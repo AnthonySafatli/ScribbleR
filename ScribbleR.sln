@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScribbleR.Server", "ScribbleR.Server\ScribbleR.Server.csproj", "{45CE6A55-FBF0-4722-A02A-FC14B660B139}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "scribbler.client", "scribbler.client\scribbler.client.esproj", "{D7904E50-BCBF-4F53-B6B9-44AC7920DCAA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{45CE6A55-FBF0-4722-A02A-FC14B660B139}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45CE6A55-FBF0-4722-A02A-FC14B660B139}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45CE6A55-FBF0-4722-A02A-FC14B660B139}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45CE6A55-FBF0-4722-A02A-FC14B660B139}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7904E50-BCBF-4F53-B6B9-44AC7920DCAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7904E50-BCBF-4F53-B6B9-44AC7920DCAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7904E50-BCBF-4F53-B6B9-44AC7920DCAA}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{D7904E50-BCBF-4F53-B6B9-44AC7920DCAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7904E50-BCBF-4F53-B6B9-44AC7920DCAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7904E50-BCBF-4F53-B6B9-44AC7920DCAA}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
