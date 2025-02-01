@@ -1,3 +1,4 @@
+import './App.css';
 
 function App() {
     return (
@@ -8,11 +9,11 @@ function App() {
                 </div>
                 <div className="col-md-11 h-100 bg-danger">
                     <div className="d-flex justify-content-center h-100">
-                        <div className="d-flex gap-2 w-75 h-100 bg-warning">
-                            <div className="bg-dark">
-                                
+                        <div className="d-flex gap-2 w-75 h-100 bg-warning h-300"> {/* Added h-300 class */}
+                            <div className="bg-dark h-auto"> {/* Added h-auto class */}
+
                             </div>
-                            <div className="bg-dark">
+                            <div className="bg-dark h-auto"> {/* Added h-auto class */}
 
                             </div>
                         </div>
