@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using ScribbleR.Server.Models;
 
 namespace ScribbleR.Server.Controllers
 {

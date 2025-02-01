@@ -1,4 +1,4 @@
-namespace ScribbleR.Server
+namespace ScribbleR.Server.Models
 {
     public class WeatherForecast
     {

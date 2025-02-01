@@ -1,6 +1,0 @@
-@ScribbleR.Server_HostAddress = http://localhost:5232
-
-GET {{ScribbleR.Server_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
