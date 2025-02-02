@@ -23,7 +23,7 @@ const DrawCanvas: React.FC = () => {
         canvas.style.width = `${canvas.width * scale}px`;
         canvas.style.height = `${canvas.height * scale}px`;
 
-        const getMousePos = (e: MouseEvent): Position => {
+        const getMousePos = (e: React.MouseEvent<HTMLCanvasElement>) => {
             const rect = canvas.getBoundingClientRect();
             const x = Math.floor((e.clientX - rect.left) / (rect.width / canvas.width));
             const y = Math.floor((e.clientY - rect.top) / (rect.height / canvas.height));
@@ -60,43 +60,35 @@ const DrawCanvas: React.FC = () => {
             }
         };
 
-        const handleMouseDown = (e: MouseEvent) => {
-            setIsDrawing(true);
-            const pos = getMousePos(e);
-            setLastPos(pos);
-            draw(pos);
-        };
-
-        const handleMouseMove = (e: MouseEvent) => {
-            if (isDrawing && lastPos) {
-                const currentPos = getMousePos(e);
-                drawLine(lastPos, currentPos);
-                setLastPos(currentPos);
-            }
-        };
-
-        const handleMouseUp = () => {
-            setIsDrawing(false);
-            setLastPos(null);
-        };
-
-        const handleMouseOut = () => {
-            setIsDrawing(false);
-            setLastPos(null);
-        };
-
-        canvas.addEventListener('mousedown', handleMouseDown);
-        canvas.addEventListener('mousemove', handleMouseMove);
-        canvas.addEventListener('mouseup', handleMouseUp);
-        canvas.addEventListener('mouseout', handleMouseOut);
-
         return () => {
-            canvas.removeEventListener('mousedown', handleMouseDown);
-            canvas.removeEventListener('mousemove', handleMouseMove);
-            canvas.removeEventListener('mouseup', handleMouseUp);
-            canvas.removeEventListener('mouseout', handleMouseOut);
+          //No cleanup needed as we are not using addEventListener
         };
-    }, [isDrawing, lastPos]);
+    }, []);
+
+    const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
+        setIsDrawing(true);
+        const pos = getMousePos(e);
+        setLastPos(pos);
+        draw(pos);
+    };
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+        if (isDrawing && lastPos) {
+            const currentPos = getMousePos(e);
+            drawLine(lastPos, currentPos);
+            setLastPos(currentPos);
+        }
+    };
+
+    const handleMouseUp = () => {
+        setIsDrawing(false);
+        setLastPos(null);
+    };
+
+    const handleMouseOut = () => {
+        setIsDrawing(false);
+        setLastPos(null);
+    };
 
     return (
         <canvas
@@ -104,6 +96,10 @@ const DrawCanvas: React.FC = () => {
             width={64}
             height={64}
             style={{ border: '1px solid black' }}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseOut={handleMouseOut}
         ></canvas>
     );
 };
