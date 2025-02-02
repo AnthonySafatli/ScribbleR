@@ -1,0 +1,111 @@
+import React, { useRef, useState, useEffect } from 'react';
+
+interface Position {
+    x: number;
+    y: number;
+}
+
+const DrawCanvas: React.FC = () => {
+    const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const [isDrawing, setIsDrawing] = useState<boolean>(false);
+    const [lastPos, setLastPos] = useState<Position | null>(null);
+
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        const scale = 10;
+
+        // Scale the canvas visually
+        canvas.style.width = `${canvas.width * scale}px`;
+        canvas.style.height = `${canvas.height * scale}px`;
+
+        const getMousePos = (e: MouseEvent): Position => {
+            const rect = canvas.getBoundingClientRect();
+            const x = Math.floor((e.clientX - rect.left) / (rect.width / canvas.width));
+            const y = Math.floor((e.clientY - rect.top) / (rect.height / canvas.height));
+            return { x, y };
+        };
+
+        const draw = (pos: Position) => {
+            ctx.fillStyle = '#000'; // Black color for drawing
+            ctx.fillRect(pos.x, pos.y, 1, 1);
+        };
+
+        const drawLine = (start: Position, end: Position) => {
+            ctx.fillStyle = '#000';
+            const dx = Math.abs(end.x - start.x);
+            const dy = Math.abs(end.y - start.y);
+            const sx = start.x < end.x ? 1 : -1;
+            const sy = start.y < end.y ? 1 : -1;
+            let err = dx - dy;
+
+            let x = start.x;
+            let y = start.y;
+
+            while (x !== end.x || y !== end.y) {
+                ctx.fillRect(x, y, 1, 1);
+                const e2 = 2 * err;
+                if (e2 > -dy) {
+                    err -= dy;
+                    x += sx;
+                }
+                if (e2 < dx) {
+                    err += dx;
+                    y += sy;
+                }
+            }
+        };
+
+        const handleMouseDown = (e: MouseEvent) => {
+            setIsDrawing(true);
+            const pos = getMousePos(e);
+            setLastPos(pos);
+            draw(pos);
+        };
+
+        const handleMouseMove = (e: MouseEvent) => {
+            if (isDrawing && lastPos) {
+                const currentPos = getMousePos(e);
+                drawLine(lastPos, currentPos);
+                setLastPos(currentPos);
+            }
+        };
+
+        const handleMouseUp = () => {
+            setIsDrawing(false);
+            setLastPos(null);
+        };
+
+        const handleMouseOut = () => {
+            setIsDrawing(false);
+            setLastPos(null);
+        };
+
+        canvas.addEventListener('mousedown', handleMouseDown);
+        canvas.addEventListener('mousemove', handleMouseMove);
+        canvas.addEventListener('mouseup', handleMouseUp);
+        canvas.addEventListener('mouseout', handleMouseOut);
+
+        return () => {
+            canvas.removeEventListener('mousedown', handleMouseDown);
+            canvas.removeEventListener('mousemove', handleMouseMove);
+            canvas.removeEventListener('mouseup', handleMouseUp);
+            canvas.removeEventListener('mouseout', handleMouseOut);
+        };
+    }, [isDrawing, lastPos]);
+
+    return (
+        <canvas
+            ref={canvasRef}
+            width={64}
+            height={64}
+            style={{ border: '1px solid black' }}
+        ></canvas>
+    );
+};
+
+export default DrawCanvas;

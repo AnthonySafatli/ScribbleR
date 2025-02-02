@@ -1,8 +1,11 @@
+import DrawCanvas from "./components/DrawCanvas";
+import ToolBar from "./components/ToolBar";
 
 function App() {
     return (
         <div>
-            hi
+            <ToolBar />
+            <DrawCanvas />
         </div>
     );
 }
