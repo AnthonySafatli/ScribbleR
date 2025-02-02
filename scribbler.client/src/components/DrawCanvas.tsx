@@ -7,22 +7,24 @@ interface Position {
 
 const DrawCanvas: React.FC = () => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
-    const [isDrawing, setIsDrawing] = useState<boolean>(false);
+    const [isDrawing, setIsDrawing] = useState(false);
     const [lastPos, setLastPos] = useState<Position | null>(null);
 
-    const canvas = canvasRef.current;
-    if (!canvas) return <div>Canvas not found</div>; //Handle case where canvas is null
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            if (ctx) {
+                const scale = 10;
+                canvas.style.width = `${canvas.width * scale}px`;
+                canvas.style.height = `${canvas.height * scale}px`;
+            }
+        }
+    }, []);
 
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return <div>Context not found</div>; //Handle case where context is null
-
-    const scale = 10;
-
-    // Scale the canvas visually
-    canvas.style.width = `${canvas.width * scale}px`;
-    canvas.style.height = `${canvas.height * scale}px`;
-
-    const getMousePos = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    const getMousePos = (e: React.MouseEvent<HTMLCanvasElement>): Position => {
+        const canvas = canvasRef.current;
+        if (!canvas) return { x: 0, y: 0 };
         const rect = canvas.getBoundingClientRect();
         const x = Math.floor((e.clientX - rect.left) / (rect.width / canvas.width));
         const y = Math.floor((e.clientY - rect.top) / (rect.height / canvas.height));
@@ -30,31 +32,35 @@ const DrawCanvas: React.FC = () => {
     };
 
     const draw = (pos: Position) => {
-        ctx.fillStyle = '#000'; // Black color for drawing
-        ctx.fillRect(pos.x, pos.y, 1, 1);
+        const ctx = canvasRef.current?.getContext('2d');
+        if (ctx) {
+            ctx.fillStyle = '#000';
+            ctx.fillRect(pos.x, pos.y, 1, 1);
+        }
     };
 
     const drawLine = (start: Position, end: Position) => {
-        ctx.fillStyle = '#000';
-        const dx = Math.abs(end.x - start.x);
-        const dy = Math.abs(end.y - start.y);
-        const sx = start.x < end.x ? 1 : -1;
-        const sy = start.y < end.y ? 1 : -1;
-        let err = dx - dy;
-
-        let x = start.x;
-        let y = start.y;
-
-        while (x !== end.x || y !== end.y) {
-            ctx.fillRect(x, y, 1, 1);
-            const e2 = 2 * err;
-            if (e2 > -dy) {
-                err -= dy;
-                x += sx;
-            }
-            if (e2 < dx) {
-                err += dx;
-                y += sy;
+        const ctx = canvasRef.current?.getContext('2d');
+        if (ctx) {
+            ctx.fillStyle = '#000';
+            const dx = Math.abs(end.x - start.x);
+            const dy = Math.abs(end.y - start.y);
+            const sx = start.x < end.x ? 1 : -1;
+            const sy = start.y < end.y ? 1 : -1;
+            let err = dx - dy;
+            let x = start.x;
+            let y = start.y;
+            while (x !== end.x || y !== end.y) {
+                ctx.fillRect(x, y, 1, 1);
+                const e2 = 2 * err;
+                if (e2 > -dy) {
+                    err -= dy;
+                    x += sx;
+                }
+                if (e2 < dx) {
+                    err += dx;
+                    y += sy;
+                }
             }
         }
     };
@@ -94,7 +100,7 @@ const DrawCanvas: React.FC = () => {
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
             onMouseOut={handleMouseOut}
-        ></canvas>
+        />
     );
 };
 
