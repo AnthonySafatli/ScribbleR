@@ -1,19 +1,27 @@
+import { useState } from 'react';
+
 import './App.css'
+
 import ClearButton from './components/ClearButton';
 import DrawCanvas from "./components/DrawCanvas";
 import SendButton from './components/SendButton';
-// import ToolBar from "./components/ToolBar";
 
 function App() {
+
+    const [canvasClear, setCanvasClear] = useState(false);
+
+    function requestCanvasClear() {
+        setCanvasClear(!canvasClear);
+    }
+
     return (
         <div className="container">
             <div className="d-flex flex-column justify-content-center">
-                {/* <ToolBar /> */}
-                <DrawCanvas />
+                <DrawCanvas cleared={canvasClear} />
 
                 <div className="d-flex justify-content-around gap-2 my-4">
                     <SendButton />
-                    <ClearButton />
+                    <ClearButton onClear={requestCanvasClear} />
                 </div>
             </div>
         </div>

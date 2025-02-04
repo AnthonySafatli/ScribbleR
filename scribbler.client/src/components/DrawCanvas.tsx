@@ -5,11 +5,11 @@ interface Position {
     y: number;
 }
 
-interface DrawCanvasProps {
+interface Props {
     cleared: boolean;
 }
 
-function DrawCanvas({ cleared }: DrawCanvasProps) {
+function DrawCanvas({ cleared }: Props) {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const [isDrawing, setIsDrawing] = useState(false);
     const [lastPos, setLastPos] = useState<Position | null>(null);
@@ -22,9 +22,16 @@ function DrawCanvas({ cleared }: DrawCanvasProps) {
                 const scale = 10;
                 canvas.style.width = `${canvas.width * scale}px`;
                 canvas.style.height = `${canvas.height * scale}px`;
-                if (cleared) {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                }
+            }
+        }
+    }, []);
+
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            if (ctx) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
             }
         }
     }, [cleared]);
