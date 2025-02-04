@@ -91,16 +91,18 @@ const DrawCanvas: React.FC = () => {
     };
 
     return (
-        <canvas
-            ref={canvasRef}
-            width={64}
-            height={64}
-            style={{ border: '1px solid black' }}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onMouseOut={handleMouseOut}
-        />
+        <div className="d-flex justify-content-center bg-light mt-4">
+            <canvas
+                ref={canvasRef}
+                width={64}
+                height={64}
+                style={{ border: '1px solid black' }}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onMouseOut={handleMouseOut}
+            />
+        </div>
     );
 };
 
