@@ -1,7 +1,10 @@
+import CenteredContainer from "../components/CenteredContainer";
 
 function Account() {
     return (
-        <p>Accounts Page</p>
+        <CenteredContainer>
+            Accounts Page
+        </CenteredContainer>
     );
 }
 

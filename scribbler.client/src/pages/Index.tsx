@@ -1,7 +1,10 @@
+import CenteredContainer from "../components/CenteredContainer";
 
 function Index() {
     return (
-        <p>This is the Index Page!</p>
+        <CenteredContainer>
+            This is the Index Page!
+        </CenteredContainer>
     );
 }
 
