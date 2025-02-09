@@ -1,31 +1,24 @@
-import { useState } from 'react';
-import { Container } from 'react-bootstrap';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import './App.css'
 
-import ClearButton from './components/ClearButton';
-import DrawCanvas from "./components/DrawCanvas";
-import SendButton from './components/SendButton';
+import Index from './pages/Index';
+import Account from './pages/Account';
+import ChatRoom from './pages/ChatRoom';
+import NotFound from './pages/NotFound';
 
 function App() {
-
-    const [canvasClear, setCanvasClear] = useState(false);
-
-    function requestCanvasClear() {
-        setCanvasClear(!canvasClear);
-    }
-
     return (
-        <Container>
-            <div className="d-flex flex-column justify-content-center">
-                <DrawCanvas cleared={canvasClear} />
+        <Router>
+            <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/Account" element={<Account />} />
+                <Route path="/ChatRoom" element={<ChatRoom />} />
 
-                <div className="d-flex justify-content-around gap-2 my-4">
-                    <SendButton />
-                    <ClearButton onClear={requestCanvasClear} />
-                </div>
-            </div>
-        </Container>
+                {/* Fallback 404 Route */}
+                <Route path="*" element={<NotFound />} />
+            </Routes>
+        </Router>
     );
 }
 
