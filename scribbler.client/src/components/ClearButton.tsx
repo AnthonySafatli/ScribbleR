@@ -1,3 +1,4 @@
+import { Button } from "react-bootstrap";
 
 interface Props {
     onClear: () => void;
@@ -6,9 +7,9 @@ interface Props {
 function ClearButton({ onClear }: Props) {
 
     return (
-        <button className="btn btn-primary" onClick={onClear}>
+        <Button variant="primary" onClick={onClear}>
             Clear!
-        </button>
+        </Button>
     );
 }
 

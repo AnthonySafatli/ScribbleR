@@ -1,6 +1,8 @@
+import { Button } from "react-bootstrap";
+
 function SendButton() {
     return (
-        <button className="btn btn-primary">Send!</button>
+        <Button variant="primary">Send!</Button>
     );
 }
 

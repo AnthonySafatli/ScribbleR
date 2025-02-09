@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Container } from 'react-bootstrap';
 
 import './App.css'
 
@@ -15,7 +16,7 @@ function App() {
     }
 
     return (
-        <div className="container">
+        <Container>
             <div className="d-flex flex-column justify-content-center">
                 <DrawCanvas cleared={canvasClear} />
 
@@ -24,7 +25,7 @@ function App() {
                     <ClearButton onClear={requestCanvasClear} />
                 </div>
             </div>
-        </div>
+        </Container>
     );
 }
 
