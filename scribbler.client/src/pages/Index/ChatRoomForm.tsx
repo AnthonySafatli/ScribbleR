@@ -5,15 +5,15 @@ import RoomIdInput from "./RoomIdInput";
 import RoomIdSubmit from "./RoomIdSubmit";
 
 function ChatRoomForm() {
-    const [hasContent, setHasContent] = useState(false);
+    const [roomId, setRoomId] = useState("");
 
     return (
         <Form>
             <Row>
                 <Col>
-                    <RoomIdInput onContentChange={setHasContent} />
+                    <RoomIdInput onContentChange={setRoomId} />
                 </Col>
-                {hasContent && (
+                {roomId && (
                     <Col>
                         <RoomIdSubmit />
                     </Col>

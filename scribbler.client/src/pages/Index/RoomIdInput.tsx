@@ -1,19 +1,19 @@
 import { Form } from "react-bootstrap";
 
 interface Props {
-    onContentChange: (hasContent: boolean) => void; 
+    onContentChange: (roomId: string) => void;
 }
 
 function RoomIdInput({ onContentChange }: Props) {
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        onContentChange(event.target.value.trim() !== ""); 
+        onContentChange(event.target.value.trim());
     };
 
     return (
         <Form.Control
             placeholder="Enter Room ID"
-            onChange={handleInputChange} 
+            onChange={handleInputChange}
         />
     );
 }
