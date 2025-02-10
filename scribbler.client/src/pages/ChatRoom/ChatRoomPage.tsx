@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Container } from "react-bootstrap";
 
-import DrawCanvas from "../components/DrawCanvas";
-import SendButton from "../components/SendButton";
-import ClearButton from "../components/ClearButton";
+import DrawCanvas from "./DrawCanvas";
+import SendButton from "./SendButton";
+import ClearButton from "./ClearButton";
 
-function ChatRoom() {
+function ChatRoomPage() {
 
     const [canvasClear, setCanvasClear] = useState(false);
 
@@ -27,4 +27,4 @@ function ChatRoom() {
     );
 }
 
-export default ChatRoom;
+export default ChatRoomPage;

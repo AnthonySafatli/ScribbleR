@@ -2,18 +2,18 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import './App.css'
 
-import Index from './pages/Index';
-import Account from './pages/Account';
-import ChatRoom from './pages/ChatRoom';
+import IndexPage from './pages/Index/IndexPage';
+import AccountPage from './pages/Account/AccountPage';
+import ChatRoomPage from './pages/ChatRoom/ChatRoomPage';
 import NotFound from './pages/NotFound';
 
 function App() {
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/Account" element={<Account />} />
-                <Route path="/ChatRoom" element={<ChatRoom />} />
+                <Route path="/" element={<IndexPage />} />
+                <Route path="/Account" element={<AccountPage />} />
+                <Route path="/ChatRoom" element={<ChatRoomPage />} />
 
                 {/* Fallback 404 Route */}
                 <Route path="*" element={<NotFound />} />
