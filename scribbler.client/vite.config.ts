@@ -6,5 +6,11 @@ export default defineConfig({
     plugins: [plugin()],
     server: {
         port: 52861,
+        proxy: {
+            '/login': {
+                target: 'https://localhost:44389/',
+                secure: false
+            }
+        }
     }
 })
