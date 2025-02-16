@@ -2,9 +2,11 @@ import CenteredContainer from "../components/CenteredContainer";
 
 function NotFound() {
     return (
-        <CenteredContainer>
-            Error 404: Page Not Found
-        </CenteredContainer>
+        <div className="vh-100">
+            <CenteredContainer>
+                Error 404: Page Not Found
+            </CenteredContainer>
+        </div>
     );
 }
 

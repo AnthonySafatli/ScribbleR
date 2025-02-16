@@ -7,9 +7,9 @@ interface Props {
 
 function CenteredContainer({ children }: Props) {
     return (
-        <Container>
+        <Container fluid className="flex-grow-1">
             <div className="d-flex justify-content-center align-items-center"
-                    style={{height: '100vh'}}>
+                style={{ height: '100%' }}>
                 {children}
             </div>
         </Container>

@@ -2,9 +2,11 @@ import CenteredContainer from "../../components/CenteredContainer";
 
 function AccountPage() {
     return (
-        <CenteredContainer>
-            Accounts Page
-        </CenteredContainer>
+        <div className="vh-100">
+            <CenteredContainer>
+                Accounts Page
+            </CenteredContainer>
+        </div>
     );
 }
 

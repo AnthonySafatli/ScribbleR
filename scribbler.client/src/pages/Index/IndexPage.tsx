@@ -1,11 +1,16 @@
 import CenteredContainer from "../../components/CenteredContainer";
 import ChatRoomForm from "./ChatRoomForm";
+import IndexNav from "./IndexNav";
 
 function IndexPage() {
     return (
-        <CenteredContainer>
-            <ChatRoomForm />
-        </CenteredContainer>
+        <div className="vh-100 d-flex flex-column">
+            <IndexNav /> 
+            
+            <CenteredContainer>
+                <ChatRoomForm />
+            </CenteredContainer>
+        </div>
     );
 }
 
