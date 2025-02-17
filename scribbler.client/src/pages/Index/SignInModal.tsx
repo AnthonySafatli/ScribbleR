@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { JSX, useState } from "react";
 
 import { Alert, Button, Form, Modal, Spinner } from "react-bootstrap";
 import EmailInput from "./EmailInput";
@@ -15,16 +15,22 @@ function SignInModal({ show, onClose }: Props) {
     const [password, setPassword] = useState<string>("");
     const [rememberme, setRememberme] = useState<boolean>(false);
 
-    // state variables for alert messages
-    const [showAlert, setShowAlert] = useState(false);
-    const [error, setError] = useState<string>("");
-
-    // state variable for email error message
-    const [emailError, setEmailError] = useState<string>("");
+    // state variable for error message
+    const [alertError, setAlertError] = useState<string | null>(null);
+    const [emailError, setEmailError] = useState<string | null>("");
+    const [passwordError, setPasswordError] = useState<JSX.Element | null>(null)
 
     // state variables for submit button
     const [isRegister, setIsRegister] = useState<boolean | null>(null);
     const [loadingSubmit, setLoadingSubmit] = useState(false);
+
+    const closeModal = () => {
+        onClose();
+        setAlertError(null);
+        setEmailError(null);
+        setPasswordError(null);
+        setIsRegister(null);
+    }
 
     // handle change events for input fields
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,34 +42,36 @@ function SignInModal({ show, onClose }: Props) {
     };
 
     const handleFormError = (alertMessage: string) => {
-        setError(alertMessage);
+        setAlertError(alertMessage);
         setLoadingSubmit(false);
-        setShowAlert(true);
     }
 
     // handle submit event for the form
-    const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+        // setup
+        setAlertError(null);
+        setEmailError(null)
+        setPasswordError(null)
         setLoadingSubmit(true);
 
-        // validate email and passwords
+        // make sure email is validated
+        if (isRegister == null) {
+            handleFormError("Enter valid email.")
+            return;
+        }
+
+        // input validation
         if (!email || !password) {
             handleFormError("Please fill in all fields.");
-        } else {
-            // clear error message
-            setError("");
-            setShowAlert(false);
-            setLoadingSubmit(true);
+            return;
+        }
 
-            let loginurl = "";
-            if (rememberme == true)
-                loginurl = "/login?useCookies=true";
-            else
-                loginurl = "/login?useSessionCookies=true";
-
-            // post data to the /register api
-            fetch(loginurl, {
+        // register of needed
+        let registerSuccess = false;
+        if (isRegister == true) {
+            await fetch("/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -72,34 +80,99 @@ function SignInModal({ show, onClose }: Props) {
                     email: email,
                     password: password,
                 }),
+            }).then((response) => {
+                if (response.ok) {
+                    registerSuccess = true;
+                    return;
+                }
+                return response.json();
             }).then((data) => {
-                // handle success or error from the server
-                console.log(data);
-                if (data.ok) {
-                    window.location.href = '/';
-                }
-                else {
-                    handleFormError("Error Logging In.");
-                }
+                if (registerSuccess)
+                    return;
 
+                setPasswordError(
+                    <>
+                        {data.errors.PasswordRequiresLower && (
+                            <small className="text-danger d-block">Password must contain at least one lowercase!</small>
+                        )}
+                        {data.errors.PasswordRequiresNonAlphanumeric && (
+                            <small className="text-danger d-block">Passwords must have at least one special character!</small>
+                        )}
+                        {data.errors.PasswordRequiresUpper && (
+                            <small className="text-danger d-block">Password must contain at least one uppercase!</small>
+                        )}
+                        {data.errors.PasswordTooShort && (
+                            <small className="text-danger d-block">Password must be at least 6 characters!</small>
+                        )}
+                    </>
+                )
+                if (data.errors.InvalidEmail)
+                    setEmailError("Invalid Email!")
+                if (data.errors.DuplicateUserName)
+                    setEmailError("Username Taken. Try again!")
+
+                throw new Error(data.title)
             }).catch((error) => {
                 // handle network error
                 console.error(error);
-                handleFormError("Error Logging in.");
+                handleFormError(error.message);
+                return;
             });
         }
+
+        if (isRegister && !registerSuccess) {
+            setLoadingSubmit(false);
+            return;
+        }
+
+        // login
+        let loginurl = "";
+        if (rememberme == true)
+            loginurl = "/login?useCookies=true";
+        else
+            loginurl = "/login?useSessionCookies=true";
+
+        // post data to the /register api
+        fetch(loginurl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password,
+            }),
+        }).then((response) => {
+            // handle success or error from the server
+            if (response.ok) {
+                window.location.href = '/';
+                return;
+            }
+            else {
+                return response.json();
+            }
+        }).then((data) => {
+            if (data.status == 401)
+                handleFormError("Incorrect email or password!");
+            else
+                throw new Error("Error logging in");
+        }).catch((error) => {
+            // handle network error
+            console.error(error);
+            handleFormError(error.message);
+        });
     };
 
     return (
-        <Modal show={show} onHide={onClose} centered>
+        <Modal show={show} onHide={closeModal} centered>
             <Modal.Header closeButton>
                 <Modal.Title>Sign In</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleLogin}>
-                    {showAlert && (
-                        <Alert variant="danger" onClose={() => setShowAlert(false)} dismissible>
-                            {error}
+                    {alertError && (
+                        <Alert variant="danger" onClose={() => setAlertError(null)} dismissible>
+                            {alertError}
                         </Alert>
                     )}
 
@@ -108,9 +181,7 @@ function SignInModal({ show, onClose }: Props) {
                         <Form.Label>Email Address</Form.Label>
                         <EmailInput setEmail={setEmail} handleResult={setIsRegister} setError={setEmailError} />
                         {emailError && (
-                            <small className="text-danger">
-                                {emailError}
-                            </small>
+                            <small className="text-danger d-block">{emailError}</small>
                         )}
                     </Form.Group>
                     <Form.Group className="my-3">
@@ -121,6 +192,9 @@ function SignInModal({ show, onClose }: Props) {
                             id="password"
                             onChange={handleChange}
                             placeholder="Enter Password" />
+                        {passwordError && (
+                            passwordError
+                        )}
                     </Form.Group>
                     <Form.Group className="my-3">
                         <Form.Check
@@ -131,9 +205,11 @@ function SignInModal({ show, onClose }: Props) {
                             label="Remember Me" />
                     </Form.Group>
                     <div className="d-flex align-items-center justify-content-center gap-2">
-                        <Button variant="primary" type="submit">
+                        <Button variant="primary" type="submit" disabled={isRegister==null}>
                             <div className="d-flex align-items-center justify-content-center gap-2">
-                                <span>Sign In</span>
+                                <span>{isRegister ? "Sign Up!" :
+                                    isRegister == false ? "Sign in!" :
+                                    "Sign in or up"}</span>
                                 {loadingSubmit && (
                                     <Spinner animation="border" role="status" size="sm">
                                         <span className="visually-hidden">Loading...</span>

@@ -35,7 +35,7 @@ function EmailInput({ setEmail, handleResult, setError }: Props) {
         })
             .then(async (response) => {
                 if (!response.ok) {
-                    throw new Error(`Error: ${response.status} ${response.statusText}`);
+                    throw new Error("Invalid Email!");
                 }
                 return response.json();
             })
@@ -54,7 +54,7 @@ function EmailInput({ setEmail, handleResult, setError }: Props) {
     }
 
     useEffect(() => {
-        const timeOutId = setTimeout(() => pingEmail(query), 1000);
+        const timeOutId = setTimeout(() => pingEmail(query), 1500);
         return () => clearTimeout(timeOutId);
     }, [query]);
 
