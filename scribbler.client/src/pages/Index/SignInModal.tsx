@@ -133,6 +133,7 @@ function SignInModal({ show, onClose }: Props) {
             loginurl = "/login?useSessionCookies=true";
 
         // post data to the /register api
+        let signedIn = false;
         fetch(loginurl, {
             method: "POST",
             headers: {
@@ -145,6 +146,7 @@ function SignInModal({ show, onClose }: Props) {
         }).then((response) => {
             // handle success or error from the server
             if (response.ok) {
+                signedIn = true;
                 window.location.href = '/';
                 return;
             }
@@ -152,6 +154,9 @@ function SignInModal({ show, onClose }: Props) {
                 return response.json();
             }
         }).then((data) => {
+            if (signedIn)
+                return;
+
             if (data.status == 401)
                 handleFormError("Incorrect email or password!");
             else

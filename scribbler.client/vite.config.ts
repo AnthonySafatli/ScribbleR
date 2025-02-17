@@ -18,7 +18,11 @@ export default defineConfig({
             '/needsregister': {
                 target: 'https://localhost:44389/',
                 secure: false
-            }
+            },
+            '/pingauth': {
+                target: 'https://localhost:44389/',
+                secure: false
+            },
         }
     }
 })
