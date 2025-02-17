@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Alert, Button, Form, Modal } from "react-bootstrap";
+import { Alert, Button, Form, Modal, Spinner } from "react-bootstrap";
 
 interface Props {
     show: boolean,
@@ -14,9 +14,13 @@ function SignInModal({ show, onClose }: Props) {
     const [password, setPassword] = useState<string>("");
     const [rememberme, setRememberme] = useState<boolean>(false);
 
-    // state variable for error messages
+    // state variables for alert messages
     const [showAlert, setShowAlert] = useState(false);
     const [error, setError] = useState<string>("");
+
+    // state variables for loading
+    const [loadingEmailConfirm, setLoadingEmailConfirm] = useState(false);
+    const [loadingSubmit, setLoadingSubmit] = useState(false);
 
     // handle change events for input fields
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,22 +33,32 @@ function SignInModal({ show, onClose }: Props) {
             setRememberme(e.target.checked);
     };
 
+    const formError = (alertMessage: string) => {
+        setError(alertMessage);
+        setLoadingSubmit(false);
+        setShowAlert(true);
+    }
+
     // handle submit event for the form
-    const handleSubmit = () => {
+    const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        setLoadingSubmit(true);
+
         // validate email and passwords
         if (!email || !password) {
-            setError("Please fill in all fields.");
-            setShowAlert(true);
+            formError("Please fill in all fields.");
         } else {
             // clear error message
             setError("");
-            setShowAlert(false)
+            setShowAlert(false);
+            setLoadingSubmit(true);
 
             let loginurl = "";
             if (rememberme == true)
-                loginurl = "/login?rememberme=true";
+                loginurl = "/login?useCookies=true";
             else
-                loginurl = "/login?rememberme=false";
+                loginurl = "/login?useSessionCookies=true";
 
             // post data to the /register api
             fetch(loginurl, {
@@ -60,20 +74,16 @@ function SignInModal({ show, onClose }: Props) {
                 // handle success or error from the server
                 console.log(data);
                 if (data.ok) {
-                    setError("Successful Login.");
-                    setShowAlert(true);
                     window.location.href = '/';
                 }
                 else {
-                    setError("Error Logging In.");
-                    setShowAlert(true);
+                    formError("Error Logging In.");
                 }
 
             }).catch((error) => {
                 // handle network error
                 console.error(error);
-                setError("Error Logging in.");
-                setShowAlert(true);
+                formError("Error Logging in.");
             });
         }
     };
@@ -84,7 +94,7 @@ function SignInModal({ show, onClose }: Props) {
                 <Modal.Title>Sign In</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Form>
+                <Form onSubmit={handleLogin}>
                     {showAlert && (
                         <Alert variant="danger" onClose={() => setShowAlert(false)} dismissible>
                             {error}
@@ -94,13 +104,20 @@ function SignInModal({ show, onClose }: Props) {
                     <Form.Text>Enter email to sign in or sign up!</Form.Text>
                     <Form.Group className="my-3">
                         <Form.Label>Email Address</Form.Label>
-                        <Form.Control
-                            type="email"
-                            name="email"
-                            id="email"
-                            placeholder="name@email.com"
-                            onChange={handleChange}
-                            autoFocus />
+                        <div className="d-flex justify-content-center align-items-center gap-4">
+                            <Form.Control
+                                type="email"
+                                name="email"
+                                id="email"
+                                placeholder="name@email.com"
+                                onChange={handleChange}
+                                autoFocus />
+                            {loadingEmailConfirm && (
+                                <Spinner animation="border" role="status" size="sm">
+                                    <span className="visually-hidden">Loading...</span>
+                                </Spinner>
+                            )}
+                        </div>
                     </Form.Group>
                     <Form.Group className="my-3">
                         <Form.Label>Password</Form.Label>
@@ -119,11 +136,20 @@ function SignInModal({ show, onClose }: Props) {
                             onChange={handleChange}
                             label="Remember Me" />
                     </Form.Group>
+                    <div className="d-flex align-items-center justify-content-center gap-2">
+                        <Button variant="primary" type="submit">
+                            <div className="d-flex align-items-center justify-content-center gap-2">
+                                <span>Sign In</span>
+                                {loadingSubmit && (
+                                    <Spinner animation="border" role="status" size="sm">
+                                        <span className="visually-hidden">Loading...</span>
+                                    </Spinner>
+                                )}
+                            </div>
+                        </Button>
+                    </div>
                 </Form>
             </Modal.Body>
-            <Modal.Footer >
-                <Button variant="primary" onClick={handleSubmit}>Sign In</Button>
-            </Modal.Footer>
         </Modal>
     );
 }
