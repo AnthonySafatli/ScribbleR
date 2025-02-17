@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { Alert, Button, Form, Modal, Spinner } from "react-bootstrap";
+import EmailInput from "./EmailInput";
 
 interface Props {
     show: boolean,
@@ -18,22 +19,29 @@ function SignInModal({ show, onClose }: Props) {
     const [showAlert, setShowAlert] = useState(false);
     const [error, setError] = useState<string>("");
 
+    // state variables for submit button
+    const [isRegister, setIsRegister] = useState(false);
+    const [isLogin, setIsLogin] = useState(false);
+
     // state variables for loading
-    const [loadingEmailConfirm, setLoadingEmailConfirm] = useState(false);
     const [loadingSubmit, setLoadingSubmit] = useState(false);
+
+    // handle if register or login
+    const handleLoginRegsiter = (register: boolean, login: boolean) => {
+        setIsRegister(register);
+        setIsLogin(login);
+    }
 
     // handle change events for input fields
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        if (name === "email")
-            setEmail(value);
         if (name === "password")
             setPassword(value);
         if (name === "rememberme")
             setRememberme(e.target.checked);
     };
 
-    const formError = (alertMessage: string) => {
+    const handleFormError = (alertMessage: string) => {
         setError(alertMessage);
         setLoadingSubmit(false);
         setShowAlert(true);
@@ -47,7 +55,7 @@ function SignInModal({ show, onClose }: Props) {
 
         // validate email and passwords
         if (!email || !password) {
-            formError("Please fill in all fields.");
+            handleFormError("Please fill in all fields.");
         } else {
             // clear error message
             setError("");
@@ -77,13 +85,13 @@ function SignInModal({ show, onClose }: Props) {
                     window.location.href = '/';
                 }
                 else {
-                    formError("Error Logging In.");
+                    handleFormError("Error Logging In.");
                 }
 
             }).catch((error) => {
                 // handle network error
                 console.error(error);
-                formError("Error Logging in.");
+                handleFormError("Error Logging in.");
             });
         }
     };
@@ -101,23 +109,10 @@ function SignInModal({ show, onClose }: Props) {
                         </Alert>
                     )}
 
-                    <Form.Text>Enter email to sign in or sign up!</Form.Text>
+                    <Form.Text>Enter email and password to sign in or sign up!</Form.Text>
                     <Form.Group className="my-3">
                         <Form.Label>Email Address</Form.Label>
-                        <div className="d-flex justify-content-center align-items-center gap-4">
-                            <Form.Control
-                                type="email"
-                                name="email"
-                                id="email"
-                                placeholder="name@email.com"
-                                onChange={handleChange}
-                                autoFocus />
-                            {loadingEmailConfirm && (
-                                <Spinner animation="border" role="status" size="sm">
-                                    <span className="visually-hidden">Loading...</span>
-                                </Spinner>
-                            )}
-                        </div>
+                        <EmailInput setEmail={setEmail} handleResult={handleRegisterLogin} />
                     </Form.Group>
                     <Form.Group className="my-3">
                         <Form.Label>Password</Form.Label>
