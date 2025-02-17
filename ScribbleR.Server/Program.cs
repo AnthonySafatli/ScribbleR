@@ -52,7 +52,7 @@ namespace ScribbleR.Server
                 }
 
                 var user = await userManager.FindByEmailAsync(email);
-                return Results.Ok(user == null);
+                return Results.Json(new { NeedsRegister = user == null } );
             });
 
             // Configure the HTTP request pipeline.

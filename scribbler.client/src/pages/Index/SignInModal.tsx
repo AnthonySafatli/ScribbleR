@@ -19,18 +19,12 @@ function SignInModal({ show, onClose }: Props) {
     const [showAlert, setShowAlert] = useState(false);
     const [error, setError] = useState<string>("");
 
+    // state variable for email error message
+    const [emailError, setEmailError] = useState<string>("");
+
     // state variables for submit button
-    const [isRegister, setIsRegister] = useState(false);
-    const [isLogin, setIsLogin] = useState(false);
-
-    // state variables for loading
+    const [isRegister, setIsRegister] = useState<boolean | null>(null);
     const [loadingSubmit, setLoadingSubmit] = useState(false);
-
-    // handle if register or login
-    const handleLoginRegsiter = (register: boolean, login: boolean) => {
-        setIsRegister(register);
-        setIsLogin(login);
-    }
 
     // handle change events for input fields
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -112,7 +106,12 @@ function SignInModal({ show, onClose }: Props) {
                     <Form.Text>Enter email and password to sign in or sign up!</Form.Text>
                     <Form.Group className="my-3">
                         <Form.Label>Email Address</Form.Label>
-                        <EmailInput setEmail={setEmail} handleResult={handleRegisterLogin} />
+                        <EmailInput setEmail={setEmail} handleResult={setIsRegister} setError={setEmailError} />
+                        {emailError && (
+                            <small className="text-danger">
+                                {emailError}
+                            </small>
+                        )}
                     </Form.Group>
                     <Form.Group className="my-3">
                         <Form.Label>Password</Form.Label>

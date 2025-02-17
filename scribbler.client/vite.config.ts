@@ -10,6 +10,10 @@ export default defineConfig({
             '/login': {
                 target: 'https://localhost:44389/',
                 secure: false
+            },
+            '/needsregister': {
+                target: 'https://localhost:44389/',
+                secure: false
             }
         }
     }
