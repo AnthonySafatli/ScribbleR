@@ -1,0 +1,19 @@
+.image-container {
+    background-color: grey;
+    height: 75px;   
+    width: 75px; 
+}
+
+nav .nav-btn {
+    border: 1px solid lightgrey; 
+    border-left: none;
+    border-top: none;
+    width: 100%;
+    padding: 30px 10px;
+    padding-right: 20px;
+    background-color: transparent;
+}
+
+nav .nav-btn-bottom {
+    border-bottom: none;
+}
