@@ -1,5 +1,7 @@
 import { Container, Button, Row, Col } from 'react-bootstrap';
 
+import Icon from '../../components/Icon';
+
 import './AccountPage.css';
 
 function AccountPage() {
@@ -14,19 +16,19 @@ function AccountPage() {
                         <ul className="nav flex-column gap-4">
                             <li className="nav-item">
                                 <Button variant="primary" className="w-100 py-2">
-                                    <i className="bi bi-person-circle mr-2"></i>
+                                    <Icon name="person-circle"></Icon>
                                     <span>&nbsp;&nbsp; Account</span>
                                 </Button>
                             </li>
                             <li className="nav-item">
                                 <Button variant="" className="w-100 py-2">
-                                    <i className="bi bi-people-fill"></i>
+                                    <Icon name="people-fill"></Icon>
                                     <span>&nbsp;&nbsp; Friends</span>
                                 </Button>
                             </li>
                             <li className="nav-item">
                                 <Button variant="" className="w-100 py-2">
-                                    <i className="bi bi-clock-history mr-2"></i>
+                                    <Icon name="clock-history"></Icon>
                                     <span>&nbsp;&nbsp; History</span>
                                 </Button>
                             </li>
@@ -42,17 +44,17 @@ function AccountPage() {
                         <ul className="nav flex-column align-items-center gap-4">
                             <li className="nav-item">
                                 <Button variant="primary" className="py-2">
-                                    <i className="bi bi-person-circle"></i>
+                                    <Icon name="person-circle"></Icon>
                                 </Button>
                             </li>
                             <li className="nav-item">
                                 <Button variant="" className="py-2">
-                                    <i className="bi bi-people-fill"></i>
+                                    <Icon name="people-fill"></Icon>
                                 </Button>
                             </li>
                             <li className="nav-item">
                                 <Button variant="" className="py-2">
-                                    <i className="bi bi-clock-history"></i>
+                                    <Icon name="clock-history"></Icon>
                                 </Button>
                             </li>
                         </ul>
