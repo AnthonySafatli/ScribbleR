@@ -30,9 +30,11 @@ function IndexPage() {
             <IndexNav onSignIn={() => setShowModal(true)} email={email} /> 
 
             <SignInModal show={showModal} onClose={() => setShowModal(false)} />
-            
+
             <CenteredContainer>
-                <ChatRoomForm />
+                <main>
+                    <ChatRoomForm />
+                </main>
             </CenteredContainer>
         </div>
     );
