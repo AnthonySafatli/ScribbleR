@@ -20,11 +20,17 @@ function AccountNav() {
         setIsMd(window.innerWidth > mdThreshold);
     }, [windowWidth])
 
+    const imageStyle = {
+        backgroundColor: 'grey',
+        height: '75px',
+        width: '75px', 
+    };
+
     return (
         <Col xs={isMd ? 3 : 2}>
             <nav>
                 <div className="d-flex justify-content-center mb-5">
-                    <div className="image-container"></div>
+                    <div style={imageStyle}></div>
                 </div>
                 <ul className={"nav flex-column gap-4 " + (isMd ? "" : "align-items-center")}>
                     <li className="nav-item">

@@ -2,8 +2,6 @@ import { Container, Row, Col } from 'react-bootstrap';
 
 import AccountNav from './AccountNav';
 
-import './AccountPage.css';
-
 function AccountPage() {
     return (
         <Container>
