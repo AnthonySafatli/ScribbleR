@@ -4,10 +4,10 @@ import Icon from "../../components/Icon";
 
 interface Props {
     onSignIn: () => void;
-    email: string | null;
+    signedIn: boolean;
 }
 
-function IndexNav({ onSignIn, email }: Props) {
+function IndexNav({ onSignIn, signedIn }: Props) {
     return (
         <Navbar bg="light" data-bs-theme="light">
             <Container>
@@ -16,7 +16,7 @@ function IndexNav({ onSignIn, email }: Props) {
                 <Navbar.Collapse className="justify-content-end">
                     <Nav>
                         {
-                            email ?
+                            signedIn ?
                                 <Nav.Link href="/Account">
                                     <Icon name="person-circle" />
                                     &nbsp; View Account

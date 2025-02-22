@@ -5,9 +5,15 @@ import ChatRoomForm from "./ChatRoomForm";
 import IndexNav from "./IndexNav";
 import SignInModal from "./SignInModal";
 
-function IndexPage() {
+import AppUser from "../../models/AppUser";
+
+interface Props {
+    setSignInInfo: (signInInfo: AppUser | null) => void
+    accountInfo: AppUser | null
+}
+
+function IndexPage({ setSignInInfo, accountInfo }: Props) {
     const [showModal, setShowModal] = useState(false);
-    const [email, setEmail] = useState<string | null>(null);
 
     useEffect(() => {
         fetch("/pingauth", {
@@ -17,8 +23,7 @@ function IndexPage() {
                 return res.json();
         }).then((data) => {
             if (data) {
-                console.log(data)
-                setEmail(data.email);
+                setSignInInfo(data as AppUser);
             }
         }).catch(e => {
             console.error(e);
@@ -27,7 +32,7 @@ function IndexPage() {
 
     return (
         <div className="vh-100 d-flex flex-column">
-            <IndexNav onSignIn={() => setShowModal(true)} email={email} /> 
+            <IndexNav onSignIn={() => setShowModal(true)} signedIn={accountInfo != null} /> 
 
             <SignInModal show={showModal} onClose={() => setShowModal(false)} />
 

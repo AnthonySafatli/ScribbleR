@@ -52,8 +52,8 @@ function SignInModal({ show, onClose }: Props) {
 
         // setup
         setAlertError(null);
-        setEmailError(null)
-        setPasswordError(null)
+        setEmailError(null);
+        setPasswordError(null);
         setLoadingSubmit(true);
 
         // make sure email is validated
