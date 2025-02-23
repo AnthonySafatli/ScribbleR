@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 
+import SignInForm from '../../components/SignInForm';
+import SetupAccountForm from '../../components/SetupAccountForm';
 import AccountNav from './AccountNav';
 import AccountContent from './AccountContent';
 import FriendsContent from './FriendsContent';
 import HistoryContent from './HistoryContent';
 
 import { AppUser, PingAuth } from '../../models/AppUser';
-import SignInForm from '../../components/SignInForm';
-import CenteredContainer from '../../components/CenteredContainer';
 
 interface Props {
     accountInfo: AppUser | null | undefined
@@ -40,7 +40,7 @@ function AccountPage({ setAccountInfo, accountInfo }: Props) {
         }
     };
 
-    const onSignedIn = () => {
+    const onFormSubmit = () => {
         window.location.href = "/Account";
     }
 
@@ -50,18 +50,30 @@ function AccountPage({ setAccountInfo, accountInfo }: Props) {
                 accountInfo === undefined ?
                     <></> :
                     accountInfo === null ?
-                        <Container className="mt-5">
-                            <h1 className="mb-3">Sign In!</h1>
-                            <SignInForm closeToggle={false} onSignedIn={onSignedIn} /> 
-                        </Container> 
-                        :
-                        <Row className="vh-100 py-5">
-                            <AccountNav currentPage={currentPage} navigate={setCurrentPage} />
-
-                            <Col>
-                                { renderContent() }
+                        <Row className="mt-5">
+                            <Col lg={6}>
+                                <h1 className="mb-3">Sign In!</h1>
+                                <SignInForm closeToggle={false} onSignedIn={onFormSubmit} /> 
                             </Col>
-                        </Row>
+                        </Row> 
+                        :
+                        accountInfo.isSetup ? 
+                            <Row className="vh-100 py-5">
+                                <AccountNav currentPage={currentPage} navigate={setCurrentPage} />
+
+                                <Col>
+                                    <div className="px-5">
+                                        { renderContent() }
+                                    </div>
+                                </Col>
+                            </Row>
+                            :
+                            <Row className="mt-5">
+                                <Col lg={6}>
+                                    <h1 className="mb-3">Setup Account!</h1>
+                                    <SetupAccountForm onFormSubmit={onFormSubmit} userId={accountInfo.id} />
+                                </Col>
+                            </Row> 
             }
         </Container>
     );

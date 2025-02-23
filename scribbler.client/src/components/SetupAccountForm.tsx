@@ -56,10 +56,17 @@ function SignInForm({ onFormSubmit, userId }: Props) {
                 aboutMe: aboutMe
             }),
         }).then(res => {
-            console.log(res)
+            if (res.ok) {
+                onFormSubmit();
+                return;
+            }
+
+            throw new Error("Error Setting Up Account");
+        }).catch(e => {
+            console.error(e);
+            handleFormError(e.message);
         })
 
-        onFormSubmit();
     } 
 
     return (

@@ -27,13 +27,12 @@ namespace ScribbleR.Server.Controllers
             if (user == null)
                 return NotFound();
 
-            if (setupInfo.DisplayName == null)
+            if (string.IsNullOrWhiteSpace(setupInfo.DisplayName))
                 return BadRequest();
 
             user.IsSetup = true;
             user.DisplayName = setupInfo.DisplayName;
-            user.AboutMe = string.IsNullOrEmpty(setupInfo.AboutMe?.Trim()) ? 
-                                                    null : setupInfo.AboutMe;
+            user.AboutMe = string.IsNullOrWhiteSpace(setupInfo.AboutMe) ? null : setupInfo.AboutMe;
 
             await _context.SaveChangesAsync();
 
