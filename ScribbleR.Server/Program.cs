@@ -47,6 +47,7 @@ public class Program
 
             return Results.Json(
                 new { 
+                    appUser.Id,
                     appUser.Email, 
                     appUser.DisplayName, 
                     appUser.IsSetup, 

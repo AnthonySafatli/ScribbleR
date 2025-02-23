@@ -1,12 +1,13 @@
-import { JSX, useState } from "react";
+import { useState } from "react";
 import { Alert, Button, Form, Spinner } from "react-bootstrap";
 
 
 interface Props {
-    onFormSubmit: () => void
+    onFormSubmit: () => void,
+    userId: string | undefined
 }
 
-function SignInForm({ onFormSubmit }: Props) {
+function SignInForm({ onFormSubmit, userId }: Props) {
 
     const [displayName, setDisplayName] = useState("");
     const [aboutMe, setAboutMe] = useState("");
@@ -44,7 +45,19 @@ function SignInForm({ onFormSubmit }: Props) {
             handleFormError("About Me can not be greater than 200 characters");
         }
 
-        // fetch('')
+        fetch('/account/setup', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                id: userId,
+                displayName: displayName,
+                aboutMe: aboutMe
+            }),
+        }).then(res => {
+            console.log(res)
+        })
 
         onFormSubmit();
     } 

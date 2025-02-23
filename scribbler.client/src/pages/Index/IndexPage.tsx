@@ -38,7 +38,7 @@ function IndexPage({ setSignInInfo, accountInfo }: Props) {
             <IndexNav onSignIn={() => setShowSignInModal(true)} signedIn={accountInfo != null} /> 
 
             <SignInModal show={showSignInModal} onClose={() => setShowSignInModal(false)} />
-            <SetupAccountModal show={showSetupAccountModal} />
+            <SetupAccountModal show={showSetupAccountModal} userId={accountInfo?.id} />
             
             <CenteredContainer>
                 <main>

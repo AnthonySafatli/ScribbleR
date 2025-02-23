@@ -1,5 +1,6 @@
 
 export interface AppUser {
+    id: string,
     email: string,
     displayName: string | null,
     aboutMe: string | null,
