@@ -25,6 +25,20 @@ function AccountNav({ currentPage, navigate }: Props) {
         setIsMd(window.innerWidth > mdThreshold);
     }, [windowWidth])
 
+    function handleLogout() {
+        fetch("/logout", {
+            method: "POST"
+        }).then(res => {
+            if (res.ok) {
+                window.location.href = "/"
+            }
+
+            throw new Error("Error signing out")
+        }).catch(e => {
+            console.error(e)
+        })
+    }
+
     const imageStyle = {
         backgroundColor: 'grey',
         height: '75px',
@@ -63,6 +77,15 @@ function AccountNav({ currentPage, navigate }: Props) {
                             onClick={() => { navigate(3) }}>
                             <Icon name="clock-history"></Icon>
                             {isMd && <span>&nbsp;&nbsp; History</span>}
+                        </Button>
+                    </li>
+                    <li className="nav-item mt-5">
+                        <Button
+                            variant=""
+                            className={"py-2" + (isMd ? " w-100" : "")}
+                            onClick={() => { handleLogout() }}>
+                            <Icon name="box-arrow-right"></Icon>
+                            {isMd && <span>&nbsp;&nbsp; Sign Out</span>}
                         </Button>
                     </li>
                 </ul>

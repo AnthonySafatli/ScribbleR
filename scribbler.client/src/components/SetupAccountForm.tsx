@@ -92,7 +92,7 @@ function SignInForm({ onFormSubmit, userId }: Props) {
             <Form.Group className="my-3">
                 <Form.Label>About Me</Form.Label>
                 <Form.Control
-                    type="textarea"
+                    as="textarea"
                     name="aboutMe"
                     id="aboutMe"
                     onChange={handleChange}

@@ -1,11 +1,15 @@
 
 interface Props {
-    name: string;
+    name: string,
+    colour?: string | null,
 }
 
-function Icon({ name }: Props) {
+function Icon({ name, colour = null }: Props) {
+
+    const classColour = colour ? `text-${colour}` : "";
+
     return (
-        <i className={`bi bi-${name}`}></i>
+        <i className={`bi bi-${name} ` + classColour}></i>
     );
 }
 
