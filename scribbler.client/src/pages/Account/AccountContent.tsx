@@ -1,6 +1,13 @@
 import { Button } from "react-bootstrap";
 
-function AccountContent() {
+import { AppUser } from "../../models/AppUser";
+
+interface Props {
+    accountInfo: AppUser | null | undefined
+    setAccountInfo: (signInInfo: AppUser | null) => void
+}
+
+function AccountContent({ setAccountInfo, accountInfo }: Props) {
 
     function handleLogout() {
         fetch("/logout", {
@@ -19,6 +26,12 @@ function AccountContent() {
     return (
         <>
             <h1>Account Page!</h1>
+
+            {
+                accountInfo &&
+                <p>Email: {accountInfo.email}</p>
+            }
+
             <Button onClick={handleLogout}>Logout</Button>
         </>
     );

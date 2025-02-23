@@ -5,29 +5,22 @@ import ChatRoomForm from "./ChatRoomForm";
 import IndexNav from "./IndexNav";
 import SignInModal from "./SignInModal";
 
-import AppUser from "../../models/AppUser";
+import { AppUser, PingAuth } from "../../models/AppUser";
 
 interface Props {
+    accountInfo: AppUser | null | undefined
     setSignInInfo: (signInInfo: AppUser | null) => void
-    accountInfo: AppUser | null
 }
 
 function IndexPage({ setSignInInfo, accountInfo }: Props) {
     const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
-        fetch("/pingauth", {
-            method: "GET",
-        }).then((res) => {
-            if (res.status == 200)
-                return res.json();
-        }).then((data) => {
-            if (data) {
-                setSignInInfo(data as AppUser);
-            }
-        }).catch(e => {
-            console.error(e);
-        })
+        async function getAccountInfo() {
+            setSignInInfo(await PingAuth())
+        }
+
+        getAccountInfo();
     }, [])
 
     return (
