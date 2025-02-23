@@ -25,12 +25,20 @@ function IndexPage({ setSignInInfo, accountInfo }: Props) {
         getAccountInfo();
     }, [])
 
+    useEffect(() => {
+        if (accountInfo === null || accountInfo === undefined) {
+            setShowSetupAccountModal(false)
+            return;
+        }
+        setShowSetupAccountModal(!accountInfo.isSetup)
+    }, [accountInfo])
+
     return (
         <div className="vh-100 d-flex flex-column">
             <IndexNav onSignIn={() => setShowSignInModal(true)} signedIn={accountInfo != null} /> 
 
             <SignInModal show={showSignInModal} onClose={() => setShowSignInModal(false)} />
-            <SetupAccountModal show={showSetupAccountModal} onClose={() => setShowSetupAccountModal(false)} />
+            <SetupAccountModal show={showSetupAccountModal} />
             
             <CenteredContainer>
                 <main>
