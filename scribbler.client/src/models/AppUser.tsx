@@ -1,6 +1,11 @@
 
 export interface AppUser {
-    email: string;
+    email: string,
+    displayName: string | null,
+    aboutMe: string | null,
+    createdAt: Date,
+    updatedAt: Date,
+    isSetup: boolean,
 }
 
 export async function PingAuth(): Promise<AppUser | null>{

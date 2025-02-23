@@ -37,10 +37,23 @@ public class Program
             return Results.Ok();
         }).RequireAuthorization();
 
-        app.MapGet("/pingauth", (ClaimsPrincipal user) =>
+        app.MapGet("/pingauth", async (ClaimsPrincipal user, UserManager<AppUser> userManager) =>
         {
-            var email = user.FindFirstValue(ClaimTypes.Email);
-            return Results.Json(new { Email = email });
+            var userId = user.FindFirstValue(ClaimTypes.NameIdentifier); 
+            var appUser = await userManager.FindByIdAsync(userId); 
+
+            if (appUser == null)
+                return Results.Unauthorized(); 
+
+            return Results.Json(
+                new { 
+                    appUser.Email, 
+                    appUser.DisplayName, 
+                    appUser.IsSetup, 
+                    appUser.AboutMe, 
+                    appUser.CreatedAt, 
+                    appUser.UpdatedAt 
+                });
         }).RequireAuthorization();
 
         app.MapGet("/needsregister", async (string email, UserManager<AppUser> userManager) =>

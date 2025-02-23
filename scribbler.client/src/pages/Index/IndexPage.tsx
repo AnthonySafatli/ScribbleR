@@ -4,6 +4,7 @@ import CenteredContainer from "../../components/CenteredContainer";
 import ChatRoomForm from "./ChatRoomForm";
 import IndexNav from "./IndexNav";
 import SignInModal from "./SignInModal";
+import SetupAccountModal from "./SetupAccountModal";
 
 import { AppUser, PingAuth } from "../../models/AppUser";
 
@@ -13,7 +14,8 @@ interface Props {
 }
 
 function IndexPage({ setSignInInfo, accountInfo }: Props) {
-    const [showModal, setShowModal] = useState(false);
+    const [showSignInModal, setShowSignInModal] = useState(false);
+    const [showSetupAccountModal, setShowSetupAccountModal] = useState(false);
 
     useEffect(() => {
         async function getAccountInfo() {
@@ -25,10 +27,11 @@ function IndexPage({ setSignInInfo, accountInfo }: Props) {
 
     return (
         <div className="vh-100 d-flex flex-column">
-            <IndexNav onSignIn={() => setShowModal(true)} signedIn={accountInfo != null} /> 
+            <IndexNav onSignIn={() => setShowSignInModal(true)} signedIn={accountInfo != null} /> 
 
-            <SignInModal show={showModal} onClose={() => setShowModal(false)} />
-
+            <SignInModal show={showSignInModal} onClose={() => setShowSignInModal(false)} />
+            <SetupAccountModal show={showSetupAccountModal} onClose={() => setShowSetupAccountModal(false)} />
+            
             <CenteredContainer>
                 <main>
                     <ChatRoomForm />
