@@ -1,13 +1,14 @@
-import { Container, Nav, Navbar } from "react-bootstrap";
+import { Container, Nav, Navbar, Spinner } from "react-bootstrap";
 
+import { AppUser } from "../../models/AppUser";
 import Icon from "../../components/Icon";
 
 interface Props {
     onSignIn: () => void;
-    signedIn: boolean;
+    accountInfo: AppUser | null | undefined;
 }
 
-function IndexNav({ onSignIn, signedIn }: Props) {
+function IndexNav({ onSignIn, accountInfo }: Props) {
     return (
         <Navbar bg="light" data-bs-theme="light">
             <Container>
@@ -16,12 +17,16 @@ function IndexNav({ onSignIn, signedIn }: Props) {
                 <Navbar.Collapse className="justify-content-end">
                     <Nav>
                         {
-                            signedIn ?
-                                <Nav.Link href="/Account">
-                                    <Icon name="person-circle" />
-                                    &nbsp; View Account
-                                </Nav.Link> : 
-                                <Nav.Link onClick={onSignIn}>Sign In</Nav.Link>
+                            accountInfo === undefined ?
+                                <Spinner size='sm'></Spinner>
+                                :
+                                accountInfo === null ?
+                                    <Nav.Link onClick={onSignIn}>Sign In</Nav.Link>
+                                    : 
+                                    <Nav.Link href="/Account">
+                                        <Icon name="person-circle" />
+                                        &nbsp; View Account
+                                    </Nav.Link>
                         }
                     </Nav>
                 </Navbar.Collapse>

@@ -35,7 +35,7 @@ function IndexPage({ setSignInInfo, accountInfo }: Props) {
 
     return (
         <div className="vh-100 d-flex flex-column">
-            <IndexNav onSignIn={() => setShowSignInModal(true)} signedIn={accountInfo != null} /> 
+            <IndexNav onSignIn={() => setShowSignInModal(true)} accountInfo={accountInfo} /> 
 
             <SignInModal show={showSignInModal} onClose={() => setShowSignInModal(false)} />
             <SetupAccountModal show={showSetupAccountModal} userId={accountInfo?.id} />
