@@ -2,9 +2,8 @@
 
 namespace ScribbleR.Server.Models.Dtos;
 
-public class SetupDto
+public class UserAccountDto
 {
-    public string? Id { get; set; }
     [StringLength(50)]
     public string? DisplayName { get; set; }
 

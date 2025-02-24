@@ -51,7 +51,6 @@ function SignInForm({ onFormSubmit, userId }: Props) {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                id: userId,
                 displayName: displayName,
                 aboutMe: aboutMe
             }),

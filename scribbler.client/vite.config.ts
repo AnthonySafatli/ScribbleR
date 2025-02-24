@@ -31,6 +31,10 @@ export default defineConfig({
                 target: 'https://localhost:44389/',
                 secure: false
             },
+            '/account/edit': {
+                target: 'https://localhost:44389/',
+                secure: false
+            },
         }
     }
 })

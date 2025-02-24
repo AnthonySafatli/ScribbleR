@@ -57,7 +57,7 @@ function AccountNav({ currentPage, navigate }: Props) {
                             variant={currentPage == 1 ? "primary" : ""}
                             className={"py-2" + (isMd ? " w-100" : "")}
                             onClick={() => { navigate(1) }}>
-                            <Icon name="person-circle"></Icon>
+                            <Icon name="person-circle" />
                             {isMd && <span>&nbsp;&nbsp; Account</span>}
                         </Button>
                     </li>
@@ -66,7 +66,7 @@ function AccountNav({ currentPage, navigate }: Props) {
                             variant={currentPage == 2 ? "primary" : ""}
                             className={"py-2" + (isMd ? " w-100" : "")}
                             onClick={() => { navigate(2) }}>
-                            <Icon name="people-fill"></Icon>
+                            <Icon name="people-fill" />
                             {isMd && <span>&nbsp;&nbsp; Friends</span>}
                         </Button>
                     </li>
@@ -75,11 +75,17 @@ function AccountNav({ currentPage, navigate }: Props) {
                             variant={currentPage == 3 ? "primary" : ""}
                             className={"py-2" + (isMd ? " w-100" : "")}
                             onClick={() => { navigate(3) }}>
-                            <Icon name="clock-history"></Icon>
+                            <Icon name="clock-history" />
                             {isMd && <span>&nbsp;&nbsp; History</span>}
                         </Button>
                     </li>
                     <li className="nav-item mt-5">
+                        <a className={"btn py-2" + (isMd ? " w-100" : "")} href="/">
+                            <Icon name="arrow-left" />
+                            {isMd && <span>&nbsp;&nbsp; Back to Home</span>}
+                        </a>
+                    </li>
+                    <li className="nav-item">
                         <Button
                             variant=""
                             className={"py-2" + (isMd ? " w-100" : "")}
