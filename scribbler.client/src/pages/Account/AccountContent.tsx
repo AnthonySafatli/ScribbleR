@@ -39,7 +39,7 @@ function AccountContent({ setAccountInfo, accountInfo, displayName, aboutMe, han
 
         setLoadingFormSubmit(true);
 
-        fetch(`/account/edit/$(accountInfo?.id)`, {
+        fetch(`/account/edit/${accountInfo?.id}`, { //Corrected the template literal here
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -51,13 +51,18 @@ function AccountContent({ setAccountInfo, accountInfo, displayName, aboutMe, han
         }).then(res => {
             if (res.ok) {
                 // change accountInfo to display name and about me
-                return;
+                setAccountInfo({...accountInfo, displayName: displayName, aboutMe: aboutMe}); //Update accountInfo
+                setSuccessFormSubmit(true);
+                setLoadingFormSubmit(false);
+                setAlertError(null);
+                return res.json(); //Added to handle potential JSON response
             }
 
             throw new Error("Error Saving Changes!");
         }).catch(e => {
             console.error(e);
             setAlertError(e.message)
+            setLoadingFormSubmit(false);
         })
     };
 
@@ -83,7 +88,7 @@ function AccountContent({ setAccountInfo, accountInfo, displayName, aboutMe, han
                             name="displayName"
                             id="displayName"
                             onChange={handleChange}
-                            value={displayName}
+                            value={displayName || ""} //Handle undefined values
                             placeholder="Enter your preferred display name" />
                     </Col>
                 </Row>
@@ -94,7 +99,7 @@ function AccountContent({ setAccountInfo, accountInfo, displayName, aboutMe, han
                         name="aboutMe"
                         id="aboutMe"
                         onChange={handleChange}
-                        value={aboutMe}
+                        value={aboutMe || ""} //Handle undefined values
                         placeholder="Share something interesting about yourself!" />
                 </Form.Group>
                 <Form.Group>
