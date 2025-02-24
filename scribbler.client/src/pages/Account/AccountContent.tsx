@@ -36,6 +36,29 @@ function AccountContent({ setAccountInfo, accountInfo, displayName, aboutMe, han
             setAlertError("Display Name cannot be empty!");
             return;
         }
+
+        setLoadingFormSubmit(true);
+
+        fetch(`/account/edit/$(accountInfo?.id)`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                displayName: displayName,
+                aboutMe: aboutMe
+            }),
+        }).then(res => {
+            if (res.ok) {
+                // change accountInfo to display name and about me
+                return;
+            }
+
+            throw new Error("Error Saving Changes!");
+        }).catch(e => {
+            console.error(e);
+            setAlertError(e.message)
+        })
     };
 
     return (
