@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using ScribbleR.Server.Hubs;
 
 namespace ScribbleR.Server;
 
@@ -23,6 +24,7 @@ public class Program
         builder.Services.AddIdentityApiEndpoints<AppUser>()
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
+        builder.Services.AddSignalR();
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
@@ -81,6 +83,7 @@ public class Program
         app.UseAuthorization();
 
         app.MapControllers();
+        app.MapHub<ChatHub>("/Chat");
 
         app.Run();
     }
