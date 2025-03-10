@@ -25,18 +25,20 @@ function AccountNav({ currentPage, navigate }: Props) {
         setIsMd(window.innerWidth > mdThreshold);
     }, [windowWidth])
 
-    function handleLogout() {
-        fetch("/api/auth/logout", {
-            method: "POST"
-        }).then(res => {
-            if (res.ok) {
-                window.location.href = "/"
-            }
+    async function handleLogout() {
+        try {
+            const res = await fetch("/api/auth/logout", {
+                method: "POST"
+            });
 
-            throw new Error("Error signing out")
-        }).catch(e => {
-            console.error(e)
-        })
+            if (res.ok) {
+                window.location.href = "/";
+            } else {
+                throw new Error("Error signing out")
+            }
+        } catch (error: unknown) {
+            console.error(error);
+        }
     }
 
     const imageStyle = {

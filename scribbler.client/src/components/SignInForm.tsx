@@ -70,53 +70,55 @@ function SignInForm({ closeToggle, onSignedIn }: Props) {
         // register of needed
         let registerSuccess = false;
         if (isRegister == true) {
-            await fetch("/api/auth/register", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    email: email,
-                    password: password,
-                }),
-            }).then((response) => {
-                if (response.ok) {
+            try {
+                const res = await fetch("/api/auth/register", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password,
+                    }),
+                })
+
+                if (res.ok) {
                     registerSuccess = true;
-                    return;
+                } else {
+                    const data = await res.json();
+
+                    setPasswordError(
+                        <>
+                            {data.errors.PasswordRequiresLower && (
+                                <small className="text-danger d-block">Password must contain at least one lowercase!</small>
+                            )}
+                            {data.errors.PasswordRequiresNonAlphanumeric && (
+                                <small className="text-danger d-block">Passwords must have at least one special character!</small>
+                            )}
+                            {data.errors.PasswordRequiresUpper && (
+                                <small className="text-danger d-block">Password must contain at least one uppercase!</small>
+                            )}
+                            {data.errors.PasswordTooShort && (
+                                <small className="text-danger d-block">Password must be at least 6 characters!</small>
+                            )}
+                        </>
+                    )
+                    if (data.errors.InvalidEmail)
+                        setEmailError("Invalid Email!")
+                    if (data.errors.DuplicateUserName)
+                        setEmailError("Username Taken. Try again!")
+
+                    throw new Error(data.title)
                 }
-                return response.json();
-            }).then((data) => {
-                if (registerSuccess)
-                    return;
-
-                setPasswordError(
-                    <>
-                        {data.errors.PasswordRequiresLower && (
-                            <small className="text-danger d-block">Password must contain at least one lowercase!</small>
-                        )}
-                        {data.errors.PasswordRequiresNonAlphanumeric && (
-                            <small className="text-danger d-block">Passwords must have at least one special character!</small>
-                        )}
-                        {data.errors.PasswordRequiresUpper && (
-                            <small className="text-danger d-block">Password must contain at least one uppercase!</small>
-                        )}
-                        {data.errors.PasswordTooShort && (
-                            <small className="text-danger d-block">Password must be at least 6 characters!</small>
-                        )}
-                    </>
-                )
-                if (data.errors.InvalidEmail)
-                    setEmailError("Invalid Email!")
-                if (data.errors.DuplicateUserName)
-                    setEmailError("Username Taken. Try again!")
-
-                throw new Error(data.title)
-            }).catch((error) => {
+            } catch (error: unknown) {
                 // handle network error
                 console.error(error);
-                handleFormError(error.message);
-                return;
-            });
+                if (error instanceof Error) {
+                    handleFormError(error.message);
+                } else {
+                    handleFormError("An unknown error occurred");
+                }
+            }
         }
 
         if (isRegister && !registerSuccess) {

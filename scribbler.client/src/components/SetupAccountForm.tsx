@@ -29,7 +29,7 @@ function SignInForm({ onFormSubmit, userId }: Props) {
         setLoadingSubmit(false);
     }
 
-    const handleSaveChanges = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSaveChanges = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoadingSubmit(true);
 
@@ -45,26 +45,32 @@ function SignInForm({ onFormSubmit, userId }: Props) {
             handleFormError("About Me can not be greater than 200 characters");
         }
 
-        fetch('/api/account/setup', {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                displayName: displayName,
-                aboutMe: aboutMe
-            }),
-        }).then(res => {
+        try {
+            const res = await fetch('/api/account/setup', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    displayName: displayName,
+                    aboutMe: aboutMe
+                }),
+            });
+
             if (res.ok) {
                 onFormSubmit();
                 return;
+            } else {
+                throw new Error("Error Setting Up Account");
             }
-
-            throw new Error("Error Setting Up Account");
-        }).catch(e => {
-            console.error(e);
-            handleFormError(e.message);
-        })
+        } catch (error: unknown) {
+            console.error(error);
+            if (error instanceof Error) {
+                handleFormError(error.message);
+            } else {
+                handleFormError("An unknown error occurred");
+            }
+        }
 
     } 
 

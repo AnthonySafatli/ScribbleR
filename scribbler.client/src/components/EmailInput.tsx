@@ -12,7 +12,7 @@ function EmailInput({ setEmail, handleResult, setError }: Props) {
     const [query, setQuery] = useState("");
     const [loadingEmailConfirm, setLoadingEmailConfirm] = useState(false);
 
-    const pingEmail = (emailQuery: string) => {
+    const pingEmail = async (emailQuery: string) => {
         if (!emailQuery) {
             setError("");
             handleResult(null);
@@ -27,30 +27,34 @@ function EmailInput({ setEmail, handleResult, setError }: Props) {
 
         // api query
         const url = `/api/auth/needsregister?email=${encodeURIComponent(emailQuery)}`;
-        fetch(url, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-            .then(async (response) => {
-                if (!response.ok) {
-                    throw new Error("Invalid Email!");
-                }
-                return response.json();
-            })
-            .then((data) => {
-                handleResult(data.needsRegister);
-                setEmail(emailQuery);
-            })
-            .catch((error) => {
-                console.error("Fetch error:", error);
-                setError(error.message);
-                handleResult(null);
-            })
-            .finally(() => {
-                setLoadingEmailConfirm(false);
+        try {
+            const res = await fetch(url, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
             });
+
+            if (!res.ok) {
+                throw new Error("Invalid Email!");
+            }
+
+            const data = await res.json();
+            handleResult(data.needsRegister);
+            setEmail(emailQuery);
+        } catch (error: unknown) {
+            console.error("Fetch error:", error);
+
+            if (error instanceof Error) {
+                setError(error.message); 
+            } else {
+                setError("An unknown error occurred"); 
+            }
+
+            handleResult(null);
+        }
+        
+        setLoadingEmailConfirm(false);
     }
 
     useEffect(() => {

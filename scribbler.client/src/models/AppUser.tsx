@@ -10,19 +10,22 @@ export interface AppUser {
 }
 
 export async function PingAuth(): Promise<AppUser | null>{
-    return fetch("/api/auth/pingauth", {
-        method: "GET",
-    }).then((res) => {
-        if (res.status == 200)
-            return res.json();
-    }).then((data) => {
-        if (data) {
-            return data as AppUser;
-        }
 
-        return null
-    }).catch(e => {
-        console.error(e);
+    try {
+
+        const res = await fetch("/api/auth/pingauth", {
+            method: "GET",
+        });
+
+        if (res.status == 200) {
+            const data = await res.json()
+            return data as AppUser;
+        } 
+
+        throw new Error("An unexpected error occured!");
+
+    } catch (error: unknown) {
+        console.log(error)
         return null;
-    })
+    }
 }

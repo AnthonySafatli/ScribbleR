@@ -32,7 +32,7 @@ function AccountContent({ setAccountInfo, accountInfo, displayName, aboutMe, han
 
         return false;
     }
-    const handleAccountSave = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleAccountSave = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         setSubmitError(null);
@@ -43,32 +43,37 @@ function AccountContent({ setAccountInfo, accountInfo, displayName, aboutMe, han
         }
 
         setLoadingFormSubmit(true);
+        try {
+            const res = await fetch('/api/account/edit', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    displayName: displayName,
+                    aboutMe: aboutMe
+                }),
+            });
 
-        fetch('/api/account/edit', { 
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                displayName: displayName,
-                aboutMe: aboutMe
-            }),
-        }).then(res => {
             if (res.ok) {
-                return res.json();
+                const data = await res.json();
+                setAccountInfo(data)
+                setLoadingFormSubmit(false);
+                setSuccessFormSubmit(true);
+            } else {
+                throw new Error("Error Saving Changes!");
             }
-
-            throw new Error("Error Saving Changes!");
-        }).then(data => {
-            console.log(data)
-            setAccountInfo(data)
-            setLoadingFormSubmit(false);
-            setSuccessFormSubmit(true);
-        }).catch(e => {
+        } catch (error: unknown) {
             console.error(e);
-            setSubmitError(e.message)
+            if (error instanceof Error) {
+                setSubmitError(error.message);
+            } else {
+                setSubmitError("An unknown error occurred");
+            }
             setLoadingFormSubmit(false);
-        })
+        }
+
+        
     };
 
     return (
