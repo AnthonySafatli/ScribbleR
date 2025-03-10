@@ -70,7 +70,7 @@ function SignInForm({ closeToggle, onSignedIn }: Props) {
         // register of needed
         let registerSuccess = false;
         if (isRegister == true) {
-            await fetch("/register", {
+            await fetch("/api/auth/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -127,9 +127,9 @@ function SignInForm({ closeToggle, onSignedIn }: Props) {
         // login
         let loginurl = "";
         if (rememberme == true)
-            loginurl = "/login?useCookies=true";
+            loginurl = "/api/auth/login?useCookies=true";
         else
-            loginurl = "/login?useSessionCookies=true";
+            loginurl = "/api/auth/login?useSessionCookies=true";
 
         // post data to the /register api
         let signedIn = false;

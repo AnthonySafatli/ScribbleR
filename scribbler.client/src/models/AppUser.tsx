@@ -10,7 +10,7 @@ export interface AppUser {
 }
 
 export async function PingAuth(): Promise<AppUser | null>{
-    return fetch("/pingauth", {
+    return fetch("/api/auth/pingauth", {
         method: "GET",
     }).then((res) => {
         if (res.status == 200)

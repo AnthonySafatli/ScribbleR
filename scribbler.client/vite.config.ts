@@ -7,31 +7,7 @@ export default defineConfig({
     server: {
         port: 52861,
         proxy: {
-            '/login': {
-                target: 'https://localhost:44389/',
-                secure: false
-            },
-            '/logout': {
-                target: 'https://localhost:44389/',
-                secure: false
-            },
-            '/register': {
-                target: 'https://localhost:44389/',
-                secure: false
-            },
-            '/needsregister': {
-                target: 'https://localhost:44389/',
-                secure: false
-            },
-            '/pingauth': {
-                target: 'https://localhost:44389/',
-                secure: false
-            },
-            '/account/setup': {
-                target: 'https://localhost:44389/',
-                secure: false
-            },
-            '/account/edit': {
+            '^/api/': {
                 target: 'https://localhost:44389/',
                 secure: false
             },

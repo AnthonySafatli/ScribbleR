@@ -29,17 +29,30 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
+        builder.Services.AddCors(opt =>
+        {
+            opt.AddPolicy("reactApp", builder =>
+            {
+                builder.WithOrigins("http://localhost:52861")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+
+            });
+        });
+
         var app = builder.Build();
 
-        app.MapIdentityApi<AppUser>();
+        app.MapGroup("/api/auth")
+            .MapIdentityApi<AppUser>();
 
-        app.MapPost("/logout", async (SignInManager<AppUser> signInManager) =>
+        app.MapPost("/api/auth/logout", async (SignInManager<AppUser> signInManager) =>
         {
             await signInManager.SignOutAsync();
             return Results.Ok();
         }).RequireAuthorization();
 
-        app.MapGet("/pingauth", async (ClaimsPrincipal user, UserManager<AppUser> userManager) =>
+        app.MapGet("/api/auth/pingauth", async (ClaimsPrincipal user, UserManager<AppUser> userManager) =>
         {
             var userId = user.FindFirstValue(ClaimTypes.NameIdentifier); 
             var appUser = await userManager.FindByIdAsync(userId); 
@@ -59,7 +72,7 @@ public class Program
                 });
         }).RequireAuthorization();
 
-        app.MapGet("/needsregister", async (string email, UserManager<AppUser> userManager) =>
+        app.MapGet("/api/auth/needsregister", async (string email, UserManager<AppUser> userManager) =>
         {
             // Basic Email validation
             if (string.IsNullOrEmpty(email) || !IsValidEmail(email))
@@ -83,7 +96,9 @@ public class Program
         app.UseAuthorization();
 
         app.MapControllers();
-        app.MapHub<ChatHub>("/Chat");
+        app.MapHub<ChatHub>("/api/Chat");
+
+        app.UseCors("reactApp");
 
         app.Run();
     }

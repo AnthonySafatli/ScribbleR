@@ -26,7 +26,7 @@ function AccountNav({ currentPage, navigate }: Props) {
     }, [windowWidth])
 
     function handleLogout() {
-        fetch("/logout", {
+        fetch("/api/auth/logout", {
             method: "POST"
         }).then(res => {
             if (res.ok) {

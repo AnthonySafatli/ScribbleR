@@ -44,7 +44,7 @@ function AccountContent({ setAccountInfo, accountInfo, displayName, aboutMe, han
 
         setLoadingFormSubmit(true);
 
-        fetch('/account/edit', { 
+        fetch('/api/account/edit', { 
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

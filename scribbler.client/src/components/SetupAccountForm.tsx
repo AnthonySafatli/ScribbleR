@@ -45,7 +45,7 @@ function SignInForm({ onFormSubmit, userId }: Props) {
             handleFormError("About Me can not be greater than 200 characters");
         }
 
-        fetch('/account/setup', {
+        fetch('/api/account/setup', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

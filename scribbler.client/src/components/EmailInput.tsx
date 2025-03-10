@@ -26,7 +26,7 @@ function EmailInput({ setEmail, handleResult, setError }: Props) {
         setLoadingEmailConfirm(true);
 
         // api query
-        const url = `/needsregister?email=${encodeURIComponent(emailQuery)}`;
+        const url = `/api/auth/needsregister?email=${encodeURIComponent(emailQuery)}`;
         fetch(url, {
             method: "GET",
             headers: {

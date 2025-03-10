@@ -8,7 +8,7 @@ using ScribbleR.Server.Models.Dtos;
 namespace ScribbleR.Server.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class AccountController : ControllerBase
     {
         private readonly ILogger<AccountController> _logger;
