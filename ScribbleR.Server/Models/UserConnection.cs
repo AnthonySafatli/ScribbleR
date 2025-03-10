@@ -1,6 +1,1 @@
-﻿namespace ScribbleR.Server.Models;
-
-public class UserConnection
-{
-    public string ChatRoom { get; set; }
-}
+//This file is no longer needed and can be deleted.

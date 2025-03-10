@@ -1,13 +1,12 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using ScribbleR.Server.Models;
+using Microsoft.AspNetCore.SignalR;
 
 namespace ScribbleR.Server.Hubs;
 
 public class ChatHub : Hub
 {
-    public async Task TestJoin(UserConnection conn)
+    public async Task TestJoin(string chatroom)
     {
-        await Groups.AddToGroupAsync(Context.ConnectionId, conn.ChatRoom);
-        await Clients.Group(conn.ChatRoom).SendAsync(nameof(TestJoin), "admin", "Someone has joined");
+        await Groups.AddToGroupAsync(Context.ConnectionId, chatroom);
+        await Clients.Group(chatroom).SendAsync(nameof(TestJoin), $"admin: Someone has joined {chatroom}");
     }
 }
