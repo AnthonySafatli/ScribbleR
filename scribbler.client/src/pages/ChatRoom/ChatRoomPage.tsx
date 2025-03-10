@@ -10,14 +10,17 @@ function ChatRoomPage() {
     const joinChatRoom = async (chatroom: string) => {
         try {
             const conn = new HubConnectionBuilder()
-                .withUrl("/Chat")
+                .withUrl("https://localhost:44389/chat")
                 .configureLogging(LogLevel.Debug)
                 .build();
+
             conn.on("TestJoin", (msg: string) => { 
                 console.log("msg: ", msg);
             });
+
             await conn.start();
             await conn.invoke("TestJoin", chatroom); 
+
             setConnection(conn);
         } catch (e) {
             console.error(e);
