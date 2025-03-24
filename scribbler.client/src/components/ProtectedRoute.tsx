@@ -14,7 +14,7 @@ const ProtectedRoute: React.FC = () => {
 
     useEffect(() => {
         if (!user) return;
-        setIsSetup(user.isSetup);
+        setIsSetup(user.isSetup); // TODO: does not work
     }, [user])
 
     if (loading) {

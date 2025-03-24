@@ -1,20 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, Button, Col, Form, OverlayTrigger, Row, Spinner, Tooltip } from "react-bootstrap";
 
 import Icon from "../../components/Icon";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import { AuthContextData } from "../../models/AppUser";
 
-import { AppUser } from "../../models/AppUser";
+function AccountContent() {
 
-interface Props {
-    accountInfo: AppUser | null | undefined
-    setAccountInfo: (signInInfo: AppUser | null) => void
+    const { user, setUser } = useAuthContext() as AuthContextData;
 
-    displayName: string | undefined
-    aboutMe: string | undefined
-    handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-}
+    const [displayName, setDisplayName] = useState<string>(user?.displayName ?? "");
+    const [aboutMe, setAboutMe] = useState<string>(user?.aboutMe ?? "");
 
-function AccountContent({ setAccountInfo, accountInfo, displayName, aboutMe, handleChange }: Props) {
+    useEffect(() => {
+        setDisplayName(user?.displayName ?? "")
+        setAboutMe(user?.aboutMe ?? "")
+    }, [user]);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        if (name === "displayName")
+            setDisplayName(value);
+        if (name === "aboutMe")
+            setAboutMe(value);
+    };
 
     // Submit Status
     const [loadingFormSubmit, setLoadingFormSubmit] = useState(false);
@@ -25,13 +34,13 @@ function AccountContent({ setAccountInfo, accountInfo, displayName, aboutMe, han
     const [submitError, setSubmitError] = useState<string | null>("");
 
     const unsavedChanges = () => {
-        if (accountInfo?.aboutMe != aboutMe)
+        if (user?.aboutMe != aboutMe)
             return true;
-        if (accountInfo?.displayName != displayName)
+        if (user?.displayName != displayName)
             return true;
-
         return false;
     }
+
     const handleAccountSave = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -57,7 +66,7 @@ function AccountContent({ setAccountInfo, accountInfo, displayName, aboutMe, han
 
             if (res.ok) {
                 const data = await res.json();
-                setAccountInfo(data)
+                setUser(data)
                 setLoadingFormSubmit(false);
                 setSuccessFormSubmit(true);
             } else {
@@ -72,8 +81,6 @@ function AccountContent({ setAccountInfo, accountInfo, displayName, aboutMe, han
             }
             setLoadingFormSubmit(false);
         }
-
-        
     };
 
     return (
@@ -88,13 +95,18 @@ function AccountContent({ setAccountInfo, accountInfo, displayName, aboutMe, han
 
             <Form onSubmit={handleAccountSave}>
                 <Row>
+                    <Col xs={2}>
+                        <div className="d-flex align-items-center h-100">
+                            <Form.Label className="mb-0">Display Name</Form.Label>
+                        </div>
+                    </Col>
                     <Col className="py-2">
                         <Form.Control
                             type="text"
                             name="displayName"
                             id="displayName"
                             onChange={handleChange}
-                            value={displayName || ""} 
+                            value={displayName} 
                             placeholder="Enter your preferred display name" />
                     </Col>
                 </Row>
@@ -105,7 +117,7 @@ function AccountContent({ setAccountInfo, accountInfo, displayName, aboutMe, han
                         name="aboutMe"
                         id="aboutMe"
                         onChange={handleChange}
-                        value={aboutMe || ""} 
+                        value={aboutMe} 
                         placeholder="Share something interesting about yourself!" />
                 </Form.Group>
                 <Form.Group>
