@@ -13,21 +13,19 @@ const ProtectedRoute: React.FC = () => {
     const [isSetup, setIsSetup] = useState(false);
 
     useEffect(() => {
-        if (user === null || user === undefined) {
-            setIsSetup(false);
-            return;
-        }
-        console.log(user)
+        if (!user) return;
         setIsSetup(user.isSetup);
     }, [user])
 
-    if (loading)
-        return
+    if (loading) {
+        return (
             <div className="vh-100 d-flex flex-column">
                 <CenteredContainer>
                     Loading...
                 </CenteredContainer>
-            </div>;
+            </div>
+        );
+    }
 
     return user ?
         isSetup ?
