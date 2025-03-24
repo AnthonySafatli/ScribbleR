@@ -1,44 +1,32 @@
 import { useEffect, useState } from "react";
 
+import { useAuthContext } from "../../hooks/useAuthContext";
 import CenteredContainer from "../../components/CenteredContainer";
 import ChatRoomForm from "./ChatRoomForm";
 import IndexNav from "./IndexNav";
 import SignInModal from "./SignInModal";
 import SetupAccountModal from "./SetupAccountModal";
+import { AuthContextData } from "../../models/AppUser";
 
-import { AppUser, PingAuth } from "../../models/AppUser";
-
-interface Props {
-    accountInfo: AppUser | null | undefined
-    setSignInInfo: (signInInfo: AppUser | null) => void
-}
-
-function IndexPage({ setSignInInfo, accountInfo }: Props) {
+function IndexPage() {
+    const { user } = useAuthContext() as AuthContextData;
     const [showSignInModal, setShowSignInModal] = useState(false);
     const [showSetupAccountModal, setShowSetupAccountModal] = useState(false);
 
     useEffect(() => {
-        async function getAccountInfo() {
-            setSignInInfo(await PingAuth())
-        }
-
-        getAccountInfo();
-    }, [])
-
-    useEffect(() => {
-        if (accountInfo === null || accountInfo === undefined) {
+        if (user === null || user === undefined) {
             setShowSetupAccountModal(false)
             return;
         }
-        setShowSetupAccountModal(!accountInfo.isSetup)
-    }, [accountInfo])
+        setShowSetupAccountModal(!user.isSetup)
+    }, [user])
 
     return (
         <div className="vh-100 d-flex flex-column">
-            <IndexNav onSignIn={() => setShowSignInModal(true)} accountInfo={accountInfo} /> 
+            <IndexNav onSignIn={() => setShowSignInModal(true)} accountInfo={user} /> 
 
             <SignInModal show={showSignInModal} onClose={() => setShowSignInModal(false)} />
-            <SetupAccountModal show={showSetupAccountModal} userId={accountInfo?.id} />
+            <SetupAccountModal show={showSetupAccountModal} />
             
             <CenteredContainer>
                 <main>

@@ -6,25 +6,35 @@ import AccountPage from './pages/Account/AccountPage';
 import ChatRoomPage from './pages/ChatRoom/ChatRoomPage';
 import NotFound from './pages/NotFound';
 
+import ProtectedRoute from './components/ProtectedRoute';
+import { AuthProvider } from './context/AuthContext';
 import { AppUser }from './models/AppUser';
 
 import './App.css'
 
 function App() {
-
-    const [accountInfo, setAccountInfo] = useState<AppUser | null | undefined>(undefined)
-
     return (
-        <Router>
-            <Routes>
-                <Route path="/" element={<IndexPage accountInfo={accountInfo} setSignInInfo={setAccountInfo} />} />
-                <Route path="/Account" element={<AccountPage accountInfo={accountInfo} setAccountInfo={setAccountInfo} />} />
-                <Route path="/ChatRoom" element={<ChatRoomPage />} />
+        <AuthProvider>
+            <Router>
+                <Routes>
+                    {/* Index */}
+                    <Route path="/" element={<IndexPage />} />
 
-                {/* Fallback 404 Route */}
-                <Route path="*" element={<NotFound />} />
-            </Routes>
-        </Router>
+                    {/* Accounts */}
+                    <Route element={<ProtectedRoute />}>
+                        <Route path="/Account" element={<AccountPage />} />
+                    </Route>
+
+                    {/* Chatroom */}
+                    <Route element={<ProtectedRoute />}>
+                        <Route path="/ChatRoom" element={<ChatRoomPage />} />
+                    </Route>
+
+                    {/* Fallback 404 Route */}
+                    <Route path="*" element={<NotFound />} />
+                </Routes>
+            </Router>
+        </AuthProvider>
     );
 }
 

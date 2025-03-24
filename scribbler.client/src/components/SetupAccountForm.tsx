@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { Alert, Button, Form, Spinner } from "react-bootstrap";
 
+import { useAuthContext } from "../hooks/useAuthContext";
+import { AppUser, AuthContextData } from "../models/AppUser";
 
-interface Props {
-    onFormSubmit: () => void,
-    userId: string | undefined
-}
+function SignInForm() {
 
-function SignInForm({ onFormSubmit, userId }: Props) {
+    const { user, setUser } = useAuthContext() as AuthContextData;
 
     const [displayName, setDisplayName] = useState("");
     const [aboutMe, setAboutMe] = useState("");
@@ -58,7 +57,13 @@ function SignInForm({ onFormSubmit, userId }: Props) {
             });
 
             if (res.ok) {
-                onFormSubmit();
+                const newUser: AppUser = {
+                    ...user as AppUser,
+                    isSetup: true,
+                    displayName: displayName,
+                    aboutMe: aboutMe,
+                }
+                setUser(newUser);
                 return;
             } else {
                 throw new Error("Error Setting Up Account");
