@@ -57,13 +57,8 @@ function SignInForm() {
             });
 
             if (res.ok) {
-                const newUser: AppUser = {
-                    ...user as AppUser,
-                    isSetup: true,
-                    displayName: displayName,
-                    aboutMe: aboutMe,
-                }
-                setUser(newUser);
+                const data = await res.json();
+                setUser(data);
                 return;
             } else {
                 throw new Error("Error Setting Up Account");
