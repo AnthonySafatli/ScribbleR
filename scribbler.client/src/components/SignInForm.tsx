@@ -2,6 +2,7 @@ import { JSX, useState, useEffect } from "react";
 import { Alert, Button, Form, Spinner } from "react-bootstrap";
 
 import EmailInput from "./EmailInput";
+import PasswordInput from "./PasswordInput";
 
 interface Props {
     closeToggle: boolean,
@@ -187,12 +188,7 @@ function SignInForm({ closeToggle, onSignedIn }: Props) {
             </Form.Group>
             <Form.Group className="my-3">
                 <Form.Label>Password</Form.Label>
-                <Form.Control
-                    type="password"
-                    name="password"
-                    id="password"
-                    onChange={handleChange}
-                    placeholder="Enter Password" />
+                <PasswordInput handleChange={handleChange} />
                 {passwordError && (
                     passwordError
                 )}
