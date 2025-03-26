@@ -6,6 +6,7 @@ import { Button, Container, Form } from "react-bootstrap";
 import SendButton from "./SendButton";
 import ClearButton from "./ClearButton";
 import NotFound from "../NotFound";
+import SignalRConnections from "../../models/SignalRConnections";
 
 function ChatRoomPage() {
 
@@ -13,19 +14,21 @@ function ChatRoomPage() {
 
     const [conn, setConnection] = useState<HubConnection | null>(null);
 
-    const joinChatRoom = async () => {
+    const joinedChatRoom = (msg: string, userId: string) => {
+        console.log("msg: ", msg);
+        console.log("user: ", userId);
+    }
+
+    const connectToChatRoom = async () => {
         try {
             const conn = new HubConnectionBuilder()
                 .withUrl("https://localhost:44389/api/chat")
-                .configureLogging(LogLevel.Debug)
                 .build();
 
-            conn.on("TestJoin", (msg: string) => { 
-                console.log("msg: ", msg);
-            });
+            conn.on(SignalRConnections.TEST_JOIN, joinedChatRoom);
 
             await conn.start();
-            await conn.invoke("TestJoin", chatroomId); 
+            await conn.invoke(SignalRConnections.TEST_JOIN, chatroomId); 
 
             setConnection(conn);
         } catch (e) {
@@ -53,7 +56,7 @@ function ChatRoomPage() {
                         <Form.Control as="textarea" rows={5} style={{ resize: "none", width: "100%" }}></Form.Control>
                     </div>
                     <div className="d-flex justify-content-around gap-2 my-4">
-                        <Button onClick={joinChatRoom}>Join {chatroomId}</Button>
+                        <Button onClick={connectToChatRoom}>Join {chatroomId}</Button>
                         <SendButton />
                         <ClearButton onClear={requestCanvasClear} />
                     </div>
