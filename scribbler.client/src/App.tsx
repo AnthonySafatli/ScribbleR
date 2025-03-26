@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import IndexPage from './pages/Index/IndexPage';
@@ -8,7 +7,6 @@ import NotFound from './pages/NotFound';
 
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
-import { AppUser }from './models/AppUser';
 
 import './App.css'
 
@@ -27,7 +25,7 @@ function App() {
 
                     {/* Chatroom */}
                     <Route element={<ProtectedRoute />}>
-                        <Route path="/ChatRoom" element={<ChatRoomPage />} />
+                        <Route path="/ChatRoom/:chatroomId" element={<ChatRoomPage />} />
                     </Route>
 
                     {/* Fallback 404 Route */}

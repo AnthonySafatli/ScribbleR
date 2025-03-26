@@ -1,13 +1,19 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
+import { useParams } from "react-router-dom";
 import { useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
+
 import SendButton from "./SendButton";
 import ClearButton from "./ClearButton";
+import NotFound from "../NotFound";
 
 function ChatRoomPage() {
+
+    const { chatroomId } = useParams();
+
     const [conn, setConnection] = useState<HubConnection | null>(null);
 
-    const joinChatRoom = async (chatroom: string) => {
+    const joinChatRoom = async () => {
         try {
             const conn = new HubConnectionBuilder()
                 .withUrl("https://localhost:44389/api/chat")
@@ -19,7 +25,7 @@ function ChatRoomPage() {
             });
 
             await conn.start();
-            await conn.invoke("TestJoin", chatroom); 
+            await conn.invoke("TestJoin", chatroomId); 
 
             setConnection(conn);
         } catch (e) {
@@ -33,6 +39,10 @@ function ChatRoomPage() {
         setCanvasClear(!canvasClear);
     }
 
+    if (chatroomId === undefined) {
+        return <NotFound />
+    }
+
     return (
         <main>
             <Container>
@@ -43,7 +53,7 @@ function ChatRoomPage() {
                         <Form.Control as="textarea" rows={5} style={{ resize: "none", width: "100%" }}></Form.Control>
                     </div>
                     <div className="d-flex justify-content-around gap-2 my-4">
-                        <Button onClick={() => joinChatRoom("Test")}>Join</Button>
+                        <Button onClick={joinChatRoom}>Join {chatroomId}</Button>
                         <SendButton />
                         <ClearButton onClear={requestCanvasClear} />
                     </div>

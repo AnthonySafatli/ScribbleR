@@ -9,4 +9,19 @@ public class ChatHub : Hub
         await Groups.AddToGroupAsync(Context.ConnectionId, chatroom);
         await Clients.Group(chatroom).SendAsync(nameof(TestJoin), $"admin: Someone has joined {chatroom}");
     }
+
+    public async Task JoinChatroom(string chatroom)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task SendMessage()
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task LeaveChatroom()
+    {
+        throw new NotImplementedException();
+    }
 }
