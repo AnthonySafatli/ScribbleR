@@ -1,21 +1,29 @@
 import { useState } from "react";
-import { Col, Form, Row } from "react-bootstrap";
+import { Button, Col, Form, Row } from "react-bootstrap";
 
 import RoomIdInput from "./RoomIdInput";
-import RoomIdSubmit from "./RoomIdSubmit";
 
 function ChatRoomForm() {
     const [roomId, setRoomId] = useState("");
 
+    const goToChatRoom = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        window.location.replace("/Chatroom/" + roomId)
+    }
+
     return (
-        <Form>
+        <Form onSubmit={goToChatRoom}>
             <Row>
                 <Col>
                     <RoomIdInput onContentChange={setRoomId} />
                 </Col>
                 {roomId && (
                     <Col>
-                        <RoomIdSubmit />
+                        <div>
+                            <Button variant="primary" type="submit">
+                                Go To Room
+                            </Button>
+                        </div>
                     </Col>
                 )}
             </Row>
