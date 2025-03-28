@@ -4,20 +4,16 @@ namespace ScribbleR.Server.Hubs;
 
 public class ChatHub : Hub
 {
-    public async Task TestJoin(string chatroom)
+    public async Task TestJoin(string chatroom, string displayName, string userId)
     {
         await Groups.AddToGroupAsync(Context.ConnectionId, chatroom);
-        var userId = Context.UserIdentifier;
-
-        if (userId == null) return;
-
-        var displayName = Context.User?.FindFirst("DisplayName")?.Value;
         await Clients.Group(chatroom).SendAsync(nameof(TestJoin), $"{displayName} has joined {chatroom}", userId);
     }
 
-    public async Task JoinChatroom(string chatroom)
+    public async Task JoinChatroom(string chatroom, string displayName, string userId)
     {
-        throw new NotImplementedException();
+        await Groups.AddToGroupAsync(Context.ConnectionId, chatroom);
+        await Clients.Group(chatroom).SendAsync(nameof(TestJoin), userId, $"{displayName} has joined {chatroom}");
     }
 
     public async Task SendMessage()

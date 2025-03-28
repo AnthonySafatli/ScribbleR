@@ -1,4 +1,4 @@
-import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
+import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
@@ -7,10 +7,14 @@ import SendButton from "./SendButton";
 import ClearButton from "./ClearButton";
 import NotFound from "../NotFound";
 import SignalRConnections from "../../models/SignalRConnections";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import { AuthContextData } from "../../models/AppUser";
 
 function ChatRoomPage() {
 
     const { chatroomId } = useParams();
+
+    const { user } = useAuthContext() as AuthContextData;
 
     const [conn, setConnection] = useState<HubConnection | null>(null);
 
@@ -28,7 +32,7 @@ function ChatRoomPage() {
             conn.on(SignalRConnections.TEST_JOIN, joinedChatRoom);
 
             await conn.start();
-            await conn.invoke(SignalRConnections.TEST_JOIN, chatroomId); 
+            await conn.invoke(SignalRConnections.TEST_JOIN, chatroomId, user?.displayName, user?.id); 
 
             setConnection(conn);
         } catch (e) {
