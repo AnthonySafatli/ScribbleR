@@ -13,7 +13,7 @@ public class ChatHub : Hub
     public async Task JoinChatroom(string chatroom, string displayName, string userId)
     {
         await Groups.AddToGroupAsync(Context.ConnectionId, chatroom);
-        await Clients.Group(chatroom).SendAsync(nameof(TestJoin), userId, $"{displayName} has joined {chatroom}");
+        await Clients.Group(chatroom).SendAsync(nameof(JoinChatroom), userId, $"{displayName} has joined {chatroom}");
     }
 
     public async Task SendMessage()

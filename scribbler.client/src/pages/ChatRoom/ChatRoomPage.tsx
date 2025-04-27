@@ -1,6 +1,6 @@
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 
 import SendButton from "./SendButton";
@@ -18,27 +18,35 @@ function ChatRoomPage() {
 
     const [conn, setConnection] = useState<HubConnection | null>(null);
 
-    const joinedChatRoom = (msg: string, userId: string) => {
+    const joinedChatRoom = (userId: string, msg: string) => {
         console.log("msg: ", msg);
         console.log("user: ", userId);
     }
 
-    const connectToChatRoom = async () => {
+    const setupConnection = async () => {
         try {
-            const conn = new HubConnectionBuilder()
-                .withUrl("https://localhost:44389/api/chat")
-                .build();
+            if (!conn) {
+                const conn = new HubConnectionBuilder()
+                    .withUrl("https://localhost:44389/api/chat")
+                    .build();
 
-            conn.on(SignalRConnections.TEST_JOIN, joinedChatRoom);
+                conn.on(SignalRConnections.JOIN_CHATROOM, joinedChatRoom);
 
-            await conn.start();
-            await conn.invoke(SignalRConnections.TEST_JOIN, chatroomId, user?.displayName, user?.id); 
+                await conn.start();
+                await conn.invoke(SignalRConnections.JOIN_CHATROOM, chatroomId, user?.displayName, user?.id); 
 
-            setConnection(conn);
+                setConnection(conn);
+            }
         } catch (e) {
             console.error(e);
         }
     };
+
+    useEffect(() => {
+        if (user) {
+            setupConnection();
+        }
+    }, [user])
 
     const [canvasClear, setCanvasClear] = useState(false);
 
@@ -60,7 +68,6 @@ function ChatRoomPage() {
                         <Form.Control as="textarea" rows={5} style={{ resize: "none", width: "100%" }}></Form.Control>
                     </div>
                     <div className="d-flex justify-content-around gap-2 my-4">
-                        <Button onClick={connectToChatRoom}>Join {chatroomId}</Button>
                         <SendButton />
                         <ClearButton onClear={requestCanvasClear} />
                     </div>
