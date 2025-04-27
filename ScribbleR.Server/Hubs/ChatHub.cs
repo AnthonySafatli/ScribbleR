@@ -8,36 +8,52 @@ public class ChatHub : Hub
 {
     private readonly SharedDb _shared;
 
+    private const string ReceiveMessage = "ReceiveMessage";
+
     public ChatHub(SharedDb shared)
     {
         _shared = shared;
     }
 
-    public async Task TestJoin(UserConnection conn)
-    {
-        await Groups.AddToGroupAsync(Context.ConnectionId, conn.Chatroom);
-        await Clients.Group(conn.Chatroom).SendAsync(nameof(TestJoin), $"{conn.DisplayName} has joined {conn.Chatroom}", conn.UserId);
-    }
+    /*
+     * 
+     * ReceiveMessage Structure
+     * 
+     * Display Name
+     * User Id
+     * Message
+     * IsJsoinOrLeave
+     * 
+     */
 
     public async Task JoinChatroom(UserConnection conn)
     {
         await Groups.AddToGroupAsync(Context.ConnectionId, conn.Chatroom);
-
         _shared.connections[Context.ConnectionId] = conn;
 
-        await Clients.Group(conn.Chatroom).SendAsync(nameof(JoinChatroom), conn.UserId, $"{conn.DisplayName} has joined {conn.Chatroom}");
+        await Clients.Group(conn.Chatroom).SendAsync(nameof(JoinChatroom), conn.UserId, $"{conn.DisplayName} has joined {conn.Chatroom}"); // TODO: Remove
+        await Clients.Group(conn.Chatroom).SendAsync(ReceiveMessage, conn.DisplayName, conn.UserId, "", true);
+        await Clients.Group(conn.Chatroom).SendAsync("UserCount", 14); // TODO: Replace with actual count using Clients
+                                                                       // TODO: Only send to the user that joined
     }
 
     public async Task SendMessage(string msg)
     {
         if (_shared.connections.TryGetValue(Context.ConnectionId, out UserConnection? conn))
         {
-            await Clients.Group(conn.Chatroom).SendAsync(nameof(SendMessage), conn.DisplayName, msg);
+            await Clients.Group(conn.Chatroom).SendAsync(nameof(SendMessage), conn.DisplayName, msg); // TODO: Remove
+            await Clients.Group(conn.Chatroom).SendAsync(ReceiveMessage, conn.DisplayName, conn.UserId, msg, null);
         }
     }
 
-    public async Task LeaveChatroom()
+    public override async Task OnDisconnectedAsync(Exception? exception)
     {
-        throw new NotImplementedException();
+        if (_shared.connections.TryGetValue(Context.ConnectionId, out UserConnection? conn))
+        {
+            // TODO: Remove the user from the group
+            await Clients.Group(conn.Chatroom).SendAsync(ReceiveMessage, conn.DisplayName, conn.UserId, "", false);
+        }
+
+        await base.OnDisconnectedAsync(exception);
     }
 }
