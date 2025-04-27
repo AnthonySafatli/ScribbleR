@@ -40,6 +40,8 @@ public class Program
             });
         });
 
+        builder.Services.AddSingleton<SharedDb>();
+
         var app = builder.Build();
 
         app.MapGroup("/api/auth")
