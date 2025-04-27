@@ -23,9 +23,9 @@ function ChatRoomPage() {
         console.log("user: ", userId);
     }
 
-    const setupConnection = async () => {
+    const setupConnection = async (hubCon: HubConnection | null) => {
         try {
-            if (!conn) {
+            if (!hubCon) {
                 const conn = new HubConnectionBuilder()
                     .withUrl("https://localhost:44389/api/chat")
                     .build();
@@ -33,7 +33,7 @@ function ChatRoomPage() {
                 conn.on(SignalRConnections.JOIN_CHATROOM, joinedChatRoom);
 
                 await conn.start();
-                await conn.invoke(SignalRConnections.JOIN_CHATROOM, chatroomId, user?.displayName, user?.id); 
+                await conn.invoke(SignalRConnections.JOIN_CHATROOM, {chatroom: chatroomId, displayName: user?.displayName, userId: user?.id}); 
 
                 setConnection(conn);
             }
@@ -44,7 +44,7 @@ function ChatRoomPage() {
 
     useEffect(() => {
         if (user) {
-            setupConnection();
+            setupConnection(conn);
         }
     }, [user])
 
