@@ -8,6 +8,7 @@ import SignalRConnections from "../../models/SignalRConnections";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { AuthContextData } from "../../models/AppUser";
 import { Message } from "../../models/Message";
+import Icon from "../../components/Icon";
 
 function ChatRoomPage() {
     const { chatroomId } = useParams();
@@ -69,7 +70,6 @@ function ChatRoomPage() {
     };
 
     function renderMessage(msg: Message) {
-        console.log(msg)
         if (msg.isSystem) {
             return (
                 <Alert variant="info">
@@ -93,11 +93,15 @@ function ChatRoomPage() {
     return (
         <main>
             <Container>
-                <div className="vh-100 d-flex flex-column justify-content-center">
-                    <h1 className="text-center">Chat Room</h1>
-                    <div>Chatroom User Count: { userCount }</div>
-                    <div className="d-flex flex-column" style={{ flexGrow: 1, justifyContent: "flex-end" }}>
-                        {messages.map((msg, i) => (<div key={i}>{ renderMessage(msg) }</div>))}
+                <div className="vh-100 d-flex flex-column">
+                    <div className="sticky-top mt-5">
+                        <div className="d-flex justify-content-around align-items-center">
+                            <h1 className="text-center">Chat Room</h1>
+                            <div><Icon name="person-circle" /> {userCount}</div>
+                        </div>
+                    </div>
+                    <div className="d-flex flex-column overflow-auto" style={{ flexGrow: 1, justifyContent: "flex-end", overflowY: 'auto', padding: '1rem' }}>
+                        {messages.map((msg, i) => (<div key={i}>{renderMessage(msg)}</div>))}
                     </div>
                     <div className="mt-4">
                         <Form.Control
@@ -115,6 +119,7 @@ function ChatRoomPage() {
                 </div>
             </Container>
         </main>
+
     );
 }
 
