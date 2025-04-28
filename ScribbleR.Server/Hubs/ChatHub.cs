@@ -37,6 +37,14 @@ public class ChatHub : Hub
         }
     }
 
+    public async Task SendSketch()
+    {
+        if (_shared.connections.TryGetValue(Context.ConnectionId, out UserConnection? conn))
+        {
+            await Clients.Group(conn.Chatroom).SendAsync(ReceiveMessage, conn.DisplayName, conn.UserId, "I sent a sketch", null);
+        }
+    }
+
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
         if (_shared.connections.TryGetValue(Context.ConnectionId, out UserConnection? conn))

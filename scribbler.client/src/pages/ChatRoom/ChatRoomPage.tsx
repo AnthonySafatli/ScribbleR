@@ -1,7 +1,7 @@
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Alert, Button, Container, Form } from "react-bootstrap";
+import { Alert, Button, Col, Container, Form, Row } from "react-bootstrap";
 
 import NotFound from "../NotFound";
 import SignalRConnections from "../../models/SignalRConnections";
@@ -9,6 +9,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { AuthContextData } from "../../models/AppUser";
 import { Message } from "../../models/Message";
 import Icon from "../../components/Icon";
+import DrawCanvas from "./DrawCanvas";
 
 function ChatRoomPage() {
     const { chatroomId } = useParams();
@@ -72,7 +73,7 @@ function ChatRoomPage() {
     function renderMessage(msg: Message) {
         if (msg.isSystem) {
             return (
-                <Alert variant="info">
+                <Alert variant="info" className="mt-2 mb-0">
                     <b>{msg.displayName}</b>{(msg.isJoin ? " has joined the chat" : " has left the chat")}
                 </Alert>
             );
@@ -80,7 +81,7 @@ function ChatRoomPage() {
         }
 
         return (
-            <Alert variant="secondary">
+            <Alert variant="secondary" className="mt-2 mb-0">
                 <b>{msg.displayName}</b>: {msg.message}
             </Alert>
         );
@@ -101,9 +102,14 @@ function ChatRoomPage() {
                         </div>
                     </div>
                     <div className="d-flex flex-column overflow-auto" style={{ flexGrow: 1, justifyContent: "flex-end", overflowY: 'auto', padding: '1rem' }}>
-                        {messages.map((msg, i) => (<div key={i}>{renderMessage(msg)}</div>))}
+                        { messages.map((msg, i) => (<div key={i}>{renderMessage(msg)}</div>))}
                     </div>
-                    <div className="mt-4">
+                        
+                    {/* 
+
+                    This is for typing messages
+
+                    <div className="mt-2">
                         <Form.Control
                             as="textarea"
                             rows={5}
@@ -112,10 +118,23 @@ function ChatRoomPage() {
                             onChange={(e) => setTypedMessage(e.target.value)}
                         />
                     </div>
-                    <div className="d-flex justify-content-around gap-2 my-4">
-                        <Button variant="primary" onClick={sendMessage}>Send!</Button>
-                        <Button variant="primary">Clear!</Button>
+
+                    */}
+
+                    <div>
+                        <DrawCanvas />
                     </div>
+                    <Row className="my-2">
+                        <Col>
+                            <Button className="w-100" variant="primary"><Icon name="trash3" /></Button>
+                        </Col>
+                        <Col>
+                            <Button className="w-100" variant="primary"><Icon name="journal-arrow-down" /></Button>
+                        </Col>
+                        <Col>
+                            <Button className="w-100" variant="primary" onClick={sendMessage}><Icon name="journal-arrow-up" /></Button>
+                        </Col>
+                    </Row>
                 </div>
             </Container>
         </main>
