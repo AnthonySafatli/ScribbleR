@@ -1,8 +1,10 @@
+import { CanvasPath } from "react-sketch-canvas";
 
 export interface Message {
     displayName: string,
     userId: string,
-    message: string,
+    paths: CanvasPath[] | null,
+    message: string | null,
     isSystem: boolean,
     isJoin: boolean,
 }

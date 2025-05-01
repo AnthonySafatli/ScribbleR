@@ -24,7 +24,6 @@ public class ChatHub : Hub
 
         await Clients.Group(conn.Chatroom).SendAsync(ReceiveMessage, conn.DisplayName, conn.UserId, "", true);
 
-
         int userCount = _shared.connections.Count(c => c.Value.Chatroom == conn.Chatroom);
         await Clients.Group(conn.Chatroom).SendAsync(UserCount, userCount);
 
@@ -42,7 +41,6 @@ public class ChatHub : Hub
     {
         if (_shared.connections.TryGetValue(Context.ConnectionId, out UserConnection? conn))
         {
-            await Clients.Group(conn.Chatroom).SendAsync(ReceiveMessage, conn.DisplayName, conn.UserId, "I sent a sketch", null);
             await Clients.Group(conn.Chatroom).SendAsync(ReceiveSketch, conn.DisplayName, conn.UserId, paths);
         }
     }

@@ -1,8 +1,8 @@
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { Alert, Button, Col, Container, Row } from "react-bootstrap";
-import { ReactSketchCanvasRef } from "react-sketch-canvas";
+import { Button, Col, Container, Row } from "react-bootstrap";
+import { ReactSketchCanvasRef, CanvasPath } from "react-sketch-canvas";
 
 import NotFound from "../NotFound";
 import SignalRConnections from "../../models/SignalRConnections";
@@ -11,6 +11,7 @@ import { AuthContextData } from "../../models/AppUser";
 import { Message } from "../../models/Message";
 import Icon from "../../components/Icon";
 import DrawCanvas from "./DrawCanvas";
+import MessageCard from "./MessageCard";
 
 function ChatRoomPage() {
     const { chatroomId } = useParams();
@@ -37,6 +38,7 @@ function ChatRoomPage() {
                         const newMsg = {
                             displayName: displayName,
                             userId: userId,
+                            paths: null,
                             message: msg,
                             isSystem: isJoinOrLeave !== null,
                             isJoin: isJoinOrLeave === true,
@@ -48,8 +50,16 @@ function ChatRoomPage() {
                         setUserCount(count);
                     });
 
-                    newConn.on(SignalRConnections.RECEIVE_SKETCH, (paths: CanvasPath[]) => {
-                        console.log(paths);
+                    newConn.on(SignalRConnections.RECEIVE_SKETCH, (displayName: string, userId: string, paths: CanvasPath[]) => {
+                        const newMsg = {
+                            displayName: displayName,
+                            userId: userId,
+                            paths: paths,
+                            message: null,
+                            isSystem: false,
+                            isJoin: false
+                        }
+                        setMessages(prevMessages => [...prevMessages, newMsg]);
                     });
 
                     await newConn.start();
@@ -79,23 +89,6 @@ function ChatRoomPage() {
             }
         };
     */}
-
-    function renderMessage(msg: Message) {
-        if (msg.isSystem) {
-            return (
-                <Alert variant="info" className="mt-2 mb-0">
-                    <b>{msg.displayName}</b>{(msg.isJoin ? " has joined the chat" : " has left the chat")}
-                </Alert>
-            );
-
-        }
-
-        return (
-            <Alert variant="secondary" className="mt-2 mb-0">
-                <b>{msg.displayName}</b>: {msg.message}
-            </Alert>
-        );
-    }
 
     const clearCanvas = () => {
         canvasRef.current?.clearCanvas();
@@ -138,7 +131,7 @@ function ChatRoomPage() {
                         </div>
                     </div>
                     <div className="d-flex flex-column overflow-auto" style={{ flexGrow: 1, justifyContent: "flex-end", overflowY: 'auto', padding: '1rem' }}>
-                        { messages.map((msg, i) => (<div key={i}>{renderMessage(msg)}</div>))}
+                        {messages.map((msg, i) => (<div key={i}><MessageCard message={msg} /></div>))}
                     </div>
                         
                     {/* 
