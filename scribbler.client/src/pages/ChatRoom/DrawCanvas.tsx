@@ -1,14 +1,14 @@
-import { ReactSketchCanvas } from "react-sketch-canvas";
+import { forwardRef } from "react";
+import { ReactSketchCanvas, ReactSketchCanvasRef } from "react-sketch-canvas";
 
-function DrawCanvas() {
-    return (
-        <ReactSketchCanvas
-            width="600"
-            height="400"
-            strokeWidth={4}
-            strokeColor="black"
-        />
-    );
-}
+const DrawCanvas = forwardRef<ReactSketchCanvasRef>((_, ref) => (
+    <ReactSketchCanvas
+        ref={ref}
+        height="200px"
+        strokeWidth={4}
+        strokeColor="black"
+    />
+));
+
 
 export default DrawCanvas;

@@ -1,7 +1,8 @@
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { Alert, Button, Col, Container, Form, Row } from "react-bootstrap";
+import { useEffect, useRef, useState } from "react";
+import { Alert, Button, Col, Container, Row } from "react-bootstrap";
+import { ReactSketchCanvasRef } from "react-sketch-canvas";
 
 import NotFound from "../NotFound";
 import SignalRConnections from "../../models/SignalRConnections";
@@ -17,9 +18,11 @@ function ChatRoomPage() {
 
     const [isConnected, setIsConnected] = useState(false);
     const [conn, setConnection] = useState<HubConnection | null>(null);
-    const [typedMessage, setTypedMessage] = useState<string>("");
+    // const [typedMessage, setTypedMessage] = useState<string>("");
     const [messages, setMessages] = useState<Message[]>([]);
     const [userCount, setUserCount] = useState(0);
+
+    const canvasRef = useRef<ReactSketchCanvasRef>(null);
 
     useEffect(() => {
         if (user && !isConnected) {
@@ -45,6 +48,10 @@ function ChatRoomPage() {
                         setUserCount(count);
                     });
 
+                    newConn.on(SignalRConnections.RECEIVE_SKETCH, (paths: CanvasPath[]) => {
+                        console.log(paths);
+                    });
+
                     await newConn.start();
                     await newConn.invoke(SignalRConnections.JOIN_CHATROOM, {
                         chatroom: chatroomId,
@@ -63,12 +70,15 @@ function ChatRoomPage() {
         }
     }, [user, chatroomId, isConnected]);
 
-    const sendMessage = () => {
-        if (conn && typedMessage.trim()) {
-            conn.invoke(SignalRConnections.SEND_MESSAGE, typedMessage);
-            setTypedMessage("");
-        }
-    };
+
+    {/* 
+        const sendMessage = () => {
+            if (conn && typedMessage.trim()) {
+                conn.invoke(SignalRConnections.SEND_MESSAGE, typedMessage);
+                setTypedMessage("");
+            }
+        };
+    */}
 
     function renderMessage(msg: Message) {
         if (msg.isSystem) {
@@ -86,6 +96,32 @@ function ChatRoomPage() {
             </Alert>
         );
     }
+
+    const clearCanvas = () => {
+        canvasRef.current?.clearCanvas();
+    };
+
+    const saveDrawing = async () => {
+        const paths = await canvasRef.current?.exportPaths();
+
+        if (conn && paths) {
+            conn.invoke(SignalRConnections.SEND_SKETCH, paths);
+            clearCanvas();
+        }
+    };
+
+    const loadDrawing = async () => {
+        //const savedPaths: CanvasPath[] = [
+        //    // Example stroke
+        //    {
+        //        paths: [{ x: 10, y: 10 }, { x: 20, y: 20 }],
+        //        strokeColor: 'black',
+        //        strokeWidth: 4,
+        //        drawMode: true
+        //    }
+        //];
+        //await canvasRef.current?.loadPaths(savedPaths);
+    };
 
     if (chatroomId === undefined) {
         return <NotFound />;
@@ -122,17 +158,17 @@ function ChatRoomPage() {
                     */}
 
                     <div>
-                        <DrawCanvas />
+                        <DrawCanvas ref={canvasRef} />
                     </div>
                     <Row className="my-2">
                         <Col>
-                            <Button className="w-100" variant="primary"><Icon name="trash3" /></Button>
+                            <Button className="w-100" variant="primary" onClick={clearCanvas}><Icon name="trash3" /></Button>
                         </Col>
                         <Col>
-                            <Button className="w-100" variant="primary"><Icon name="journal-arrow-down" /></Button>
+                            <Button className="w-100" variant="primary" onClick={loadDrawing}><Icon name="download" /></Button>
                         </Col>
                         <Col>
-                            <Button className="w-100" variant="primary" onClick={sendMessage}><Icon name="journal-arrow-up" /></Button>
+                            <Button className="w-100" variant="primary" onClick={saveDrawing}><Icon name="upload" /></Button>
                         </Col>
                     </Row>
                 </div>

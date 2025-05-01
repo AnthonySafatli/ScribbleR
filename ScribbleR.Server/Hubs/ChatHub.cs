@@ -9,6 +9,7 @@ public class ChatHub : Hub
     private readonly SharedDb _shared;
 
     private const string ReceiveMessage = "ReceiveMessage";
+    private const string ReceiveSketch = "ReceiveSketch";
     private const string UserCount = "UserCount";
 
     public ChatHub(SharedDb shared)
@@ -37,11 +38,12 @@ public class ChatHub : Hub
         }
     }
 
-    public async Task SendSketch()
+    public async Task SendSketch(CanvasPath[] paths)
     {
         if (_shared.connections.TryGetValue(Context.ConnectionId, out UserConnection? conn))
         {
             await Clients.Group(conn.Chatroom).SendAsync(ReceiveMessage, conn.DisplayName, conn.UserId, "I sent a sketch", null);
+            await Clients.Group(conn.Chatroom).SendAsync(ReceiveSketch, conn.DisplayName, conn.UserId, paths);
         }
     }
 
