@@ -25,9 +25,7 @@ public class FriendshipController : Controller
     public async Task<IActionResult> GetFriends()
     {
         AppUser? user = await _userManager.GetUserAsync(User);
-
-        if (user == null)
-            return Forbid();
+        if (user == null) return Forbid();
 
         List<AppUser> friends = await _context.Friendships
             .Where(x => (x.RequestFromUserId == user.Id || x.RequestToUserId == user.Id) && x.Status == FriendshipStatus.Accepted)
@@ -42,17 +40,13 @@ public class FriendshipController : Controller
     public async Task<IActionResult> RemoveFriend(string friendUserId)
     {
         var user = await _userManager.GetUserAsync(User);
-
-        if (user == null)
-            return Forbid();
+        if (user == null) return Forbid();
 
         Friendship? friendship = await _context.Friendships.FirstOrDefaultAsync(x =>
             (x.RequestFromUserId == user.Id && x.RequestToUserId == friendUserId ||
              x.RequestFromUserId == friendUserId && x.RequestToUserId == user.Id)
             && x.Status == FriendshipStatus.Accepted);
-
-        if (friendship == null)
-            return NotFound();
+        if (friendship == null) return NotFound();
 
         _context.Friendships.Remove(friendship);
         await _context.SaveChangesAsync();
@@ -64,15 +58,13 @@ public class FriendshipController : Controller
     public async Task<IActionResult> SendFriendRequest([FromBody] string userId)
     {
         AppUser? currUser = await _userManager.GetUserAsync(User);
-
-        if (currUser == null)
-            return Forbid();
+        if (currUser == null) return Forbid();
 
         var existingRequest = await _context.Friendships.FirstOrDefaultAsync(x =>
             (x.RequestFromUserId == currUser.Id && x.RequestToUserId == userId) ||
             (x.RequestFromUserId == userId && x.RequestToUserId == currUser.Id));
 
-        if (existingRequest != null)
+        if (existingRequest != null) 
             return BadRequest("Friend request already sent.");
 
         Friendship newFriendship = new()
@@ -92,9 +84,7 @@ public class FriendshipController : Controller
     public async Task<IActionResult> GetReceivedRequests()
     {
         AppUser? user = await _userManager.GetUserAsync(User);
-
-        if (user == null)
-            return Forbid();
+        if (user == null) return Forbid();
 
         List<AppUser> requests = await _context.Friendships
             .Where(x => x.RequestToUserId == user.Id && x.Status == FriendshipStatus.Pending)
@@ -109,9 +99,7 @@ public class FriendshipController : Controller
     public async Task<IActionResult> GetSentRequests()
     {
         AppUser? user = await _userManager.GetUserAsync(User);
-
-        if (user == null)
-            return Forbid();
+        if (user == null) return Forbid();
 
         List<AppUser> requests = await _context.Friendships
             .Where(x => x.RequestFromUserId == user.Id && x.Status == FriendshipStatus.Pending)
@@ -126,16 +114,12 @@ public class FriendshipController : Controller
     public async Task<IActionResult> AcceptFriendRequest(int requestId)
     {
         AppUser? currUser = await _userManager.GetUserAsync(User);
-
-        if (currUser == null)
-            return Forbid();
+        if (currUser == null) return Forbid();
 
         Friendship? friendship = await _context.Friendships.FirstOrDefaultAsync(x => x.Id == requestId);
+        if (friendship == null) return NotFound();
 
-        if (friendship == null)
-            return NotFound();
-
-        if (friendship.RequestToUserId != currUser.Id)
+        if (friendship.RequestToUserId != currUser.Id) 
             return Forbid();
 
         friendship.Status = FriendshipStatus.Accepted;
@@ -148,16 +132,12 @@ public class FriendshipController : Controller
     public async Task<IActionResult> RejectFriendRequest(int requestId)
     {
         AppUser? currUser = await _userManager.GetUserAsync(User);
-
-        if (currUser == null)
-            return Forbid();
+        if (currUser == null) return Forbid();
 
         Friendship? friendship = await _context.Friendships.FirstOrDefaultAsync(x => x.Id == requestId);
+        if (friendship == null) return NotFound();
 
-        if (friendship == null)
-            return NotFound();
-
-        if (friendship.RequestToUserId != currUser.Id)
+        if (friendship.RequestToUserId != currUser.Id) 
             return Forbid();
 
         friendship.Status = FriendshipStatus.Rejected;
@@ -170,19 +150,15 @@ public class FriendshipController : Controller
     public async Task<IActionResult> CancelRequest(int requestId)
     {
         var user = await _userManager.GetUserAsync(User);
-
-        if (user == null) 
-            return Forbid();
+        if (user == null) return Forbid();
 
         Friendship? friendship = await _context.Friendships.FindAsync(requestId);
+        if (friendship == null) return NotFound();
 
-        if (friendship == null)
-            return NotFound();
-
-        if (friendship.RequestFromUserId != user.Id)
+        if (friendship.RequestFromUserId != user.Id) 
             return Forbid();
 
-        if (friendship.Status != FriendshipStatus.Pending)
+        if (friendship.Status != FriendshipStatus.Pending) 
             return BadRequest();
 
         _context.Friendships.Remove(friendship);

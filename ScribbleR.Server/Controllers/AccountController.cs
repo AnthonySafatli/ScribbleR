@@ -24,11 +24,9 @@ public class AccountController : ControllerBase
     public async Task<IActionResult> SetupAccount([FromBody] UserAccountDto setupInfo)
     {
         AppUser? user = await _userManager.GetUserAsync(User);
+        if (user == null) return Forbid();
 
-        if (user == null)
-            return Forbid();
-
-        if (string.IsNullOrWhiteSpace(setupInfo.DisplayName))
+        if (string.IsNullOrWhiteSpace(setupInfo.DisplayName)) 
             return BadRequest();
 
         user.IsSetup = true;
@@ -44,11 +42,9 @@ public class AccountController : ControllerBase
     public async Task<IActionResult> EditAccount([FromBody] UserAccountDto setupInfo)
     {
         AppUser? appUser = await _userManager.GetUserAsync(User);
+        if (appUser == null) return Forbid();
 
-        if (appUser == null)
-            return Forbid();
-
-        if (string.IsNullOrWhiteSpace(setupInfo.DisplayName))
+        if (string.IsNullOrWhiteSpace(setupInfo.DisplayName)) 
             return BadRequest();
 
         appUser.DisplayName = setupInfo.DisplayName;
