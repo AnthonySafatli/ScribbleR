@@ -13,7 +13,20 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        builder.Entity<Friendship>()
+            .HasOne(f => f.RequestFromUser)
+            .WithMany()
+            .HasForeignKey(f => f.RequestFromUserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.Entity<Friendship>()
+            .HasOne(f => f.RequestToUser)
+            .WithMany()
+            .HasForeignKey(f => f.RequestToUserId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
+
 
     public override int SaveChanges()
     {
@@ -35,4 +48,5 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
     }
 
     public DbSet<AppUser> AppUsers { get; set; }
+    public DbSet<Friendship> Friendships { get; set; }
 }
