@@ -12,6 +12,7 @@ import { Message } from "../../models/Message";
 import Icon from "../../components/Icon";
 import DrawCanvas from "./DrawCanvas";
 import MessageCard from "./MessageCard";
+import ToolBar from "./ToolBar";
 
 function ChatRoomPage() {
     const { chatroomId } = useParams();
@@ -19,11 +20,16 @@ function ChatRoomPage() {
 
     const [isConnected, setIsConnected] = useState(false);
     const [conn, setConnection] = useState<HubConnection | null>(null);
-    // const [typedMessage, setTypedMessage] = useState<string>("");
     const [messages, setMessages] = useState<Message[]>([]);
     const [userCount, setUserCount] = useState(0);
 
     const canvasRef = useRef<ReactSketchCanvasRef>(null);
+    const [isDrawing, setIsDrawing] = useState(true);
+    // const [typedMessage, setTypedMessage] = useState<string>("");
+
+    useEffect(() => {
+        canvasRef.current?.eraseMode(!isDrawing);
+    }, [isDrawing])
 
     useEffect(() => {
         if (user && !isConnected) {
@@ -150,6 +156,9 @@ function ChatRoomPage() {
 
                     */}
 
+                    <div>
+                        <ToolBar isDrawing={isDrawing} setDrawing={setIsDrawing} />
+                    </div>
                     <div>
                         <DrawCanvas ref={canvasRef} />
                     </div>
