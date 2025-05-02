@@ -85,7 +85,7 @@ function AccountContent() {
 
     return (
         <>
-            <h1 className="mb-5 mt-3">Account Page</h1>
+            <h1 className="mb-5 mt-3">My Account</h1>
 
             {alertError && (
                 <Alert variant="danger" onClose={() => setAlertError(null)} dismissible>

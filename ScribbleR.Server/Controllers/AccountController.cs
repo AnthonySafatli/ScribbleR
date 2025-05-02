@@ -1,3 +1,4 @@
+using Microsoft.AspNet.SignalR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using ScribbleR.Server.Models.Dtos;
 namespace ScribbleR.Server.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 public class AccountController : ControllerBase
 {
