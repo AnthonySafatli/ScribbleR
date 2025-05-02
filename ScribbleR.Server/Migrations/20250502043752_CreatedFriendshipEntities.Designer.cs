@@ -12,7 +12,7 @@ using ScribbleR.Server.Data;
 namespace ScribbleR.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250501225842_CreatedFriendshipEntities")]
+    [Migration("20250502043752_CreatedFriendshipEntities")]
     partial class CreatedFriendshipEntities
     {
         /// <inheritdoc />
@@ -56,7 +56,7 @@ namespace ScribbleR.Server.Migrations
 
                     b.HasIndex("RequestToUserId");
 
-                    b.ToTable("Friendship");
+                    b.ToTable("Friendships");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

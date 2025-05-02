@@ -53,7 +53,7 @@ namespace ScribbleR.Server.Migrations
 
                     b.HasIndex("RequestToUserId");
 
-                    b.ToTable("Friendship");
+                    b.ToTable("Friendships");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

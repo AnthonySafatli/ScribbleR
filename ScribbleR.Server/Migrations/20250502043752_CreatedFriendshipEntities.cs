@@ -13,7 +13,7 @@ namespace ScribbleR.Server.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Friendship",
+                name: "Friendships",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -26,15 +26,15 @@ namespace ScribbleR.Server.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Friendship", x => x.Id);
+                    table.PrimaryKey("PK_Friendships", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Friendship_AspNetUsers_RequestFromUserId",
+                        name: "FK_Friendships_AspNetUsers_RequestFromUserId",
                         column: x => x.RequestFromUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Friendship_AspNetUsers_RequestToUserId",
+                        name: "FK_Friendships_AspNetUsers_RequestToUserId",
                         column: x => x.RequestToUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -42,13 +42,13 @@ namespace ScribbleR.Server.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Friendship_RequestFromUserId",
-                table: "Friendship",
+                name: "IX_Friendships_RequestFromUserId",
+                table: "Friendships",
                 column: "RequestFromUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Friendship_RequestToUserId",
-                table: "Friendship",
+                name: "IX_Friendships_RequestToUserId",
+                table: "Friendships",
                 column: "RequestToUserId");
         }
 
@@ -56,7 +56,7 @@ namespace ScribbleR.Server.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Friendship");
+                name: "Friendships");
         }
     }
 }

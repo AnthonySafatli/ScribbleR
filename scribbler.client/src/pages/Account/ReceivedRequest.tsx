@@ -19,11 +19,11 @@ function ReceivedRequest({ friendRequest }: Props) {
 
     return (
         <ListGroup.Item>
-            <div className="d-flex flex-space-between">
+            <div className="d-flex justify-content-between align-items-center">
                 <div>
                     {friendRequest.user.displayName}
                 </div>
-                <div className="d-flex">
+                <div className="d-flex gap-1">
                     <Button variant="success" onClick={() => acceptRequest()}>
                         <Icon name="check" />
                     </Button>

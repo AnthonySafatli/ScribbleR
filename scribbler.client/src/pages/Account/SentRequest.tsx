@@ -15,7 +15,7 @@ function SentRequest({ friendRequest }: Props) {
 
     return (
         <ListGroup.Item>
-            <div className="d-flex flex-space-between">
+            <div className="d-flex justify-content-between align-items-center">
                 <div>
                     {friendRequest.user.displayName}
                 </div>

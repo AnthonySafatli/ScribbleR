@@ -7,6 +7,7 @@ import SentRequest from "./SentRequest";
 import ReceivedRequest from "./ReceivedRequest";
 import Icon from "../../components/Icon";
 import FriendItem from "./FriendItem";
+import AddFriendModal from "../../components/AddFriendModal";
 
 interface RawSentFriendRequest {
     id: number;
@@ -34,6 +35,7 @@ function FriendsContent() {
                     throw new Error("Failed to fetch friends");
 
                 const data = await res.json();
+                console.log("Friends: ", data)
                 setFriends(data);
             } catch (err) {
                 console.error("Error fetching friends:", err);
@@ -47,6 +49,7 @@ function FriendsContent() {
                     throw new Error("Failed to fetch sent requests");
 
                 const data: RawSentFriendRequest[] = await res.json();
+                console.log("Sent: ", data)
                 setSentRequests(data.map((request) => {
                     return { requestId: request.id, user: request.requestToUser };
                 }));
@@ -62,6 +65,7 @@ function FriendsContent() {
                     throw new Error("Failed to fetch received requests");
 
                 const data: RawReceivedFriendRequest[] = await res.json();
+                console.log("Received: ", data)
                 setReceievedRequests(data.map((request) => {
                     return { requestId: request.id, user: request.requestFromUser };
                 }));
@@ -78,6 +82,8 @@ function FriendsContent() {
 
     return (
         <>
+            <AddFriendModal show={showAddFriendModal}  />
+
             <div className="mb-5 mt-3 d-flex justify-content-between align-items-center">
                 <h1>My Friends</h1>
                 <Button variant="outline-primary" onClick={() => setShowAddFriendModal(true)}>
