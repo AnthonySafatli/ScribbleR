@@ -3,7 +3,7 @@ import { Modal, Button, Form, Alert, Spinner } from "react-bootstrap";
 
 interface Props {
     show: boolean;
-    onClose?: () => void;
+    onClose: () => void;
     onRequestSent?: () => void;
 }
 
@@ -47,7 +47,7 @@ const AddFriendModal = ({ show, onClose, onRequestSent }: Props) => {
         setError(null);
         setSuccess(null);
         setLoading(false);
-        onClose?.();
+        onClose();
     };
 
     return (
@@ -59,7 +59,7 @@ const AddFriendModal = ({ show, onClose, onRequestSent }: Props) => {
                 <Form.Group controlId="username">
                     <Form.Label>Friend's Username</Form.Label>
                     <Form.Control
-                        type="text"
+                        type="email"
                         placeholder="Enter username"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
@@ -71,9 +71,6 @@ const AddFriendModal = ({ show, onClose, onRequestSent }: Props) => {
                 {success && <Alert variant="success" className="mt-3">{success}</Alert>}
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose} disabled={loading}>
-                    Cancel
-                </Button>
                 <Button variant="primary" onClick={handleSendRequest} disabled={loading || !username}>
                     {loading ? <Spinner size="sm" animation="border" /> : "Send Request"}
                 </Button>

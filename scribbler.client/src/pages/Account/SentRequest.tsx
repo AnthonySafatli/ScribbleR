@@ -1,4 +1,5 @@
-import { Button, ListGroup } from "react-bootstrap";
+import { useState } from "react";
+import { Button, ListGroup, Spinner } from "react-bootstrap";
 
 import Icon from "../../components/Icon";
 import { FriendRequest } from "../../models/FriendRequest";
@@ -9,8 +10,25 @@ interface Props {
 
 function SentRequest({ friendRequest }: Props) {
 
+    const [loading, setLoading] = useState(false);
+
     const cancelRequest = async () => {
-        // Cancel the request
+        setLoading(true);
+        try {
+            const res = await fetch("/api/Friendship/Requests/" + friendRequest.requestId, {
+                method: "DELETE",
+            });
+
+            if (!res.ok) {
+                const text = await res.text();
+                throw new Error(text || "Failed to send request");
+            }
+
+        } catch (err: any) {
+            console.error(err)
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
@@ -21,7 +39,13 @@ function SentRequest({ friendRequest }: Props) {
                 </div>
                 <div>
                     <Button variant="danger" onClick={() => cancelRequest()}>
-                        <Icon name="x" />
+                        {
+                            loading ? (
+                                <Spinner size="sm" animation="border" />
+                            ) : (
+                                <Icon name="x" />
+                            )
+                        }
                     </Button>
                 </div>
             </div>

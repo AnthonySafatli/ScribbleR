@@ -35,7 +35,6 @@ function FriendsContent() {
                     throw new Error("Failed to fetch friends");
 
                 const data = await res.json();
-                console.log("Friends: ", data)
                 setFriends(data);
             } catch (err) {
                 console.error("Error fetching friends:", err);
@@ -49,7 +48,6 @@ function FriendsContent() {
                     throw new Error("Failed to fetch sent requests");
 
                 const data: RawSentFriendRequest[] = await res.json();
-                console.log("Sent: ", data)
                 setSentRequests(data.map((request) => {
                     return { requestId: request.id, user: request.requestToUser };
                 }));
@@ -65,7 +63,6 @@ function FriendsContent() {
                     throw new Error("Failed to fetch received requests");
 
                 const data: RawReceivedFriendRequest[] = await res.json();
-                console.log("Received: ", data)
                 setReceievedRequests(data.map((request) => {
                     return { requestId: request.id, user: request.requestFromUser };
                 }));
@@ -82,7 +79,7 @@ function FriendsContent() {
 
     return (
         <>
-            <AddFriendModal show={showAddFriendModal}  />
+            <AddFriendModal show={showAddFriendModal} onClose={() => setShowAddFriendModal(false)} />
 
             <div className="mb-5 mt-3 d-flex justify-content-between align-items-center">
                 <h1>My Friends</h1>
@@ -93,7 +90,7 @@ function FriendsContent() {
 
             {
                 receivedRequests != null && receivedRequests.length > 0 &&
-                    <Card>
+                    <Card className="mb-3">
                         <Card.Header>
                             Received Requests
                         </Card.Header>
@@ -107,7 +104,7 @@ function FriendsContent() {
 
             {
                 sentRequests != null && sentRequests.length > 0 &&
-                <Card>
+                <Card className="mb-3">
                     <Card.Header>
                         Sent Requests
                     </Card.Header>
@@ -125,9 +122,8 @@ function FriendsContent() {
                 ))}
 
                 {friends?.length === 0 && (
-                    <div className="text-center">
-                        <p>You have no friends yet.</p>
-                        <Button variant="primary" onClick={() => setShowAddFriendModal(true)}>Click here to add one</Button>
+                    <div className="mt-5 text-center">
+                        <p>You have no friends yet. <Icon name="emoji-frown" /></p>
                     </div>
                 ) }
             </div>

@@ -1,4 +1,5 @@
-import { Button } from "react-bootstrap";
+import { useState } from "react";
+import { Button, Spinner } from "react-bootstrap";
 
 import { AppUser } from "../../models/AppUser";
 import Icon from "../../components/Icon";
@@ -9,18 +10,42 @@ interface Props {
 
 function FriendItem({ friend }: Props) {
 
+    const [loading, setLoading] = useState(false)
+
     const unfriend = async () => {
-        // Unfriend the user
+        setLoading(true);
+        try {
+            const res = await fetch("/api/Friendship/" + friend.id, {
+                method: "DELETE",
+            });
+
+            if (!res.ok) {
+                const text = await res.text();
+                throw new Error(text || "Failed to send request");
+            }
+
+        } catch (err: any) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+
     }
 
     return (
-        <div className="d-flex flex-space-between">
+        <div className="d-flex justify-content-between align-items-center">
             <div>
                 {friend.displayName}
             </div>
             <div>
                 <Button variant="danger" onClick={() => unfriend()}>
-                    <Icon name="person-slash" />
+                    {
+                        loading ? (
+                            <Spinner size="sm" animation="border" />
+                        ) : (
+                            <Icon name="person-slash" />
+                        )
+                    }
                 </Button>
             </div>
         </div>
