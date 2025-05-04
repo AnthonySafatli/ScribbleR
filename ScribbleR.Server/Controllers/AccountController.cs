@@ -41,10 +41,10 @@ public class AccountController : ControllerBase
         if (string.IsNullOrWhiteSpace(setupInfo.DisplayName))
             return BadRequest("Display Name cannot be empty");
 
-        user.IsSetup = true;
         user.UserHandle = setupInfo.UserHandle;
         user.DisplayName = setupInfo.DisplayName;
         user.AboutMe = string.IsNullOrWhiteSpace(setupInfo.AboutMe) ? null : setupInfo.AboutMe;
+        user.IsSetup = true;
 
         await _context.SaveChangesAsync();
 
@@ -62,10 +62,7 @@ public class AccountController : ControllerBase
 
         appUser.DisplayName = setupInfo.DisplayName;
         appUser.AboutMe = string.IsNullOrWhiteSpace(setupInfo.AboutMe) ? null : setupInfo.AboutMe;
-        appUser.Sketch = new Sketch()
-        {
-            CanvasPaths = setupInfo.ProfilePicture
-        };
+        appUser.ProfilePicturePaths = setupInfo.ProfilePicture;
 
         await _context.SaveChangesAsync();
 

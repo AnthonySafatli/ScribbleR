@@ -21,7 +21,10 @@ const MessageCard = ({ message }: Props) => {
                         <small className="text-muted">2:14 PM</small>
                     </div>
                     <div>
-                        <DrawCanvas ref={drawingRef} paths={message.paths} />
+                        <DrawCanvas
+                            ref={drawingRef}
+                            paths={message.paths}
+                            isDrawable={false} />
                     </div>
                 </Card.Body>
             </Card>

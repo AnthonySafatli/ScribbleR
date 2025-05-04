@@ -27,8 +27,8 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
             .HasForeignKey(f => f.RequestToUserId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.Entity<Sketch>()
-            .Property(d => d.CanvasPathsJson)
+        builder.Entity<AppUser>()
+            .Property(d => d.ProfilePicture)
             .HasColumnType("jsonb");
     }
 

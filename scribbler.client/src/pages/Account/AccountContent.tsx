@@ -22,6 +22,12 @@ function AccountContent() {
         setAboutMe(user?.aboutMe ?? "")
     }, [user]);
 
+    useEffect(() => {
+        if (pfpRef && user && user?.profilePicture) {
+            pfpRef?.current?.loadPaths(user?.profilePicture);
+        }
+    }, [user, pfpRef])
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         if (name === "displayName")
@@ -42,24 +48,6 @@ function AccountContent() {
     // Errors
     const [alertError, setAlertError] = useState<string | null>("");
     const [submitError, setSubmitError] = useState<string | null>("");
-
-    const unsavedChanges = () => {
-        if (user?.aboutMe != aboutMe)
-            return true;
-
-        if (user?.displayName != displayName)
-            return true;
-
-        function normalizePicture(picture: CanvasPath[] | null) {
-            return (picture === null || Array.isArray(picture) && picture.length === 0) ? null : picture;
-        }
-
-        if (normalizePicture(user?.profilePicture) !== normalizePicture(profilePicture)) {
-            return true;
-        }
-
-        return false;
-    }
 
     const handleAccountSave = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -190,13 +178,10 @@ function AccountContent() {
                 </Row>
                 <Form.Group>
                     <div className="d-flex justify-content-between align-items-center">
-                        {unsavedChanges() ? (
-                            <Button variant="outline-primary" type="submit" className="px-4">
-                                Save Changes
-                            </Button>
-                        ) : (
-                            <div className="invisible"></div>
-                        )}
+                        
+                        <Button variant="outline-primary" type="submit" className="px-4">
+                            Save Changes
+                        </Button>
 
                         {loadingFormSubmit && (
                             <Spinner animation="border" role="status" size="sm">

@@ -62,15 +62,7 @@ public class Program
             if (appUser == null)
                 return Results.Unauthorized(); 
 
-            return Results.Json(
-                new AppUserDto(
-                    appUser.Id,
-                    appUser.Email,
-                    appUser.UserHandle,
-                    appUser.DisplayName,
-                    appUser.AboutMe,
-                    appUser.IsSetup
-                ));
+            return Results.Json(new AppUserDto(appUser));
         }).RequireAuthorization();
 
         app.MapGet("/api/auth/needsregister", async (string email, UserManager<AppUser> userManager) =>

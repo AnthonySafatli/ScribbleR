@@ -14,7 +14,7 @@ interface Props {
 
 function AccountNav({ currentPage, navigate }: Props) {
 
-    const { user, setUser } = useAuthContext() as AuthContextData;
+    const { user } = useAuthContext() as AuthContextData;
 
     const mdThreshold = 768;
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -59,7 +59,12 @@ function AccountNav({ currentPage, navigate }: Props) {
         <Col xs={isMd ? 3 : 2}>
             <nav>
                 <div className="d-flex justify-content-center mb-5">
-                    <DrawCanvas ref={pfpRef} paths={user?.profilePicture ?? []} height="75px" width="75px" />
+                    <DrawCanvas
+                        ref={pfpRef}
+                        paths={user?.profilePicture ?? []}
+                        isDrawable={false}
+                        height="75px"
+                        width="75px" />
                 </div>
                 <ul className={"nav flex-column gap-4 " + (isMd ? "" : "align-items-center")}>
                     <li className="nav-item">

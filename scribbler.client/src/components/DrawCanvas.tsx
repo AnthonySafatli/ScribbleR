@@ -6,9 +6,10 @@ interface Props {
     height?: string,
     width?: string,
     onChange?: () => void,
+    isDrawable?: boolean,
 }
 
-const DrawCanvas = forwardRef<ReactSketchCanvasRef, Props>(({ paths = null, height = '200px', width, onChange }: Props, ref) => {
+const DrawCanvas = forwardRef<ReactSketchCanvasRef, Props>(({ paths = null, height = '200px', width, onChange, isDrawable = true }: Props, ref) => {
 
     useEffect(() => {
         if (ref && paths) {
@@ -24,7 +25,7 @@ const DrawCanvas = forwardRef<ReactSketchCanvasRef, Props>(({ paths = null, heig
             strokeWidth={4}
             strokeColor="black"
             withTimestamp={true}
-            allowOnlyPointerType={paths ? "none" : "all"}
+            allowOnlyPointerType={isDrawable ? "all" : "none"}
             onChange={onChange}
         />
     );
