@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ScribbleR.Server.Models;
+using System.Reflection.Emit;
 
 namespace ScribbleR.Server.Data;
 
@@ -25,6 +26,10 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
             .WithMany()
             .HasForeignKey(f => f.RequestToUserId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.Entity<Sketch>()
+            .Property(d => d.CanvasPathsJson)
+            .HasColumnType("jsonb");
     }
 
 

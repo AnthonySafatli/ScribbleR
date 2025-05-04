@@ -23,7 +23,7 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost("Setup")]
-    public async Task<IActionResult> SetupAccount([FromBody] UserAccountDto setupInfo)
+    public async Task<IActionResult> SetupAccount([FromBody] UserAccountPostDto setupInfo)
     {
         AppUser? user = await _userManager.GetUserAsync(User);
         if (user == null) return Forbid();
@@ -37,11 +37,11 @@ public class AccountController : ControllerBase
 
         await _context.SaveChangesAsync();
 
-        return Ok(user);
+        return Ok(new AppUserDto(user));
     }
 
     [HttpPost("Edit")]
-    public async Task<IActionResult> EditAccount([FromBody] UserAccountDto setupInfo)
+    public async Task<IActionResult> EditAccount([FromBody] UserAccountPostDto setupInfo)
     {
         AppUser? appUser = await _userManager.GetUserAsync(User);
         if (appUser == null) return Forbid();
@@ -54,15 +54,6 @@ public class AccountController : ControllerBase
 
         await _context.SaveChangesAsync();
 
-        return Ok(new
-        {
-            appUser.Id,
-            appUser.Email,
-            appUser.DisplayName,
-            appUser.IsSetup,
-            appUser.AboutMe,
-            appUser.CreatedAt,
-            appUser.UpdatedAt
-        });
+        return Ok(new AppUserDto(appUser));
     }
 }

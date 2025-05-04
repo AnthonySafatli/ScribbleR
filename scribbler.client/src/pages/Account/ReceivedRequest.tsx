@@ -19,7 +19,7 @@ function ReceivedRequest({ friendRequest, onAcceptRequest, onRejectRequest }: Pr
     const acceptRequest = async () => {
         setAcceptLoading(true);
         try {
-            const res = await fetch(`/api/Friendship/Requests/${friendRequest.requestId}/Accept`, {
+            const res = await fetch(`/api/Friendship/Requests/${friendRequest.id}/Accept`, {
                 method: "POST",
             });
 
@@ -28,7 +28,7 @@ function ReceivedRequest({ friendRequest, onAcceptRequest, onRejectRequest }: Pr
                 throw new Error(text || "Failed to send request");
             }
 
-            onAcceptRequest(friendRequest.requestId, friendRequest.user);
+            onAcceptRequest(friendRequest.id, friendRequest.user);
 
         } catch (err: any) {
             console.error(err)
@@ -40,7 +40,7 @@ function ReceivedRequest({ friendRequest, onAcceptRequest, onRejectRequest }: Pr
     const declineRequest = async () => {
         setRejectLoading(true);
         try {
-            const res = await fetch(`/api/Friendship/Requests/${friendRequest.requestId}/Reject`, {
+            const res = await fetch(`/api/Friendship/Requests/${friendRequest.id}/Reject`, {
                 method: "POST",
             });
 
@@ -49,7 +49,7 @@ function ReceivedRequest({ friendRequest, onAcceptRequest, onRejectRequest }: Pr
                 throw new Error(text || "Failed to send request");
             }
 
-            onRejectRequest(friendRequest.requestId);
+            onRejectRequest(friendRequest.id);
 
         } catch (err: any) {
             console.error(err)

@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Modal, Button, Form, Alert, Spinner } from "react-bootstrap";
+import { FriendRequest } from "../models/FriendRequest";
 
 interface Props {
     show: boolean;
     onClose: () => void;
-    onRequestSent?: (data: any) => void;
+    onRequestSent?: (request: FriendRequest) => void;
 }
 
 const AddFriendModal = ({ show, onClose, onRequestSent }: Props) => {

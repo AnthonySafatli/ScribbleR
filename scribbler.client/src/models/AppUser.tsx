@@ -1,12 +1,14 @@
 
+import { CanvasPath } from "react-sketch-canvas";
+
 export interface AppUser {
     id: string,
     email: string,
+    username: string,
     displayName: string | null,
     aboutMe: string | null,
-    createdAt: Date,
-    updatedAt: Date,
     isSetup: boolean,
+    profilePicture: CanvasPath[] | null,
 }
 
 export interface AuthContextData {

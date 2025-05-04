@@ -47,10 +47,8 @@ function FriendsContent() {
                 if (!res.ok)
                     throw new Error("Failed to fetch sent requests");
 
-                const data: RawSentFriendRequest[] = await res.json();
-                setSentRequests(data.map((request) => {
-                    return { requestId: request.id, user: request.requestToUser };
-                }));
+                const data: FriendRequest[] = await res.json();
+                setSentRequests(data);
             } catch (err) {
                 console.error("Error fetching sent requests:", err);
             }
@@ -62,10 +60,8 @@ function FriendsContent() {
                 if (!res.ok)
                     throw new Error("Failed to fetch received requests");
 
-                const data: RawReceivedFriendRequest[] = await res.json();
-                setReceievedRequests(data.map((request) => {
-                    return { requestId: request.id, user: request.requestFromUser };
-                }));
+                const data: FriendRequest[] = await res.json();
+                setReceievedRequests(data);
             } catch (err) {
                 console.error("Error fetching received requests:", err);
             }
@@ -78,19 +74,19 @@ function FriendsContent() {
 
     const onCancelRequest = (requestId: number) => {
         setSentRequests((prevRequests) =>
-            prevRequests ? prevRequests.filter(request => request.requestId !== requestId) : []
+            prevRequests ? prevRequests.filter(request => request.id !== requestId) : []
         );
     }
 
     const onRejectRequest = (requestId: number) => {
         setReceievedRequests((prevRequests) =>
-            prevRequests ? prevRequests.filter(request => request.requestId !== requestId) : []
+            prevRequests ? prevRequests.filter(request => request.id !== requestId) : []
         );
     }
 
     const onAcceptRequest = (requestId: number, user: AppUser) => {
         setReceievedRequests((prevRequests) =>
-            prevRequests ? prevRequests.filter(request => request.requestId !== requestId) : []
+            prevRequests ? prevRequests.filter(request => request.id !== requestId) : []
         );
         setFriends((prevFriends) => prevFriends ? [user, ...prevFriends] : [user]);
     }
@@ -101,11 +97,11 @@ function FriendsContent() {
         );
     }
 
-    const onRequestSent = (data: RawSentFriendRequest) => {
+    const onRequestSent = (data: FriendRequest) => {
         if (sentRequests != null) {
-            setSentRequests([...sentRequests, { requestId: data.id, user: data.requestToUser } as FriendRequest])
+            setSentRequests([...sentRequests, data])
         } else {
-            setSentRequests([{ requestId: data.id, user: data.requestToUser } as FriendRequest])
+            setSentRequests([data])
         }
     }
 
@@ -132,7 +128,7 @@ function FriendsContent() {
                         <ListGroup variant="flush">
                             {receivedRequests.map((request) => (
                                 <ReceivedRequest
-                                    key={request.requestId}
+                                    key={request.id}
                                     friendRequest={request}
                                     onAcceptRequest={onAcceptRequest}
                                     onRejectRequest={onRejectRequest} />
@@ -149,7 +145,7 @@ function FriendsContent() {
                     </Card.Header>
                     <ListGroup variant="flush">
                         {sentRequests.map((request) => (
-                            <SentRequest key={request.requestId} friendRequest={request} onCancelRequest={onCancelRequest} />
+                            <SentRequest key={request.id} friendRequest={request} onCancelRequest={onCancelRequest} />
                         ))}
                     </ListGroup>
                 </Card>

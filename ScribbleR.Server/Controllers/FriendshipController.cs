@@ -34,7 +34,7 @@ public class FriendshipController : Controller
             .AsNoTracking()
             .ToListAsync();
 
-        return Ok(friends);
+        return Ok(friends.Select(x => new AppUserDto(x)));
     }
 
     [HttpDelete("{friendUserId}")]
@@ -92,7 +92,7 @@ public class FriendshipController : Controller
         _context.Friendships.Add(newFriendship);
         await _context.SaveChangesAsync();
 
-        return Ok(newFriendship);
+        return Ok(new FriendshipDto(newFriendship, currUser.Id));
     }
 
 
@@ -108,7 +108,7 @@ public class FriendshipController : Controller
             .AsNoTracking()
             .ToListAsync();
 
-        return Ok(requests);
+        return Ok(requests.Select(x => new FriendshipDto(x, user.Id)));
     }
 
     [HttpGet("Requests/Sent")]
@@ -123,7 +123,7 @@ public class FriendshipController : Controller
             .AsNoTracking()
             .ToListAsync();
 
-        return Ok(requests);
+        return Ok(requests.Select(x => new FriendshipDto(x, user.Id)));
     }
 
     [HttpPost("Requests/{requestId}/Accept")]
@@ -141,7 +141,7 @@ public class FriendshipController : Controller
         friendship.Status = FriendshipStatus.Accepted;
 
         await _context.SaveChangesAsync();
-        return Ok(friendship);
+        return Ok(new FriendshipDto(friendship, currUser.Id));
     }
 
     [HttpPost("Requests/{requestId}/Reject")]
@@ -159,7 +159,7 @@ public class FriendshipController : Controller
         friendship.Status = FriendshipStatus.Rejected;
 
         await _context.SaveChangesAsync();
-        return Ok(friendship);
+        return Ok(new FriendshipDto(friendship, currUser.Id));
     }
 
     [HttpDelete("Requests/{requestId}")]

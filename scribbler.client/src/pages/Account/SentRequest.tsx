@@ -16,7 +16,7 @@ function SentRequest({ friendRequest, onCancelRequest }: Props) {
     const cancelRequest = async () => {
         setLoading(true);
         try {
-            const res = await fetch("/api/Friendship/Requests/" + friendRequest.requestId, {
+            const res = await fetch("/api/Friendship/Requests/" + friendRequest.id, {
                 method: "DELETE",
             });
 
@@ -25,7 +25,7 @@ function SentRequest({ friendRequest, onCancelRequest }: Props) {
                 throw new Error(text || "Failed to send request");
             }
 
-            onCancelRequest(friendRequest.requestId);
+            onCancelRequest(friendRequest.id);
 
         } catch (err: any) {
             console.error(err)

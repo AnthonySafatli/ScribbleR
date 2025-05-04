@@ -6,10 +6,14 @@ namespace ScribbleR.Server.Models;
 public class AppUser : IdentityUser
 {
     [StringLength(50)]
+    public string? UserHandle { get; set; }
+
+    [StringLength(50)]
     public string? DisplayName { get; set; }
 
-    public string? ProfilePicture { get; set; }
-    
+    public int? SketchId { get; set; }
+    public Sketch? Sketch { get; set; }
+
     [StringLength(200)]
     public string? AboutMe { get; set; }
 
