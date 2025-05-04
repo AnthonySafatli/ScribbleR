@@ -5,10 +5,11 @@ import { AppUser } from "../../models/AppUser";
 import Icon from "../../components/Icon";
 
 interface Props {
-    friend: AppUser
+    friend: AppUser,
+    onRemoveFriend: (friendId: string) => void
 }
 
-function FriendItem({ friend }: Props) {
+function FriendItem({ friend, onRemoveFriend }: Props) {
 
     const [loading, setLoading] = useState(false)
 
@@ -24,6 +25,8 @@ function FriendItem({ friend }: Props) {
                 throw new Error(text || "Failed to send request");
             }
 
+            onRemoveFriend(friend.id)
+
         } catch (err: any) {
             console.error(err);
         } finally {
@@ -38,7 +41,7 @@ function FriendItem({ friend }: Props) {
                 {friend.displayName}
             </div>
             <div>
-                <Button variant="danger" onClick={() => unfriend()}>
+                <Button variant="default" className="text-danger" onClick={() => unfriend()}>
                     {
                         loading ? (
                             <Spinner size="sm" animation="border" />

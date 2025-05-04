@@ -4,7 +4,7 @@ import { Modal, Button, Form, Alert, Spinner } from "react-bootstrap";
 interface Props {
     show: boolean;
     onClose: () => void;
-    onRequestSent?: () => void;
+    onRequestSent?: (data: any) => void;
 }
 
 const AddFriendModal = ({ show, onClose, onRequestSent }: Props) => {
@@ -32,9 +32,11 @@ const AddFriendModal = ({ show, onClose, onRequestSent }: Props) => {
                 throw new Error(text || "Failed to send request");
             }
 
+            const data = await res.json();
+
             setSuccess("Friend request sent!");
             setUsername("");
-            onRequestSent?.();
+            onRequestSent?.(data);
         } catch (err: any) {
             setError(err.message);
         } finally {

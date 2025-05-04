@@ -76,13 +76,48 @@ function FriendsContent() {
         fetchReceivedRequests();
     }, []);
 
+    const onCancelRequest = (requestId: number) => {
+        setSentRequests((prevRequests) =>
+            prevRequests ? prevRequests.filter(request => request.requestId !== requestId) : []
+        );
+    }
+
+    const onRejectRequest = (requestId: number) => {
+        setReceievedRequests((prevRequests) =>
+            prevRequests ? prevRequests.filter(request => request.requestId !== requestId) : []
+        );
+    }
+
+    const onAcceptRequest = (requestId: number, user: AppUser) => {
+        setReceievedRequests((prevRequests) =>
+            prevRequests ? prevRequests.filter(request => request.requestId !== requestId) : []
+        );
+        setFriends((prevFriends) => prevFriends ? [user, ...prevFriends] : [user]);
+    }
+
+    const onRemoveFriend = (friendId: string) => {
+        setFriends((prevFriends) =>
+            prevFriends ? prevFriends.filter(friend => friend.id !== friendId) : []
+        );
+    }
+
+    const onRequestSent = (data: RawSentFriendRequest) => {
+        if (sentRequests != null) {
+            setSentRequests([...sentRequests, { requestId: data.id, user: data.requestToUser } as FriendRequest])
+        } else {
+            setSentRequests([{ requestId: data.id, user: data.requestToUser } as FriendRequest])
+        }
+    }
 
     return (
         <>
-            <AddFriendModal show={showAddFriendModal} onClose={() => setShowAddFriendModal(false)} />
+            <AddFriendModal
+                show={showAddFriendModal}
+                onClose={() => setShowAddFriendModal(false)}
+                onRequestSent={onRequestSent} />
 
             <div className="mb-5 mt-3 d-flex justify-content-between align-items-center">
-                <h1>My Friends</h1>
+                <h1 className="m-0">My Friends</h1>
                 <Button variant="outline-primary" onClick={() => setShowAddFriendModal(true)}>
                     <Icon name="plus-circle" />
                 </Button>
@@ -96,7 +131,11 @@ function FriendsContent() {
                         </Card.Header>
                         <ListGroup variant="flush">
                             {receivedRequests.map((request) => (
-                                <ReceivedRequest key={request.requestId} friendRequest={request} />
+                                <ReceivedRequest
+                                    key={request.requestId}
+                                    friendRequest={request}
+                                    onAcceptRequest={onAcceptRequest}
+                                    onRejectRequest={onRejectRequest} />
                             ))}
                         </ListGroup>
                     </Card>
@@ -110,7 +149,7 @@ function FriendsContent() {
                     </Card.Header>
                     <ListGroup variant="flush">
                         {sentRequests.map((request) => (
-                            <SentRequest key={request.requestId} friendRequest={request} />
+                            <SentRequest key={request.requestId} friendRequest={request} onCancelRequest={onCancelRequest} />
                         ))}
                     </ListGroup>
                 </Card>
@@ -118,7 +157,7 @@ function FriendsContent() {
 
             <div>
                 {friends?.map((friend) => (
-                    <FriendItem key={friend.id} friend={friend} />
+                    <FriendItem key={friend.id} friend={friend} onRemoveFriend={onRemoveFriend} />
                 ))}
 
                 {friends?.length === 0 && (

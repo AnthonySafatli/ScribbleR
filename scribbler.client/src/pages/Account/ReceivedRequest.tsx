@@ -3,12 +3,15 @@ import { Button, ListGroup, Spinner } from "react-bootstrap";
 
 import Icon from "../../components/Icon";
 import { FriendRequest } from "../../models/FriendRequest";
+import { AppUser } from "../../models/AppUser";
 
 interface Props {
     friendRequest: FriendRequest,
+    onAcceptRequest: (requestId: number, user: AppUser) => void,
+    onRejectRequest: (requestId: number) => void,
 }
 
-function ReceivedRequest({ friendRequest }: Props) {
+function ReceivedRequest({ friendRequest, onAcceptRequest, onRejectRequest }: Props) {
 
     const [acceptLoading, setAcceptLoading] = useState(false);
     const [rejectLoading, setRejectLoading] = useState(false);
@@ -24,6 +27,8 @@ function ReceivedRequest({ friendRequest }: Props) {
                 const text = await res.text();
                 throw new Error(text || "Failed to send request");
             }
+
+            onAcceptRequest(friendRequest.requestId, friendRequest.user);
 
         } catch (err: any) {
             console.error(err)
@@ -44,6 +49,8 @@ function ReceivedRequest({ friendRequest }: Props) {
                 throw new Error(text || "Failed to send request");
             }
 
+            onRejectRequest(friendRequest.requestId);
+
         } catch (err: any) {
             console.error(err)
         } finally {
@@ -58,7 +65,7 @@ function ReceivedRequest({ friendRequest }: Props) {
                     {friendRequest.user.displayName}
                 </div>
                 <div className="d-flex gap-1">
-                    <Button variant="success" onClick={() => acceptRequest()}>
+                    <Button variant="default" className="text-success" onClick={() => acceptRequest()}>
                         {
                             acceptLoading ? (
                                 <Spinner size="sm" animation="border" />
@@ -67,7 +74,7 @@ function ReceivedRequest({ friendRequest }: Props) {
                             )
                         }
                     </Button>
-                    <Button variant="danger" onClick={() => declineRequest()}>
+                    <Button variant="default" className="text-danger" onClick={() => declineRequest()}>
                         {
                             rejectLoading ? (
                                 <Spinner size="sm" animation="border" />

@@ -85,6 +85,7 @@ public class FriendshipController : Controller
         {
             RequestFromUserId = currUser.Id,
             RequestToUserId = targetUser.Id,
+            RequestToUser = targetUser,
             Status = FriendshipStatus.Pending
         };
 

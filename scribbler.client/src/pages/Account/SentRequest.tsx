@@ -6,9 +6,10 @@ import { FriendRequest } from "../../models/FriendRequest";
 
 interface Props {
     friendRequest: FriendRequest,
+    onCancelRequest: (requestId: number) => void,
 }
 
-function SentRequest({ friendRequest }: Props) {
+function SentRequest({ friendRequest, onCancelRequest }: Props) {
 
     const [loading, setLoading] = useState(false);
 
@@ -24,6 +25,8 @@ function SentRequest({ friendRequest }: Props) {
                 throw new Error(text || "Failed to send request");
             }
 
+            onCancelRequest(friendRequest.requestId);
+
         } catch (err: any) {
             console.error(err)
         } finally {
@@ -38,7 +41,7 @@ function SentRequest({ friendRequest }: Props) {
                     {friendRequest.user.displayName}
                 </div>
                 <div>
-                    <Button variant="danger" onClick={() => cancelRequest()}>
+                    <Button variant="default" className="text-danger" onClick={() => cancelRequest()}>
                         {
                             loading ? (
                                 <Spinner size="sm" animation="border" />
