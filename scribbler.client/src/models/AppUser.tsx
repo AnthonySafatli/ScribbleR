@@ -4,7 +4,7 @@ import { CanvasPath } from "react-sketch-canvas";
 export interface AppUser {
     id: string,
     email: string,
-    username: string,
+    userHandle: string,
     displayName: string | null,
     aboutMe: string | null,
     isSetup: boolean,

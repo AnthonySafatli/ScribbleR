@@ -5,6 +5,9 @@ namespace ScribbleR.Server.Models.Dtos;
 public class UserAccountPostDto
 {
     [StringLength(50)]
+    public string? UserHandle { get; set; }
+
+    [StringLength(50)]
     public string? DisplayName { get; set; }
 
     [StringLength(200)]

@@ -2,12 +2,13 @@ import { useState } from "react";
 import { Alert, Button, Form, Spinner } from "react-bootstrap";
 
 import { useAuthContext } from "../hooks/useAuthContext";
-import { AppUser, AuthContextData } from "../models/AppUser";
+import { AuthContextData } from "../models/AppUser";
 
 function SignInForm() {
 
     const { user, setUser } = useAuthContext() as AuthContextData;
 
+    const [userHandle, setUserHandle] = useState("");
     const [displayName, setDisplayName] = useState("");
     const [aboutMe, setAboutMe] = useState("");
 
@@ -17,6 +18,8 @@ function SignInForm() {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
+        if (name === "userHandle")
+            setUserHandle(value);
         if (name === "displayName")
             setDisplayName(value);
         if (name === "aboutMe")
@@ -31,6 +34,14 @@ function SignInForm() {
     const handleSaveChanges = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoadingSubmit(true);
+
+        if (!userHandle) {
+            handleFormError("User Handle can not be empty");
+        }
+
+        if (userHandle.length > 50) {
+            handleFormError("User Handle can not be greater than 50 characters");
+        }
 
         if (!displayName) {
             handleFormError("Display Name can not be empty");
@@ -51,6 +62,7 @@ function SignInForm() {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
+                    userHandle: userHandle,
                     displayName: displayName,
                     aboutMe: aboutMe
                 }),
@@ -61,7 +73,8 @@ function SignInForm() {
                 setUser(data);
                 return;
             } else {
-                throw new Error("Error Setting Up Account");
+                const warning = await res.text();
+                throw new Error(warning || "Error Setting Up Account");
             }
         } catch (error: unknown) {
             console.error(error);
@@ -85,7 +98,17 @@ function SignInForm() {
             <Form.Text>You must setup your account before continuing!</Form.Text>
 
             <Form.Group className="my-3">
-                <Form.Label>Display Name <span style={{color: 'red'}}>*</span></Form.Label>
+                <Form.Label>User Handle <span className="text-danger">*</span></Form.Label>
+                <Form.Control
+                    type="text"
+                    name="userHandle"
+                    id="userHandle"
+                    onChange={handleChange}
+                    placeholder="The unique name others will identify you with" />
+            </Form.Group>
+
+            <Form.Group className="my-3">
+                <Form.Label>Display Name <span className="text-danger">*</span></Form.Label>
                 <Form.Control
                     type="text"
                     name="displayName"

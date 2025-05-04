@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Alert, Button, Col, Form, OverlayTrigger, Row, Spinner, Tooltip } from "react-bootstrap";
+import { Alert, Button, Col, Form, InputGroup, OverlayTrigger, Row, Spinner, Tooltip } from "react-bootstrap";
+import { ReactSketchCanvas } from "react-sketch-canvas";
 
 import Icon from "../../components/Icon";
 import { useAuthContext } from "../../hooks/useAuthContext";
@@ -97,10 +98,39 @@ function AccountContent() {
                 <Row>
                     <Col xs={2}>
                         <div className="d-flex align-items-center h-100">
+                            <Form.Label className="mb-0">User Handle</Form.Label>
+                        </div>
+                    </Col>
+                    <Col className="p-2">
+                        <InputGroup>
+                            <InputGroup.Text>@</InputGroup.Text>
+                            <Form.Control
+                                type="text"
+                                value={user?.userHandle}
+                                disabled />
+                        </InputGroup>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col xs={2}>
+                        <div className="d-flex align-items-center h-100">
+                            <Form.Label className="mb-0">Email</Form.Label>
+                        </div>
+                    </Col>
+                    <Col className="p-2">
+                        <Form.Control
+                            type="text"
+                            value={user?.email}
+                            disabled />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col xs={2}>
+                        <div className="d-flex align-items-center h-100">
                             <Form.Label className="mb-0">Display Name</Form.Label>
                         </div>
                     </Col>
-                    <Col className="py-2">
+                    <Col className="p-2">
                         <Form.Control
                             type="text"
                             name="displayName"
@@ -110,16 +140,36 @@ function AccountContent() {
                             placeholder="Enter your preferred display name" />
                     </Col>
                 </Row>
-                <Form.Group className="my-3">
-                    <Form.Label>About Me</Form.Label>
-                    <Form.Control
-                        as="textarea"
-                        name="aboutMe"
-                        id="aboutMe"
-                        onChange={handleChange}
-                        value={aboutMe} 
-                        placeholder="Share something interesting about yourself!" />
-                </Form.Group>
+                <Row className="my-3">
+                    <Col xs={2}>
+                        <div className="d-flex align-items-center h-100">
+                            <Form.Label className="mb-0">About Me</Form.Label>
+                        </div>
+                    </Col>
+                    <Col className="py-2">
+                        <Form.Control
+                            as="textarea"
+                            name="aboutMe"
+                            id="aboutMe"
+                            onChange={handleChange}
+                            value={aboutMe} 
+                            placeholder="Share something interesting about yourself!" />
+                    </Col>
+                </Row>
+                <Row className="my-3">
+                    <Col xs={2}>
+                        <div className="d-flex align-items-center h-100">
+                            <Form.Label className="mb-0">Profile Picture</Form.Label>
+                        </div>
+                    </Col>
+                    <Col className="py-2">
+                        <div className="d-flex justify-content-center">
+                            <ReactSketchCanvas
+                                height="200px"
+                                width="200px" />
+                        </div>
+                    </Col>
+                </Row>
                 <Form.Group>
                     <div className="d-flex justify-content-between align-items-center">
                         {unsavedChanges() ? (

@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 using System.Globalization;
 using ScribbleR.Server.Hubs;
+using ScribbleR.Server.Models.Dtos;
 
 namespace ScribbleR.Server;
 
@@ -62,15 +63,14 @@ public class Program
                 return Results.Unauthorized(); 
 
             return Results.Json(
-                new { 
+                new AppUserDto(
                     appUser.Id,
-                    appUser.Email, 
-                    appUser.DisplayName, 
-                    appUser.IsSetup, 
-                    appUser.AboutMe, 
-                    appUser.CreatedAt, 
-                    appUser.UpdatedAt 
-                });
+                    appUser.Email,
+                    appUser.UserHandle,
+                    appUser.DisplayName,
+                    appUser.AboutMe,
+                    appUser.IsSetup
+                ));
         }).RequireAuthorization();
 
         app.MapGet("/api/auth/needsregister", async (string email, UserManager<AppUser> userManager) =>

@@ -28,10 +28,21 @@ public class AccountController : ControllerBase
         AppUser? user = await _userManager.GetUserAsync(User);
         if (user == null) return Forbid();
 
-        if (string.IsNullOrWhiteSpace(setupInfo.DisplayName)) 
-            return BadRequest();
+        AppUser? existingUser = await _context.Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.UserHandle == setupInfo.UserHandle);
+
+        if (existingUser != null)
+            return BadRequest("User handle already exists.");
+
+        if (string.IsNullOrWhiteSpace(setupInfo.UserHandle)) 
+            return BadRequest("User Handle cannot be empty");
+         
+        if (string.IsNullOrWhiteSpace(setupInfo.DisplayName))
+            return BadRequest("Display Name cannot be empty");
 
         user.IsSetup = true;
+        user.UserHandle = setupInfo.UserHandle;
         user.DisplayName = setupInfo.DisplayName;
         user.AboutMe = string.IsNullOrWhiteSpace(setupInfo.AboutMe) ? null : setupInfo.AboutMe;
 
