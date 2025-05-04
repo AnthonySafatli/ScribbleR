@@ -10,7 +10,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { AuthContextData } from "../../models/AppUser";
 import { Message } from "../../models/Message";
 import Icon from "../../components/Icon";
-import DrawCanvas from "./DrawCanvas";
+import DrawCanvas from "../../components/DrawCanvas";
 import MessageCard from "./MessageCard";
 import ToolBar from "./ToolBar";
 

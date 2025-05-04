@@ -62,6 +62,10 @@ public class AccountController : ControllerBase
 
         appUser.DisplayName = setupInfo.DisplayName;
         appUser.AboutMe = string.IsNullOrWhiteSpace(setupInfo.AboutMe) ? null : setupInfo.AboutMe;
+        appUser.Sketch = new Sketch()
+        {
+            CanvasPaths = setupInfo.ProfilePicture
+        };
 
         await _context.SaveChangesAsync();
 

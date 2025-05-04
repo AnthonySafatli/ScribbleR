@@ -3,7 +3,7 @@ import { ReactSketchCanvasRef } from "react-sketch-canvas";
 import { Alert, Card } from 'react-bootstrap'; 
 
 import { Message } from '../../models/Message';
-import DrawCanvas from './DrawCanvas';
+import DrawCanvas from '../../components/DrawCanvas';
 
 interface Props {
     message: Message

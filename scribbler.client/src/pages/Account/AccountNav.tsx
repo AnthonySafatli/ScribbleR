@@ -1,7 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Button, Col } from "react-bootstrap";
+import { ReactSketchCanvasRef } from "react-sketch-canvas";
 
+import { useAuthContext } from "../../hooks/useAuthContext";
+import { AuthContextData } from "../../models/AppUser";
 import Icon from "../../components/Icon";
+import DrawCanvas from "../../components/DrawCanvas";
 
 interface Props {
     currentPage: number,
@@ -10,9 +14,13 @@ interface Props {
 
 function AccountNav({ currentPage, navigate }: Props) {
 
+    const { user, setUser } = useAuthContext() as AuthContextData;
+
     const mdThreshold = 768;
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const [isMd, setIsMd] = useState(window.innerWidth > mdThreshold);
+
+    const pfpRef = useRef<ReactSketchCanvasRef>(null);
 
     useEffect(() => {
         const handleResize = () => setWindowWidth(window.innerWidth);
@@ -24,6 +32,12 @@ function AccountNav({ currentPage, navigate }: Props) {
     useEffect(() => {
         setIsMd(window.innerWidth > mdThreshold);
     }, [windowWidth])
+
+    useEffect(() => {
+        if (pfpRef && user && user?.profilePicture) {
+            pfpRef?.current?.loadPaths(user?.profilePicture);
+        }
+    }, [user, pfpRef])
 
     async function handleLogout() {
         try {
@@ -41,17 +55,11 @@ function AccountNav({ currentPage, navigate }: Props) {
         }
     }
 
-    const imageStyle = {
-        backgroundColor: 'grey',
-        height: '75px',
-        width: '75px', 
-    };
-
     return (
         <Col xs={isMd ? 3 : 2}>
             <nav>
                 <div className="d-flex justify-content-center mb-5">
-                    <div style={imageStyle}></div>
+                    <DrawCanvas ref={pfpRef} paths={user?.profilePicture ?? []} height="75px" width="75px" />
                 </div>
                 <ul className={"nav flex-column gap-4 " + (isMd ? "" : "align-items-center")}>
                     <li className="nav-item">

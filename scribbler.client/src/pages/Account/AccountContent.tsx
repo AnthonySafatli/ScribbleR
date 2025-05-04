@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Alert, Button, Col, Form, InputGroup, OverlayTrigger, Row, Spinner, Tooltip } from "react-bootstrap";
-import { ReactSketchCanvas } from "react-sketch-canvas";
+import { ReactSketchCanvasRef, CanvasPath } from "react-sketch-canvas";
 
 import Icon from "../../components/Icon";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { AuthContextData } from "../../models/AppUser";
+import DrawCanvas from "../../components/DrawCanvas";
 
 function AccountContent() {
 
@@ -12,6 +13,9 @@ function AccountContent() {
 
     const [displayName, setDisplayName] = useState<string>(user?.displayName ?? "");
     const [aboutMe, setAboutMe] = useState<string>(user?.aboutMe ?? "");
+    const [profilePicture, setProfilePicture] = useState<CanvasPath[] | null>(null);
+
+    const pfpRef = useRef<ReactSketchCanvasRef>(null);
 
     useEffect(() => {
         setDisplayName(user?.displayName ?? "")
@@ -26,6 +30,11 @@ function AccountContent() {
             setAboutMe(value);
     };
 
+    const handleChangePfp = async () => {
+        const pfp = await pfpRef?.current?.exportPaths()
+        setProfilePicture(pfp === undefined ? null : pfp)
+    }
+
     // Submit Status
     const [loadingFormSubmit, setLoadingFormSubmit] = useState(false);
     const [successFormSubmit, setSuccessFormSubmit] = useState(false);
@@ -37,8 +46,18 @@ function AccountContent() {
     const unsavedChanges = () => {
         if (user?.aboutMe != aboutMe)
             return true;
+
         if (user?.displayName != displayName)
             return true;
+
+        function normalizePicture(picture: CanvasPath[] | null) {
+            return (picture === null || Array.isArray(picture) && picture.length === 0) ? null : picture;
+        }
+
+        if (normalizePicture(user?.profilePicture) !== normalizePicture(profilePicture)) {
+            return true;
+        }
+
         return false;
     }
 
@@ -61,7 +80,8 @@ function AccountContent() {
                 },
                 body: JSON.stringify({
                     displayName: displayName,
-                    aboutMe: aboutMe
+                    aboutMe: aboutMe,
+                    profilePicture: profilePicture ?? [],
                 }),
             });
 
@@ -164,9 +184,7 @@ function AccountContent() {
                     </Col>
                     <Col className="py-2">
                         <div className="d-flex justify-content-center">
-                            <ReactSketchCanvas
-                                height="200px"
-                                width="200px" />
+                            <DrawCanvas ref={pfpRef} width="200px" height="200px" onChange={() => handleChangePfp()} />
                         </div>
                     </Col>
                 </Row>

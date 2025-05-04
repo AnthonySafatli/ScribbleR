@@ -12,4 +12,6 @@ public class UserAccountPostDto
 
     [StringLength(200)]
     public string? AboutMe { get; set; }
+
+    public CanvasPath[]? ProfilePicture { get; set; }
 }

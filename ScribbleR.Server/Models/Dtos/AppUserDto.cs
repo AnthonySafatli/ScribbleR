@@ -24,6 +24,7 @@ public class AppUserDto
     {
         Id = appUser.Id;
         Email = appUser.Email ?? "";
+        UserHandle = appUser.UserHandle ?? "";
         DisplayName = appUser.DisplayName;
         AboutMe = appUser.AboutMe;
         IsSetup = appUser.IsSetup;
