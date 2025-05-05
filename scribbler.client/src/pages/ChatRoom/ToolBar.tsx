@@ -1,42 +1,37 @@
-import { Button } from "react-bootstrap";
-
-import Icon from "../../components/Icon";
+import MessageMode from "../../models/MessageMode";
 import ToolBarToggle from "./ToolBarToggle";
 
 interface Props {
-    isDrawing: boolean;
-    setDrawing: (isDrawing: boolean) => void;
+    mode: MessageMode,
+    setMode: (mode: MessageMode) => void
 }
 
-function ToolBar({isDrawing, setDrawing}: Props) {
-
-    const drawModeClick = (setToDraw: boolean) => {
-        if (setToDraw == isDrawing)
-            return;
-        setDrawing(setToDraw);
-    }
+function ToolBar({ mode, setMode }: Props) {
 
     const drawModeOptions = [
         {
             label: "draw",
             icon: "pen",
-            onSelected: () => drawModeClick(true)
+            onSelected: () => setMode(MessageMode.Draw),
+            value: MessageMode.Draw
         },
         {
             label: "eraser",
             icon: "eraser",
-            onSelected: () => drawModeClick(false)
+            onSelected: () => setMode(MessageMode.Erase),
+            value: MessageMode.Erase
         },
         {
             label: "text",
             icon: "fonts",
-            onSelected: () => {  }
+            onSelected: () => setMode(MessageMode.Text),
+            value: MessageMode.Text
         }
     ]
 
     return (
         <div className="d-flex gap-2 mb-2">
-            <ToolBarToggle options={drawModeOptions} />
+            <ToolBarToggle selectedValue={mode} options={drawModeOptions} />
         </div>
     );
 }

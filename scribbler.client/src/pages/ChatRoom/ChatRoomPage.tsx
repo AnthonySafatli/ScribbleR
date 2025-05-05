@@ -1,7 +1,7 @@
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { Button, Col, Container, Row } from "react-bootstrap";
+import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { ReactSketchCanvasRef, CanvasPath } from "react-sketch-canvas";
 
 import NotFound from "../NotFound";
@@ -13,6 +13,7 @@ import Icon from "../../components/Icon";
 import DrawCanvas from "../../components/DrawCanvas";
 import MessageCard from "./MessageCard";
 import ToolBar from "./ToolBar";
+import MessageMode from "../../models/MessageMode";
 
 function ChatRoomPage() {
     const { chatroomId } = useParams();
@@ -24,14 +25,23 @@ function ChatRoomPage() {
     const [userCount, setUserCount] = useState(0);
 
     const canvasRef = useRef<ReactSketchCanvasRef>(null);
-    const [isDrawing, setIsDrawing] = useState(true);
-    // const [typedMessage, setTypedMessage] = useState<string>("");
+    const [messageMode, setMessageMode] = useState<MessageMode>(MessageMode.Draw);
+    const [typedMessage, setTypedMessage] = useState<string>("");
 
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
-        canvasRef.current?.eraseMode(!isDrawing);
-    }, [isDrawing])
+        switch (messageMode) {
+            case MessageMode.Draw:
+                canvasRef.current?.eraseMode(false);
+                break;
+            case MessageMode.Erase:
+                canvasRef.current?.eraseMode(true);
+                break;
+            case MessageMode.Text:
+                break;
+        }
+    }, [messageMode])
 
     useEffect(() => {
         if (user && !isConnected) {
@@ -89,14 +99,12 @@ function ChatRoomPage() {
     }, [user, chatroomId, isConnected]);
 
 
-    {/* 
-        const sendMessage = () => {
-            if (conn && typedMessage.trim()) {
-                conn.invoke(SignalRConnections.SEND_MESSAGE, typedMessage);
-                setTypedMessage("");
-            }
-        };
-    */}
+    const sendMessage = () => {
+        if (conn && typedMessage.trim()) {
+            conn.invoke(SignalRConnections.SEND_MESSAGE, typedMessage);
+            setTypedMessage("");
+        }
+    };
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -143,28 +151,21 @@ function ChatRoomPage() {
                         ))}
                         <div ref={messagesEndRef} />
                     </div>
-                        
-                    {/* 
-
-                    This is for typing messages
-
-                    <div className="mt-2">
-                        <Form.Control
-                            as="textarea"
-                            rows={5}
-                            style={{ resize: "none", width: "100%" }}
-                            value={typedMessage}
-                            onChange={(e) => setTypedMessage(e.target.value)}
-                        />
-                    </div>
-
-                    */}
-
                     <div>
-                        <ToolBar isDrawing={isDrawing} setDrawing={setIsDrawing} />
+                        <ToolBar mode={messageMode} setMode={setMessageMode} />
                     </div>
                     <div>
-                        <DrawCanvas ref={canvasRef} />
+                        {
+                            messageMode === MessageMode.Text ?
+                                <Form.Control
+                                    as="textarea"
+                                    style={{ resize: "none", width: "100%", height: "200px" }}
+                                    value={typedMessage}
+                                    onChange={(e) => setTypedMessage(e.target.value)}
+                                />
+                                :
+                                <DrawCanvas ref={canvasRef} />
+                        }
                     </div>
                     <Row className="my-2">
                         <Col xs={8}>

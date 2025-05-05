@@ -8,21 +8,22 @@ interface ToolBarToggleOptions {
     icon: string;
     label: string;
     onSelected: () => void;
+    value: any;
 }
 interface Props {
     options: ToolBarToggleOptions[];
+    selectedValue: any;
 }
 
-const ToolBarToggle = ({ options }: Props) => {
+const ToolBarToggle = ({ options, selectedValue }: Props) => {
 
     const [expanded, setExpanded] = useState(false);
     const [selectedOption, setSelectedOption] = useState<ToolBarToggleOptions | null>(null);
 
-    useEffect(() => {
-        if (options.length >= 0) {
-            setSelectedOption(options[0])
-        }
-    }, [])
+    const clickOption = (option: ToolBarToggleOptions) => {
+        option.onSelected();
+        setSelectedOption(option)
+    }
 
     return (
         <div className="d-flex align-items-center" style={{ height: "50px" }}>
@@ -31,7 +32,7 @@ const ToolBarToggle = ({ options }: Props) => {
                 style={{ width: "50px", height: "50px" }}
                 onClick={() => setExpanded(!expanded)}
             >
-                <Icon name={selectedOption?.icon ?? ""} />
+                <Icon name={selectedOption?.icon ?? options[0].icon} />
             </Button>
 
             <AnimatePresence>
@@ -47,8 +48,8 @@ const ToolBarToggle = ({ options }: Props) => {
                             {options.map((option, index) => (
                                 <Button
                                     key={index}
-                                    variant={selectedOption === option ? "primary" : "default"}
-                                    onClick={() => setSelectedOption(option)}
+                                    variant={option.value == selectedValue ? "primary" : "default"}
+                                    onClick={() => clickOption(option)}
                                 >
                                     <span className="text-nowrap">
                                         <Icon name={option.icon} />
