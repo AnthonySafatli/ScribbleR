@@ -27,6 +27,8 @@ function ChatRoomPage() {
     const [isDrawing, setIsDrawing] = useState(true);
     // const [typedMessage, setTypedMessage] = useState<string>("");
 
+    const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
     useEffect(() => {
         canvasRef.current?.eraseMode(!isDrawing);
     }, [isDrawing])
@@ -96,6 +98,10 @@ function ChatRoomPage() {
         };
     */}
 
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [messages]);
+
     const clearCanvas = () => {
         canvasRef.current?.clearCanvas();
     };
@@ -136,8 +142,11 @@ function ChatRoomPage() {
                             <div><Icon name="person-circle" /> {userCount}</div>
                         </div>
                     </div>
-                    <div className="d-flex flex-column overflow-auto" style={{ flexGrow: 1, justifyContent: "flex-end", overflowY: 'auto', padding: '1rem' }}>
-                        {messages.map((msg, i) => (<div key={i}><MessageCard message={msg} /></div>))}
+                    <div className="d-flex flex-column overflow-auto flex-grow-1 p-1">
+                        {messages.map((msg, i) => (
+                            <div key={i}><MessageCard message={msg} /></div>
+                        ))}
+                        <div ref={messagesEndRef} />
                     </div>
                         
                     {/* 
@@ -163,13 +172,13 @@ function ChatRoomPage() {
                         <DrawCanvas ref={canvasRef} />
                     </div>
                     <Row className="my-2">
-                        <Col>
+                        <Col xs={8}>
+                            You are sending messages as <strong><a>{user?.displayName}</a></strong>
+                        </Col>
+                        <Col xs={2}>
                             <Button className="w-100" variant="primary" onClick={clearCanvas}><Icon name="trash3" /></Button>
                         </Col>
-                        <Col>
-                            <Button className="w-100" variant="primary" onClick={loadDrawing}><Icon name="download" /></Button>
-                        </Col>
-                        <Col>
+                        <Col xs={2}>
                             <Button className="w-100" variant="primary" onClick={saveDrawing}><Icon name="upload" /></Button>
                         </Col>
                     </Row>
