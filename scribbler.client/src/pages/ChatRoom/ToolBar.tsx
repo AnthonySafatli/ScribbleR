@@ -1,6 +1,7 @@
 import { Button } from "react-bootstrap";
 
 import Icon from "../../components/Icon";
+import ToolBarToggle from "./ToolBarToggle";
 
 interface Props {
     isDrawing: boolean;
@@ -15,18 +16,27 @@ function ToolBar({isDrawing, setDrawing}: Props) {
         setDrawing(setToDraw);
     }
 
+    const drawModeOptions = [
+        {
+            label: "draw",
+            icon: "pen",
+            onSelected: () => drawModeClick(true)
+        },
+        {
+            label: "eraser",
+            icon: "eraser",
+            onSelected: () => drawModeClick(false)
+        },
+        {
+            label: "text",
+            icon: "fonts",
+            onSelected: () => {  }
+        }
+    ]
+
     return (
         <div className="d-flex gap-2 mb-2">
-            <Button variant={isDrawing ? "primary" : "default"}
-                    style={{ width: '50px', height: '50px' }}
-                    onClick={() => drawModeClick(true)}>
-                <Icon name="pen" />
-            </Button>
-            <Button variant={isDrawing ? "default" : "primary"}
-                    style={{ width: '50px', height: '50px' }}
-                    onClick={() => drawModeClick(false)}>
-                <Icon name="eraser" />
-            </Button>
+            <ToolBarToggle options={drawModeOptions} />
         </div>
     );
 }

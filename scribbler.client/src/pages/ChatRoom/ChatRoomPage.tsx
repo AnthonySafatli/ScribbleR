@@ -102,6 +102,14 @@ function ChatRoomPage() {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
+    const copyCanvas = async (copyRef: ReactSketchCanvasRef | null) => {
+        const paths = await copyRef?.exportPaths()
+        if (paths) {
+            clearCanvas();
+            canvasRef.current?.loadPaths(paths);
+        }
+    }
+
     const clearCanvas = () => {
         canvasRef.current?.clearCanvas();
     };
@@ -113,19 +121,6 @@ function ChatRoomPage() {
             conn.invoke(SignalRConnections.SEND_SKETCH, paths);
             clearCanvas();
         }
-    };
-
-    const loadDrawing = async () => {
-        //const savedPaths: CanvasPath[] = [
-        //    // Example stroke
-        //    {
-        //        paths: [{ x: 10, y: 10 }, { x: 20, y: 20 }],
-        //        strokeColor: 'black',
-        //        strokeWidth: 4,
-        //        drawMode: true
-        //    }
-        //];
-        //await canvasRef.current?.loadPaths(savedPaths);
     };
 
     if (chatroomId === undefined) {
@@ -144,7 +139,7 @@ function ChatRoomPage() {
                     </div>
                     <div className="d-flex flex-column overflow-auto flex-grow-1 p-1">
                         {messages.map((msg, i) => (
-                            <div key={i}><MessageCard message={msg} /></div>
+                            <div key={i}><MessageCard message={msg} onCopy={copyCanvas} /></div>
                         ))}
                         <div ref={messagesEndRef} />
                     </div>
@@ -173,7 +168,7 @@ function ChatRoomPage() {
                     </div>
                     <Row className="my-2">
                         <Col xs={8}>
-                            You are sending messages as <strong><a>{user?.displayName}</a></strong>
+                            You are sending messages as <strong><a href="/Account">{user?.displayName}</a></strong>
                         </Col>
                         <Col xs={2}>
                             <Button className="w-100" variant="primary" onClick={clearCanvas}><Icon name="trash3" /></Button>
