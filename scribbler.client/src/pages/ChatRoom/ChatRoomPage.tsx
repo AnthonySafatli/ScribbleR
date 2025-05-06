@@ -101,8 +101,15 @@ function ChatRoomPage() {
         }
     }, [user, chatroomId, isConnected]);
 
-
     const sendMessage = () => {
+        if (messageMode === MessageMode.Text) {
+            sendTextMessage();
+        } else {
+            saveDrawing();
+        }
+    }
+
+    const sendTextMessage = () => {
         if (conn && typedMessage.trim()) {
             conn.invoke(SignalRConnections.SEND_MESSAGE, typedMessage);
             setTypedMessage("");
@@ -189,7 +196,7 @@ function ChatRoomPage() {
                             <Button className="w-100" variant="primary" onClick={clearCanvas}><Icon name="trash3" /></Button>
                         </Col>
                         <Col xs={2}>
-                            <Button className="w-100" variant="primary" onClick={saveDrawing}><Icon name="upload" /></Button>
+                            <Button className="w-100" variant="primary" onClick={sendMessage}><Icon name="upload" /></Button>
                         </Col>
                     </Row>
                 </div>

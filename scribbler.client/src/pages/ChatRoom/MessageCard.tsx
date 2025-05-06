@@ -51,9 +51,24 @@ const MessageCard = ({ message, onCopy }: Props) => {
     }
 
     return (
-        <Alert variant="secondary" className="mt-2 mb-0">
-            <b>{message.displayName}</b>: {message.message}
-        </Alert>
+        <Card className="shader-sm mt-2 mb-0">
+            <Card.Body>
+                <div className="d-flex justify-content-between align-items-center mb-2">
+                    <div>
+                        <p className="m-0">{ message.displayName }</p>
+                        <small className="text-muted m-0">2:14 PM</small> 
+                    </div>
+                    <div>
+                        <Button variant="default" onClick={() => onCopy(drawingRef?.current)}>
+                            <Icon name="copy" />
+                        </Button>
+                    </div>
+                </div>
+                <div style={{ height: '200px', border: '1px solid black' }}>
+                    <p className="m-0">{message.message}</p>
+                </div>
+            </Card.Body>
+        </Card>
     );
 }
 
