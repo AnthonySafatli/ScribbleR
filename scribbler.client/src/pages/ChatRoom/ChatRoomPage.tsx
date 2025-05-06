@@ -161,7 +161,9 @@ function ChatRoomPage() {
                             colour={colour}
                             setColour={setColour}
                             size={size}
-                            setSize={setSize} />
+                            setSize={setSize}
+                            undo={() => canvasRef?.current?.undo()}
+                            redo={() => canvasRef?.current?.redo()} />
                     </div>
                     <div>
                         {
