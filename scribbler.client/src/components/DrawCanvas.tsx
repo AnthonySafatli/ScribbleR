@@ -3,6 +3,7 @@ import { ReactSketchCanvas, ReactSketchCanvasRef, CanvasPath } from "react-sketc
 
 interface Props {
     colour?: string,
+    size?: number,
     paths?: CanvasPath[] | null,
     height?: string,
     width?: string,
@@ -10,7 +11,7 @@ interface Props {
     isDrawable?: boolean,
 }
 
-const DrawCanvas = forwardRef<ReactSketchCanvasRef, Props>(({ colour = "black", paths = null, height = '200px', width, onChange, isDrawable = true }: Props, ref) => {
+const DrawCanvas = forwardRef<ReactSketchCanvasRef, Props>(({ colour = "black", size = 4, paths = null, height = '200px', width, onChange, isDrawable = true }: Props, ref) => {
 
     useEffect(() => {
         if (ref && paths) {
@@ -24,7 +25,8 @@ const DrawCanvas = forwardRef<ReactSketchCanvasRef, Props>(({ colour = "black", 
             strokeColor={colour}
             height={height}
             width={width}
-            strokeWidth={4}
+            strokeWidth={size}
+            eraserWidth={size}
             withTimestamp={true}
             allowOnlyPointerType={isDrawable ? "all" : "none"}
             onChange={onChange}
