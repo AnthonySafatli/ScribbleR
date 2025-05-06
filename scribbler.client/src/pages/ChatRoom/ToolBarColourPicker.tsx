@@ -3,14 +3,15 @@ import { AnimatePresence, motion } from "framer-motion";
 import { SketchPicker, ColorResult } from "react-color";
 import { Button } from "react-bootstrap";
 
-import Icon from "./Icon";
+import Icon from "../../components/Icon";
+
 
 interface Props {
     colour: string;
     setColour: (colour: string) => void;
 }
 
-const ColourPickerPopup = ({ colour, setColour }: Props ) => {
+const ToolBarColourPicker = ({ colour, setColour }: Props ) => {
 
     const [expanded, setExpanded] = useState(false);
 
@@ -65,4 +66,4 @@ const ColourPickerPopup = ({ colour, setColour }: Props ) => {
     );
 };
 
-export default ColourPickerPopup;
+export default ToolBarColourPicker;

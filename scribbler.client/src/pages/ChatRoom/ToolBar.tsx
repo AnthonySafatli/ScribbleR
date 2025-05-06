@@ -1,5 +1,6 @@
 import { Button } from "react-bootstrap";
-import ColourPickerPopup from "../../components/ColourPickerPopup";
+
+import ToolBarColourPicker from "./ToolBarColourPicker";
 import MessageMode from "../../models/MessageMode";
 import ToolBarSizePicker from "./ToolBarSizePicker";
 import ToolBarToggle from "./ToolBarToggle";
@@ -40,10 +41,10 @@ function ToolBar({ mode, setMode, colour, setColour, size, setSize, undo, redo }
     ]
 
     return (
-        <div className="d-flex gap-2 mb-2 justify-content-between">
+        <div className="d-flex gap-2 mb-2 justify-content-between overflow-auto">
             <div className="d-flex gap-2">
                 <ToolBarToggle selectedValue={mode} options={drawModeOptions} />
-                <ColourPickerPopup colour={colour} setColour={setColour} />
+                <ToolBarColourPicker colour={colour} setColour={setColour} />
                 <ToolBarSizePicker size={size} setSize={setSize} />
             </div>
             <div className="d-flex gap-2">

@@ -31,12 +31,14 @@ function ToolBarSizePicker({ size, setSize }: Props) {
                         exit={{ opacity: 0, width: 0 }}
                         transition={{ duration: 0.3 }}
                     >
-                        <Form.Range
-                            min={1}
-                            max={40}
-                            value={size}
-                            onChange={(e) => setSize(parseInt(e.target.value))}
-                        />
+                        <div style={{ minWidth: '100px' }}>
+                            <Form.Range
+                                min={1}
+                                max={40}
+                                value={size}
+                                onChange={(e) => setSize(parseInt(e.target.value))}
+                            />
+                        </div>
                     </motion.div>
                 )}
             </AnimatePresence>
