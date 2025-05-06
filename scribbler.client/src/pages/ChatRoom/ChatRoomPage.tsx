@@ -26,6 +26,7 @@ function ChatRoomPage() {
 
     const canvasRef = useRef<ReactSketchCanvasRef>(null);
     const [messageMode, setMessageMode] = useState<MessageMode>(MessageMode.Draw);
+    const [colour, setColour] = useState<string>("#000000");
     const [typedMessage, setTypedMessage] = useState<string>("");
 
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -152,7 +153,11 @@ function ChatRoomPage() {
                         <div ref={messagesEndRef} />
                     </div>
                     <div>
-                        <ToolBar mode={messageMode} setMode={setMessageMode} />
+                        <ToolBar
+                            mode={messageMode}
+                            setMode={setMessageMode}
+                            colour={colour}
+                            setColour={setColour} />
                     </div>
                     <div>
                         {
@@ -164,7 +169,7 @@ function ChatRoomPage() {
                                     onChange={(e) => setTypedMessage(e.target.value)}
                                 />
                                 :
-                                <DrawCanvas ref={canvasRef} />
+                                <DrawCanvas ref={canvasRef} colour={colour} />
                         }
                     </div>
                     <Row className="my-2">

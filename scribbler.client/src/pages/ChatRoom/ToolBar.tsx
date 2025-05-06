@@ -1,12 +1,15 @@
+import ColourPickerPopup from "../../components/ColourPickerPopup";
 import MessageMode from "../../models/MessageMode";
 import ToolBarToggle from "./ToolBarToggle";
 
 interface Props {
     mode: MessageMode,
-    setMode: (mode: MessageMode) => void
+    setMode: (mode: MessageMode) => void,
+    colour: string,
+    setColour: (colour: string) => void,
 }
 
-function ToolBar({ mode, setMode }: Props) {
+function ToolBar({ mode, setMode, colour, setColour }: Props) {
 
     const drawModeOptions = [
         {
@@ -32,6 +35,7 @@ function ToolBar({ mode, setMode }: Props) {
     return (
         <div className="d-flex gap-2 mb-2">
             <ToolBarToggle selectedValue={mode} options={drawModeOptions} />
+            <ColourPickerPopup colour={colour} setColour={setColour} />
         </div>
     );
 }
