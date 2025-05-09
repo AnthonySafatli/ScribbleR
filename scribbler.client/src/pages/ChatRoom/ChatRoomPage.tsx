@@ -149,9 +149,9 @@ function ChatRoomPage() {
         <main>
             <Container>
                 <div className="vh-100 d-flex flex-column">
-                    <div className="sticky-top mt-5">
+                    <div className="sticky-top mt-5 mb-2">
                         <div className="d-flex justify-content-around align-items-center">
-                            <h1 className="text-center">Chat Room</h1>
+                            <h1 className="text-center">Chatroom <small className="text-muted">{ chatroomId }</small></h1>
                             <div><Icon name="person-circle" /> {userCount}</div>
                         </div>
                     </div>
@@ -161,44 +161,50 @@ function ChatRoomPage() {
                         ))}
                         <div ref={messagesEndRef} />
                     </div>
-                    <div>
-                        <ToolBar
-                            mode={messageMode}
-                            setMode={setMessageMode}
-                            colour={colour}
-                            setColour={setColour}
-                            size={size}
-                            setSize={setSize}
-                            undo={() => canvasRef?.current?.undo()}
-                            redo={() => canvasRef?.current?.redo()} />
+                    <div className="d-flex justify-content-center mt-3">
+                        <div style={{ maxWidth: "600px", width: "100%" }}>
+                            <ToolBar
+                                mode={messageMode}
+                                setMode={setMessageMode}
+                                colour={colour}
+                                setColour={setColour}
+                                size={size}
+                                setSize={setSize}
+                                undo={() => canvasRef?.current?.undo()}
+                                redo={() => canvasRef?.current?.redo()} />
+                        </div>
                     </div>
-                    <div>
-                        {
-                            messageMode === MessageMode.Text ?
-                                <Form.Control
-                                    as="textarea"
-                                    style={{ resize: "none", width: "100%", height: "200px" }}
-                                    value={typedMessage}
-                                    onChange={(e) => setTypedMessage(e.target.value)}
-                                />
-                                :
-                                <DrawCanvas
-                                    ref={canvasRef}
-                                    colour={colour}
-                                    size={size} />
-                        }
+                    <div className="d-flex justify-content-center">
+                        <div>
+                            {
+                                messageMode === MessageMode.Text ?
+                                    <Form.Control
+                                        as="textarea"
+                                        style={{ resize: "none", width: "400px", height: "200px" }}
+                                        value={typedMessage}
+                                        onChange={(e) => setTypedMessage(e.target.value)}
+                                    />
+                                    :
+                                    <DrawCanvas
+                                        ref={canvasRef}
+                                        colour={colour}
+                                        size={size} />
+                            }
+                        </div>
                     </div>
-                    <Row className="my-2">
-                        <Col xs={8}>
-                            You are sending messages as <strong><a href="/Account">{user?.displayName}</a></strong>
-                        </Col>
-                        <Col xs={2}>
-                            <Button className="w-100" variant="primary" onClick={clearCanvas}><Icon name="trash3" /></Button>
-                        </Col>
-                        <Col xs={2}>
-                            <Button className="w-100" variant="primary" onClick={sendMessage}><Icon name="upload" /></Button>
-                        </Col>
-                    </Row>
+                    <div className="d-flex justify-content-center">
+                        <Row className="my-2" style={{ maxWidth: "800px", width: "100%" }}>
+                            <Col xs={8}>
+                                You are sending messages as <strong><a href="/Account">{user?.displayName}</a></strong>
+                            </Col>
+                            <Col xs={4}>
+                                <div className="d-flex gap-2">
+                                    <Button style={{ width: '100%' }} variant="primary" onClick={clearCanvas}><Icon name="trash3" /></Button>
+                                    <Button style={{ width: '100%' }} variant="primary" onClick={sendMessage}><Icon name="upload" /></Button>
+                                </div>
+                            </Col>
+                        </Row>
+                    </div>
                 </div>
             </Container>
         </main>

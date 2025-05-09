@@ -5,13 +5,13 @@ interface Props {
     colour?: string,
     size?: number,
     paths?: CanvasPath[] | null,
-    height?: string,
-    width?: string,
+    height?: number,
+    width?: number,
     onChange?: () => void,
     isDrawable?: boolean,
 }
 
-const DrawCanvas = forwardRef<ReactSketchCanvasRef, Props>(({ colour = "black", size = 4, paths = null, height = '200px', width, onChange, isDrawable = true }: Props, ref) => {
+const DrawCanvas = forwardRef<ReactSketchCanvasRef, Props>(({ colour = "black", size = 4, paths = null, height = 200, width, onChange, isDrawable = true }: Props, ref) => {
 
     useEffect(() => {
         if (ref && paths) {
@@ -23,8 +23,8 @@ const DrawCanvas = forwardRef<ReactSketchCanvasRef, Props>(({ colour = "black", 
         <ReactSketchCanvas
             ref={ref}
             strokeColor={colour}
-            height={height}
-            width={width}
+            height={height + "px"}
+            width={width ? width + "px" : (height * 2) + "px"}
             strokeWidth={size}
             eraserWidth={size}
             withTimestamp={true}
