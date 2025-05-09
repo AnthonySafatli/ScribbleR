@@ -1,5 +1,5 @@
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { ReactSketchCanvasRef, CanvasPath } from "react-sketch-canvas";
@@ -16,6 +16,8 @@ import ToolBar from "./ToolBar";
 import MessageMode from "../../models/MessageMode";
 
 function ChatRoomPage() {
+
+    const location = useLocation();
     const { chatroomId } = useParams();
     const { user } = useAuthContext() as AuthContextData;
 
@@ -143,6 +145,12 @@ function ChatRoomPage() {
         }
     };
 
+    const share = () => {
+        navigator.clipboard.writeText(location.pathname)
+            .then(() => console.log("Copied!"))
+            .catch(err => console.error("Failed to copy: ", err));
+    }
+
     if (chatroomId === undefined) {
         return <NotFound />;
     }
@@ -153,8 +161,14 @@ function ChatRoomPage() {
                 <div className="vh-100 d-flex flex-column">
                     <div className="sticky-top mt-5 mb-2">
                         <div className="d-flex justify-content-around align-items-center">
-                            <h1 className="text-center">Chatroom <small className="text-muted">{ chatroomId }</small></h1>
-                            <div><Icon name="person-circle" /> {userCount}</div>
+                            <div className="d-flex gap-3 align-items-center">
+                                <div className="mr-3"><Icon name="person-circle" /> {userCount}</div>
+                                <h1 className="text-center">Chatroom</h1>
+                                <h2 className="text-muted">{chatroomId}</h2>
+                            </div>
+                            <div>
+                                <Button variant="default" onClick={() => share()}><Icon name="box-arrow-up" /></Button>
+                            </div>
                         </div>
                     </div>
                     <div className="d-flex flex-column overflow-auto flex-grow-1 p-1">
