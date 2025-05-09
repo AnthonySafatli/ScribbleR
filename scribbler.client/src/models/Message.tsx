@@ -7,4 +7,5 @@ export interface Message {
     message: string | null,
     isSystem: boolean,
     isJoin: boolean,
+    datetime: Date
 }

@@ -22,26 +22,28 @@ public class ChatHub : Hub
         await Groups.AddToGroupAsync(Context.ConnectionId, conn.Chatroom);
         _shared.connections[Context.ConnectionId] = conn;
 
-        await Clients.Group(conn.Chatroom).SendAsync(ReceiveMessage, conn.DisplayName, conn.UserId, "", true);
+        await Clients.Group(conn.Chatroom).SendAsync(ReceiveMessage, conn.DisplayName, conn.UserId, "", true, DateTime.Now);
 
         int userCount = _shared.connections.Count(c => c.Value.Chatroom == conn.Chatroom);
         await Clients.Group(conn.Chatroom).SendAsync(UserCount, userCount);
 
     }
 
-    public async Task SendMessage(string msg)
+    public async Task SendMessage(string msg, long timestamp)
     {
         if (_shared.connections.TryGetValue(Context.ConnectionId, out UserConnection? conn))
         {
-            await Clients.Group(conn.Chatroom).SendAsync(ReceiveMessage, conn.DisplayName, conn.UserId, msg, null);
+            DateTime dateTime = DateTimeOffset.FromUnixTimeMilliseconds(timestamp).UtcDateTime;
+            await Clients.Group(conn.Chatroom).SendAsync(ReceiveMessage, conn.DisplayName, conn.UserId, msg, null, dateTime);
         }
     }
 
-    public async Task SendSketch(CanvasPath[] paths)
+    public async Task SendSketch(CanvasPath[] paths, long timestamp)
     {
         if (_shared.connections.TryGetValue(Context.ConnectionId, out UserConnection? conn))
         {
-            await Clients.Group(conn.Chatroom).SendAsync(ReceiveSketch, conn.DisplayName, conn.UserId, paths);
+            DateTime dateTime = DateTimeOffset.FromUnixTimeMilliseconds(timestamp).UtcDateTime;
+            await Clients.Group(conn.Chatroom).SendAsync(ReceiveSketch, conn.DisplayName, conn.UserId, paths, dateTime);
         }
     }
 
@@ -52,7 +54,7 @@ public class ChatHub : Hub
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, conn.Chatroom);
             _shared.connections.TryRemove(Context.ConnectionId, out _);
 
-            await Clients.Group(conn.Chatroom).SendAsync(ReceiveMessage, conn.DisplayName, conn.UserId, "", false);
+            await Clients.Group(conn.Chatroom).SendAsync(ReceiveMessage, conn.DisplayName, conn.UserId, "", false, DateTime.Now);
 
             int userCount = _shared.connections.Count(c => c.Value.Chatroom == conn.Chatroom);
             await Clients.Group(conn.Chatroom).SendAsync(UserCount, userCount);

@@ -55,7 +55,7 @@ function ChatRoomPage() {
                         .withUrl("https://localhost:44389/api/chat")
                         .build();
 
-                    newConn.on(SignalRConnections.RECEIVE_MESSAGE, (displayName: string, userId: string, msg: string, isJoinOrLeave: boolean | null) => {
+                    newConn.on(SignalRConnections.RECEIVE_MESSAGE, (displayName: string, userId: string, msg: string, isJoinOrLeave: boolean | null, datetime: string) => {
                         const newMsg = {
                             displayName: displayName,
                             userId: userId,
@@ -63,6 +63,7 @@ function ChatRoomPage() {
                             message: msg,
                             isSystem: isJoinOrLeave !== null,
                             isJoin: isJoinOrLeave === true,
+                            datetime: new Date(datetime)
                         };
                         setMessages(prevMessages => [...prevMessages, newMsg]);
                     });
@@ -71,14 +72,15 @@ function ChatRoomPage() {
                         setUserCount(count);
                     });
 
-                    newConn.on(SignalRConnections.RECEIVE_SKETCH, (displayName: string, userId: string, paths: CanvasPath[]) => {
+                    newConn.on(SignalRConnections.RECEIVE_SKETCH, (displayName: string, userId: string, paths: CanvasPath[], datetime: string) => {
                         const newMsg = {
                             displayName: displayName,
                             userId: userId,
                             paths: paths,
                             message: null,
                             isSystem: false,
-                            isJoin: false
+                            isJoin: false,
+                            datetime: new Date(datetime)
                         }
                         setMessages(prevMessages => [...prevMessages, newMsg]);
                     });
@@ -105,13 +107,13 @@ function ChatRoomPage() {
         if (messageMode === MessageMode.Text) {
             sendTextMessage();
         } else {
-            saveDrawing();
+            sendDrawing();
         }
     }
 
     const sendTextMessage = () => {
         if (conn && typedMessage.trim()) {
-            conn.invoke(SignalRConnections.SEND_MESSAGE, typedMessage);
+            conn.invoke(SignalRConnections.SEND_MESSAGE, typedMessage, Date.now());
             setTypedMessage("");
         }
     };
@@ -132,11 +134,11 @@ function ChatRoomPage() {
         canvasRef.current?.clearCanvas();
     };
 
-    const saveDrawing = async () => {
+    const sendDrawing = async () => {
         const paths = await canvasRef.current?.exportPaths();
 
         if (conn && paths) {
-            conn.invoke(SignalRConnections.SEND_SKETCH, paths);
+            conn.invoke(SignalRConnections.SEND_SKETCH, paths, Date.now());
             clearCanvas();
         }
     };

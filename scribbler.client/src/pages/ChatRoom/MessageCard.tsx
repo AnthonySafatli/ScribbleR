@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { ReactSketchCanvasRef } from "react-sketch-canvas";
 import { Alert, Button, Card } from 'react-bootstrap'; 
+import { formatDistanceToNow } from 'date-fns';
 
 import { Message } from '../../models/Message';
 import DrawCanvas from '../../components/DrawCanvas';
@@ -13,8 +14,9 @@ interface Props {
 
 const MessageCard = ({ message, onCopy }: Props) => {
     const drawingRef = useRef<ReactSketchCanvasRef>(null);
-
-    // TODO: Fix hard coded values
+    function PrettyDate(datetime: Date) {
+        return <small className="text-muted m-0">{formatDistanceToNow(datetime, { addSuffix: true })}</small>;
+    }
 
     if (message.paths) {
         return (
@@ -23,8 +25,8 @@ const MessageCard = ({ message, onCopy }: Props) => {
                     <Card.Body>
                         <div className="d-flex justify-content-between align-items-center mb-2">
                             <div>
-                                <p className="m-0">{ message.displayName }</p>
-                                <small className="text-muted m-0">2:14 PM</small> 
+                                {PrettyDate(message.datetime)}
+                                <p className="m-0">{message.displayName}</p>
                             </div>
                             <div>
                                 <Button variant="default" onClick={() => onCopy(drawingRef?.current)}>
@@ -48,7 +50,12 @@ const MessageCard = ({ message, onCopy }: Props) => {
         return (
             <div className="d-flex justify-content-center">
                 <Alert variant="info" className="mt-2 mb-0" style={{ maxWidth: "700px", width: "100%" }}>
-                    <b>{message.displayName}</b>{(message.isJoin ? " has joined the chat" : " has left the chat")}
+                    <div>
+                        { PrettyDate(message.datetime) }
+                    </div>
+                    <div>
+                        <b>{message.displayName}</b>{(message.isJoin ? " has joined the chat" : " has left the chat")}
+                    </div>
                 </Alert>
             </div>
         );
@@ -60,8 +67,8 @@ const MessageCard = ({ message, onCopy }: Props) => {
                 <Card.Body>
                     <div className="d-flex justify-content-between align-items-center mb-2">
                         <div>
+                            { PrettyDate(message.datetime) }
                             <p className="m-0">{ message.displayName }</p>
-                            <small className="text-muted m-0">2:14 PM</small> 
                         </div>
                         <div>
                             <Button variant="default" onClick={() => onCopy(drawingRef?.current)}>
