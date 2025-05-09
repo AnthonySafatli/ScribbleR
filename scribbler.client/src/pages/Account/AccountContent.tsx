@@ -172,7 +172,7 @@ function AccountContent() {
                     </Col>
                     <Col className="py-2">
                         <div className="d-flex justify-content-center">
-                            <DrawCanvas ref={pfpRef} width="200px" height="200px" onChange={() => handleChangePfp()} />
+                            <DrawCanvas ref={pfpRef} width={200} height={200} onChange={() => handleChangePfp()} />
                         </div>
                     </Col>
                 </Row>

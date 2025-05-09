@@ -63,8 +63,8 @@ function AccountNav({ currentPage, navigate }: Props) {
                         ref={pfpRef}
                         paths={user?.profilePicture ?? []}
                         isDrawable={false}
-                        height="75px"
-                        width="75px" />
+                        height={75}
+                        width={75} />
                 </div>
                 <ul className={"nav flex-column gap-4 " + (isMd ? "" : "align-items-center")}>
                     <li className="nav-item">

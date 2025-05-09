@@ -9,16 +9,6 @@ import Icon from "../../components/Icon";
 import FriendItem from "./FriendItem";
 import AddFriendModal from "../../components/AddFriendModal";
 
-interface RawSentFriendRequest {
-    id: number;
-    requestToUser: AppUser;
-}
-
-interface RawReceivedFriendRequest {
-    id: number;
-    requestFromUser: AppUser;
-}
-
 function FriendsContent() {
 
     const [friends, setFriends] = useState<AppUser[] | null>(null);
