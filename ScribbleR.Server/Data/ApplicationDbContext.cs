@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using ScribbleR.Server.Models;
+using ScribbleR.Server.Models.Base;
 using System.Reflection.Emit;
 
 namespace ScribbleR.Server.Data;
@@ -32,24 +35,39 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
             .HasColumnType("jsonb");
     }
 
-
-    public override int SaveChanges()
+    public override int SaveChanges(bool acceptAllChangesOnSuccess)
     {
-        var entities = ChangeTracker.Entries()
-                                    .Where(e => e.Entity is AppUser &&
-                                                (e.State == EntityState.Added || e.State == EntityState.Modified));
+        UpdateAuditValues();
+        return base.SaveChanges(acceptAllChangesOnSuccess);
+    }
 
-        foreach (var entity in entities)
+    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default(CancellationToken))
+    {
+        UpdateAuditValues();
+        return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+    }
+
+    private void UpdateAuditValues()
+    {
+        IEnumerable<EntityEntry> entities = ChangeTracker
+           .Entries()
+           .Where(x => x.State == EntityState.Added || x.State == EntityState.Modified);
+
+        foreach (var ent in entities)
         {
-            if (entity.State == EntityState.Added)
+            var realEnt = ent.Entity as BaseModel;
+            if (realEnt == null) continue;
+
+            if (ent.State == EntityState.Added)
             {
-                ((AppUser)entity.Entity).CreatedAt = DateTime.UtcNow;
+                realEnt.CreatedAt = DateTime.Now;
             }
-
-            ((AppUser)entity.Entity).UpdatedAt = DateTime.UtcNow;
+            else
+            {
+                ent.Property("CreatedAt").IsModified = false;
+            }
+            realEnt.UpdatedAt = DateTime.Now;
         }
-
-        return base.SaveChanges();
     }
 
     public DbSet<AppUser> AppUsers { get; set; }

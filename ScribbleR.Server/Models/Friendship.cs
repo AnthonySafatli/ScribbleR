@@ -1,12 +1,9 @@
 ﻿using ScribbleR.Server.Models;
+using ScribbleR.Server.Models.Base;
 using System.ComponentModel.DataAnnotations;
 
-public class Friendship
+public class Friendship : BaseModel
 {
-    public int Id { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
-
     public string RequestFromUserId { get; set; }
     public AppUser RequestFromUser { get; set; }
 
