@@ -68,4 +68,13 @@ public class AccountController : ControllerBase
 
         return Ok(new AppUserDto(appUser));
     }
+
+    [HttpGet("{userId}")]
+    public async Task<IActionResult> GetUser(string userId)
+    {
+        AppUser? appUser = await _context.AppUsers.FirstOrDefaultAsync(x => x.Id == userId);
+        if (appUser == null) return NotFound();
+
+        return Ok(new AppUserDto(appUser));
+    }
 }

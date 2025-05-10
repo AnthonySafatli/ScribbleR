@@ -13,7 +13,9 @@ interface Props {
 }
 
 const MessageCard = ({ message, onCopy }: Props) => {
+
     const drawingRef = useRef<ReactSketchCanvasRef>(null);
+
     function PrettyDate(datetime: Date) {
         return <small className="text-muted m-0">{formatDistanceToNow(datetime, { addSuffix: true })}</small>;
     }

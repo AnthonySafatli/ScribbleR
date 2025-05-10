@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Button, Spinner } from "react-bootstrap";
+import { Button, OverlayTrigger, Popover, Spinner } from "react-bootstrap";
 
 import { AppUser } from "../../models/AppUser";
 import Icon from "../../components/Icon";
+import UserInfo from "../../components/UserInfo";
 
 interface Props {
     friend: AppUser,
@@ -38,7 +39,12 @@ function FriendItem({ friend, onRemoveFriend }: Props) {
     return (
         <div className="d-flex justify-content-between align-items-center">
             <div>
-                {friend.displayName}
+                <OverlayTrigger
+                    placement="bottom"
+                    overlay={<Popover id="popover-basic"><Popover.Body><UserInfo userId={friend.id} /></Popover.Body></Popover>}
+                >
+                    <div>{friend.displayName}</div>
+                </OverlayTrigger>
             </div>
             <div>
                 <Button variant="default" className="text-danger" onClick={() => unfriend()}>
