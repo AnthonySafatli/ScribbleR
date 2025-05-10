@@ -37,14 +37,26 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
 
     public override int SaveChanges(bool acceptAllChangesOnSuccess)
     {
-        UpdateAuditValues();
+        // UpdateAuditValues();
         return base.SaveChanges(acceptAllChangesOnSuccess);
+    }
+
+    public override int SaveChanges()
+    {
+        // UpdateAuditValues();
+        return base.SaveChanges();
     }
 
     public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default(CancellationToken))
     {
-        UpdateAuditValues();
+        // UpdateAuditValues();
         return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+    }
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
+    {
+        // UpdateAuditValues();
+        return base.SaveChangesAsync(cancellationToken);
     }
 
     private void UpdateAuditValues()
@@ -55,8 +67,7 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
 
         foreach (var ent in entities)
         {
-            var realEnt = ent.Entity as BaseModel;
-            if (realEnt == null) continue;
+            if (ent.Entity is not BaseModel realEnt) continue;
 
             if (ent.State == EntityState.Added)
             {

@@ -4,9 +4,9 @@ import { Alert, Button, Form, Spinner } from "react-bootstrap";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { AuthContextData } from "../models/AppUser";
 
-function SignInForm() {
+function SetupAccountForm() {
 
-    const { user, setUser } = useAuthContext() as AuthContextData;
+    const { setUser } = useAuthContext() as AuthContextData;
 
     const [userHandle, setUserHandle] = useState("");
     const [displayName, setDisplayName] = useState("");
@@ -143,4 +143,4 @@ function SignInForm() {
     );
 }
 
-export default SignInForm;
+export default SetupAccountForm;

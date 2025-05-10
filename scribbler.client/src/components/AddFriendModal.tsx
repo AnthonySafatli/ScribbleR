@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { Modal, Button, Form, Alert, Spinner } from "react-bootstrap";
+import { Modal, Button, Form, Spinner } from "react-bootstrap";
+import { Bounce, toast } from "react-toastify";
+
 import { FriendRequest } from "../models/FriendRequest";
 
 interface Props {
@@ -10,14 +12,10 @@ interface Props {
 
 const AddFriendModal = ({ show, onClose, onRequestSent }: Props) => {
     const [username, setUsername] = useState("");
-    const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
     const handleSendRequest = async () => {
         setLoading(true);
-        setError(null);
-        setSuccess(null);
 
         try {
             const res = await fetch("/api/Friendship/Requests", {
@@ -35,11 +33,33 @@ const AddFriendModal = ({ show, onClose, onRequestSent }: Props) => {
 
             const data = await res.json();
 
-            setSuccess("Friend request sent!");
+            toast.info('Friend request sent!', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+            });
+
             setUsername("");
             onRequestSent?.(data);
         } catch (err: any) {
-            setError(err.message);
+            console.log(err)
+            toast.error(err.message, {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+            });
         } finally {
             setLoading(false);
         }
@@ -47,8 +67,6 @@ const AddFriendModal = ({ show, onClose, onRequestSent }: Props) => {
 
     const handleClose = () => {
         setUsername("");
-        setError(null);
-        setSuccess(null);
         setLoading(false);
         onClose();
     };
@@ -69,9 +87,6 @@ const AddFriendModal = ({ show, onClose, onRequestSent }: Props) => {
                         disabled={loading}
                     />
                 </Form.Group>
-
-                {error && <Alert variant="danger" className="mt-3">{error}</Alert>}
-                {success && <Alert variant="success" className="mt-3">{success}</Alert>}
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="primary" onClick={handleSendRequest} disabled={loading || !username}>
