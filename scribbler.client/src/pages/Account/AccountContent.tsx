@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { Alert, Button, Col, Form, InputGroup, OverlayTrigger, Row, Spinner, Tooltip } from "react-bootstrap";
-import { ReactSketchCanvasRef, CanvasPath } from "react-sketch-canvas";
-import { SketchPicker, ColorResult } from "react-color";
+import { ReactSketchCanvasRef } from "react-sketch-canvas";
 
 import Icon from "../../components/Icon";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { AuthContextData } from "../../models/AppUser";
-import DrawCanvas from "../../components/DrawCanvas";
+import PfpCanvas from "./PfpCanvas";
 
 function AccountContent() {
 
@@ -14,18 +13,8 @@ function AccountContent() {
 
     const [displayName, setDisplayName] = useState<string>(user?.displayName ?? "");
     const [aboutMe, setAboutMe] = useState<string>(user?.aboutMe ?? "");
-    const [profilePicture, setProfilePicture] = useState<CanvasPath[] | null>(null);
 
     const pfpRef = useRef<ReactSketchCanvasRef>(null);
-
-    const [isDrawMode, setIsDrawMode] = useState(true);
-    const [size, setSize] = useState(4);
-    const [colour, setColour] = useState("#000000");
-    const [showPicker, setShowPicker] = useState(false);
-
-    useEffect(() => {
-        pfpRef?.current?.eraseMode(!isDrawMode);
-    }, [isDrawMode])
 
     useEffect(() => {
         setDisplayName(user?.displayName ?? "")
@@ -33,18 +22,10 @@ function AccountContent() {
     }, [user]);
 
     useEffect(() => {
-        if (pfpRef && user && user?.profilePicture) {
+        if (pfpRef && user?.profilePicture) {
             pfpRef?.current?.loadPaths(user?.profilePicture);
         }
     }, [user, pfpRef])
-
-    const handleChangeColour = (colorResult: ColorResult) => {
-        setColour(colorResult.hex);
-    };
-
-    const clearPfp = () => {
-        pfpRef?.current?.clearCanvas();
-    }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -53,11 +34,6 @@ function AccountContent() {
         if (name === "aboutMe")
             setAboutMe(value);
     };
-
-    const handleChangePfp = async () => {
-        const pfp = await pfpRef?.current?.exportPaths()
-        setProfilePicture(pfp === undefined ? null : pfp)
-    }
 
     // Submit Status
     const [loadingFormSubmit, setLoadingFormSubmit] = useState(false);
@@ -81,6 +57,8 @@ function AccountContent() {
         setSuccessFormSubmit(false);
         setSubmitError(null)
         try {
+            const paths = pfpRef?.current?.exportPaths();
+
             const res = await fetch('/api/account/edit', {
                 method: "POST",
                 headers: {
@@ -89,7 +67,7 @@ function AccountContent() {
                 body: JSON.stringify({
                     displayName: displayName,
                     aboutMe: aboutMe,
-                    profilePicture: profilePicture ?? [],
+                    profilePicture: (await paths) ?? [],
                 }),
             });
 
@@ -191,52 +169,7 @@ function AccountContent() {
                         </div>
                     </Col>
                     <Col className="py-2">
-                        <div className="d-flex justify-content-center">
-                            <DrawCanvas
-                                ref={pfpRef}
-                                width={200}
-                                height={200}
-                                size={size}
-                                colour={colour}
-                                onChange={() => handleChangePfp()} />
-                        </div>
-                        <div className="d-flex justify-content-center gap-3 align-items-center mt-2">
-                            <Button variant={isDrawMode ? "primary" : "default"} onClick={() => setIsDrawMode(true)}>
-                                <Icon name="pen" />
-                            </Button>
-                            <Button variant={isDrawMode ? "default" : "primary"} onClick={() => setIsDrawMode(false)}>
-                                <Icon name="eraser" />
-                            </Button>
-                            <Button variant="primary" onClick={() => clearPfp()}>
-                                <Icon name="trash3" />
-                            </Button>
-                            <div style={{ position: "relative", display: "inline-block" }}>
-                                <div
-                                    onClick={() => setShowPicker(!showPicker)}
-                                    style={{
-                                        backgroundColor: colour,
-                                        width: "36px",
-                                        height: "36px",
-                                        border: "1px solid #ccc",
-                                        cursor: "pointer",
-                                    }}
-                                />
-                                {showPicker && (
-                                    <div style={{ position: "absolute", zIndex: 2 }}>
-                                        <SketchPicker color={colour} onChange={handleChangeColour} />
-                                    </div>
-                                )}
-                            </div>
-                            <div className="d-flex gap-1">
-                                <Icon name="brush" />
-                                <Form.Range
-                                    min={1}
-                                    max={40}
-                                    value={size}
-                                    onChange={(e) => setSize(parseInt(e.target.value))}
-                                />
-                            </div>
-                        </div>
+                        <PfpCanvas ref={pfpRef} />
                     </Col>
                 </Row>
                 <Form.Group>
