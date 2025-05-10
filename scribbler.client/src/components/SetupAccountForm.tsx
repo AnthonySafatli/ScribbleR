@@ -104,7 +104,7 @@ function SetupAccountForm() {
                     name="userHandle"
                     id="userHandle"
                     onChange={handleChange}
-                    placeholder="The unique name others will identify you with" />
+                    placeholder="The unique name your account will be identified with" />
             </Form.Group>
 
             <Form.Group className="my-3">

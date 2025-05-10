@@ -33,7 +33,7 @@ public class AccountController : ControllerBase
             .FirstOrDefaultAsync(x => x.UserHandle == setupInfo.UserHandle);
 
         if (existingUser != null)
-            return BadRequest("User handle already exists.");
+            return BadRequest("User handle is already taken.");
 
         if (string.IsNullOrWhiteSpace(setupInfo.UserHandle)) 
             return BadRequest("User Handle cannot be empty");

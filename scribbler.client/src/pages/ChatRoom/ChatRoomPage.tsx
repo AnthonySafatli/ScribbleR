@@ -1,7 +1,7 @@
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { useLocation, useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { Button, Col, Container, Form, OverlayTrigger, Row, Tooltip } from "react-bootstrap";
 import { ReactSketchCanvasRef, CanvasPath } from "react-sketch-canvas";
 
 import NotFound from "../NotFound";
@@ -15,6 +15,7 @@ import MessageCard from "./MessageCard";
 import ToolBar from "./ToolBar";
 import MessageMode from "../../models/MessageMode";
 import { NormalizePaths } from "../../utils/ScalePaths";
+import { Bounce, toast } from "react-toastify";
 
 function ChatRoomPage() {
 
@@ -150,6 +151,18 @@ function ChatRoomPage() {
         navigator.clipboard.writeText(location.pathname)
             .then(() => console.log("Copied!"))
             .catch(err => console.error("Failed to copy: ", err));
+
+        toast.info('Chatroom URL has been copied to clipboard', {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+        });
     }
 
     if (chatroomId === undefined) {
@@ -167,13 +180,29 @@ function ChatRoomPage() {
                                     <Icon name="arrow-left" /> Back to Home
                                 </a>
                                 <div className="d-flex gap-3 align-items-center">
-                                    <div className="mr-3"><Icon name="person-circle" /> {userCount}</div>
+                                    <OverlayTrigger
+                                        placement="bottom"
+                                        overlay={
+                                            <Tooltip>
+                                                {userCount === 1
+                                                    ? "You are the only one in the chatroom"
+                                                    : `${userCount} people are currently in the chatroom`}
+                                            </Tooltip>
+                                        }
+                                    >
+                                        <div className="mr-3">
+                                            <Icon name="person-circle" /> {userCount}
+                                        </div>
+                                    </OverlayTrigger>
+
                                     <h1 className="text-center">Chatroom</h1>
                                     <h2 className="text-muted">{chatroomId}</h2>
                                 </div>
                             </div>
                             <div>
-                                <Button variant="default" onClick={() => share()}><Icon name="box-arrow-up" /></Button>
+                                <OverlayTrigger placement="bottom" overlay={<Tooltip>Copy the url for the chatroom</Tooltip>}>
+                                    <Button variant="default" onClick={() => share()}><Icon name="box-arrow-up" /></Button>
+                                </OverlayTrigger>
                             </div>
                         </div>
                     </div>
