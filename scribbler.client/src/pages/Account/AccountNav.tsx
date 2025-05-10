@@ -4,6 +4,7 @@ import { ReactSketchCanvasRef } from "react-sketch-canvas";
 
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { AuthContextData } from "../../models/AppUser";
+import { UnnormalizePaths } from "../../utils/ScalePaths";
 import Icon from "../../components/Icon";
 import DrawCanvas from "../../components/DrawCanvas";
 
@@ -35,7 +36,7 @@ function AccountNav({ currentPage, navigate }: Props) {
 
     useEffect(() => {
         if (pfpRef && user && user?.profilePicture) {
-            pfpRef?.current?.loadPaths(user?.profilePicture);
+            pfpRef?.current?.loadPaths(UnnormalizePaths(user?.profilePicture, 75, 75));
         }
     }, [user, pfpRef])
 

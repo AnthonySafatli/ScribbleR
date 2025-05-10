@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { ReactSketchCanvasRef } from "react-sketch-canvas";
 import { SketchPicker, ColorResult } from "react-color";
@@ -8,32 +8,28 @@ import Icon from "../../components/Icon";
 
 const PfpCanvas = forwardRef<ReactSketchCanvasRef>((_, ref) => {
 
-    const pfpRef = useRef<ReactSketchCanvasRef>(null);
-
     const [isDrawMode, setIsDrawMode] = useState(true);
     const [size, setSize] = useState(4);
     const [colour, setColour] = useState("#000000");
     const [showPicker, setShowPicker] = useState(false);
 
     useEffect(() => {
-        pfpRef?.current?.eraseMode(!isDrawMode);
-    }, [isDrawMode])
-
-    useImperativeHandle(ref, () => pfpRef.current as ReactSketchCanvasRef);
+        (ref as React.RefObject<ReactSketchCanvasRef>)?.current?.eraseMode(!isDrawMode);
+    }, [isDrawMode, ref])
 
     const handleChangeColour = (colorResult: ColorResult) => {
         setColour(colorResult.hex);
     };
 
     const clearPfp = () => {
-        pfpRef?.current?.clearCanvas();
+        (ref as React.RefObject<ReactSketchCanvasRef>)?.current?.clearCanvas();
     }
 
     return (
         <>
             <div className="d-flex justify-content-center">
                 <DrawCanvas
-                    ref={pfpRef}
+                    ref={ref}
                     width={200}
                     height={200}
                     size={size}

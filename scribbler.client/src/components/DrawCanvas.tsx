@@ -1,5 +1,6 @@
 import { forwardRef, useEffect } from "react";
 import { ReactSketchCanvas, ReactSketchCanvasRef, CanvasPath } from "react-sketch-canvas";
+import { UnnormalizePaths } from "../utils/ScalePaths";
 
 interface Props {
     colour?: string,
@@ -15,9 +16,9 @@ const DrawCanvas = forwardRef<ReactSketchCanvasRef, Props>(({ colour = "black", 
 
     useEffect(() => {
         if (ref && paths) {
-            (ref as React.RefObject<ReactSketchCanvasRef>)?.current?.loadPaths(paths);
+            (ref as React.RefObject<ReactSketchCanvasRef>)?.current?.loadPaths(UnnormalizePaths(paths, height, width ?? height * 2));
         }
-    }, [paths, ref]);
+    }, [paths, ref, width, height]);
 
     return (
         <ReactSketchCanvas

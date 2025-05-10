@@ -6,6 +6,7 @@ import Icon from "../../components/Icon";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { AuthContextData } from "../../models/AppUser";
 import PfpCanvas from "./PfpCanvas";
+import { NormalizePaths } from "../../utils/ScalePaths";
 
 function AccountContent() {
 
@@ -57,7 +58,8 @@ function AccountContent() {
         setSuccessFormSubmit(false);
         setSubmitError(null)
         try {
-            const paths = pfpRef?.current?.exportPaths();
+            const paths = await pfpRef?.current?.exportPaths();
+            const normPaths = NormalizePaths(paths, 200, 200);
 
             const res = await fetch('/api/account/edit', {
                 method: "POST",
@@ -67,7 +69,7 @@ function AccountContent() {
                 body: JSON.stringify({
                     displayName: displayName,
                     aboutMe: aboutMe,
-                    profilePicture: (await paths) ?? [],
+                    profilePicture: normPaths ?? [],
                 }),
             });
 

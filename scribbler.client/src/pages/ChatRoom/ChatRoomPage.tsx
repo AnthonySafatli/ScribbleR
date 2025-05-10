@@ -14,6 +14,7 @@ import DrawCanvas from "../../components/DrawCanvas";
 import MessageCard from "./MessageCard";
 import ToolBar from "./ToolBar";
 import MessageMode from "../../models/MessageMode";
+import { NormalizePaths } from "../../utils/ScalePaths";
 
 function ChatRoomPage() {
 
@@ -140,7 +141,7 @@ function ChatRoomPage() {
         const paths = await canvasRef.current?.exportPaths();
 
         if (conn && paths) {
-            conn.invoke(SignalRConnections.SEND_SKETCH, paths, Date.now());
+            conn.invoke(SignalRConnections.SEND_SKETCH, NormalizePaths(paths, 200, 400), Date.now());
             clearCanvas();
         }
     };
