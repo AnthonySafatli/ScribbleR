@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Button, ListGroup, Spinner } from "react-bootstrap";
+import { Button, ListGroup, OverlayTrigger, Popover, Spinner } from "react-bootstrap";
 
 import Icon from "../../components/Icon";
 import { FriendRequest } from "../../models/FriendRequest";
 import { AppUser } from "../../models/AppUser";
+import UserInfo from "../../components/UserInfo";
 
 interface Props {
     friendRequest: FriendRequest,
@@ -62,7 +63,12 @@ function ReceivedRequest({ friendRequest, onAcceptRequest, onRejectRequest }: Pr
         <ListGroup.Item>
             <div className="d-flex justify-content-between align-items-center">
                 <div>
-                    {friendRequest.user.displayName}
+                    <OverlayTrigger
+                        placement="bottom"
+                        overlay={<Popover id="popover-basic"><Popover.Body><UserInfo userId={friendRequest.user.id} /></Popover.Body></Popover>}
+                    >
+                        <div>{friendRequest.user.displayName}</div>
+                    </OverlayTrigger>
                 </div>
                 <div className="d-flex gap-1">
                     <Button variant="default" className="text-success" onClick={() => acceptRequest()}>

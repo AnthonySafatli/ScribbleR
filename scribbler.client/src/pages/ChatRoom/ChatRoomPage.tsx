@@ -1,7 +1,7 @@
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { useLocation, useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { Button, Col, Container, Form, OverlayTrigger, Row, Tooltip } from "react-bootstrap";
+import { Button, Col, Container, Form, OverlayTrigger, Popover, Row, Tooltip } from "react-bootstrap";
 import { ReactSketchCanvasRef, CanvasPath } from "react-sketch-canvas";
 
 import NotFound from "../NotFound";
@@ -16,6 +16,7 @@ import ToolBar from "./ToolBar";
 import MessageMode from "../../models/MessageMode";
 import { NormalizePaths } from "../../utils/ScalePaths";
 import { Bounce, toast } from "react-toastify";
+import UserInfo from "../../components/UserInfo";
 
 function ChatRoomPage() {
 
@@ -246,7 +247,13 @@ function ChatRoomPage() {
                     <div className="d-flex justify-content-center">
                         <Row className="my-2" style={{ maxWidth: "800px", width: "100%" }}>
                             <Col xs={8}>
-                                You are sending messages as <strong><a href="/Account">{user?.displayName}</a></strong>
+                                You are sending messages as 
+                                <OverlayTrigger
+                                    placement="top"
+                                    overlay={<Popover id="popover-basic"><Popover.Body><UserInfo userId={user?.id ?? ""} /></Popover.Body></Popover>}
+                                >
+                                    <strong><a href="/Account">{user?.displayName}</a></strong>
+                                </OverlayTrigger>
                             </Col>
                             <Col xs={4}>
                                 <div className="d-flex gap-2">

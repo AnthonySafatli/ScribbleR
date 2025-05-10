@@ -1,11 +1,12 @@
 import { useRef } from 'react';
 import { ReactSketchCanvasRef } from "react-sketch-canvas";
-import { Alert, Button, Card } from 'react-bootstrap'; 
+import { Alert, Button, Card, OverlayTrigger, Popover } from 'react-bootstrap'; 
 import { formatDistanceToNow } from 'date-fns';
 
 import { Message } from '../../models/Message';
 import DrawCanvas from '../../components/DrawCanvas';
 import Icon from '../../components/Icon';
+import UserInfo from '../../components/UserInfo';
 
 interface Props {
     message: Message,
@@ -28,7 +29,12 @@ const MessageCard = ({ message, onCopy }: Props) => {
                         <div className="d-flex justify-content-between align-items-center mb-2">
                             <div>
                                 {PrettyDate(message.datetime)}
-                                <p className="m-0">{message.displayName}</p>
+                                <OverlayTrigger
+                                    placement="bottom"
+                                    overlay={<Popover id="popover-basic"><Popover.Body><UserInfo userId={message.userId} /></Popover.Body></Popover>}
+                                >
+                                    <p className="m-0">{message.displayName}</p>
+                                </OverlayTrigger>
                             </div>
                             <div>
                                 <Button variant="default" onClick={() => onCopy(drawingRef?.current)}>
@@ -56,7 +62,13 @@ const MessageCard = ({ message, onCopy }: Props) => {
                         { PrettyDate(message.datetime) }
                     </div>
                     <div>
-                        <b>{message.displayName}</b>{(message.isJoin ? " has joined the chat" : " has left the chat")}
+                        <OverlayTrigger
+                            placement="bottom"
+                            overlay={<Popover id="popover-basic"><Popover.Body><UserInfo userId={message.userId} /></Popover.Body></Popover>}
+                        >
+                            <b>{message.displayName}</b>
+                        </OverlayTrigger>
+                        {(message.isJoin ? " has joined the chat" : " has left the chat")}
                     </div>
                 </Alert>
             </div>
@@ -69,8 +81,13 @@ const MessageCard = ({ message, onCopy }: Props) => {
                 <Card.Body>
                     <div className="d-flex justify-content-between align-items-center mb-2">
                         <div>
-                            { PrettyDate(message.datetime) }
-                            <p className="m-0">{ message.displayName }</p>
+                            {PrettyDate(message.datetime)}
+                            <OverlayTrigger
+                                placement="bottom"
+                                overlay={<Popover id="popover-basic"><Popover.Body><UserInfo userId={message.userId} /></Popover.Body></Popover>}
+                            >
+                                <p className="m-0">{message.displayName}</p>
+                            </OverlayTrigger>
                         </div>
                         <div>
                             <Button variant="default" onClick={() => onCopy(drawingRef?.current)}>
