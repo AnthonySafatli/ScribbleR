@@ -16,6 +16,7 @@ const DrawCanvas = forwardRef<ReactSketchCanvasRef, Props>(({ colour = "black", 
 
     useEffect(() => {
         if (ref && paths) {
+            (ref as React.RefObject<ReactSketchCanvasRef>)?.current?.clearCanvas();
             (ref as React.RefObject<ReactSketchCanvasRef>)?.current?.loadPaths(UnnormalizePaths(paths, height, width ?? height * 2));
         }
     }, [paths, ref, width, height]);

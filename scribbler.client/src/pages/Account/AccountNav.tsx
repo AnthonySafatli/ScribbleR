@@ -36,6 +36,7 @@ function AccountNav({ currentPage, navigate }: Props) {
 
     useEffect(() => {
         if (pfpRef && user && user?.profilePicture) {
+            pfpRef?.current?.clearCanvas();
             pfpRef?.current?.loadPaths(UnnormalizePaths(user?.profilePicture, 75, 75));
         }
     }, [user, pfpRef])

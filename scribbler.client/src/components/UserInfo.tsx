@@ -4,6 +4,7 @@ import { ReactSketchCanvasRef } from "react-sketch-canvas";
 
 import { AppUser } from "../models/AppUser";
 import DrawCanvas from "./DrawCanvas";
+import { UnnormalizePaths } from "../utils/ScalePaths";
 
 interface Props {
     userId: string;
@@ -35,7 +36,7 @@ function UserInfo({ userId }: Props) {
 
     useEffect(() => {
         if (user?.profilePicture) {
-            pfpRef?.current?.loadPaths(user.profilePicture);
+            pfpRef?.current?.loadPaths(UnnormalizePaths(user.profilePicture, 75, 75));
         }
     }, [user])
 

@@ -6,7 +6,7 @@ import Icon from "../../components/Icon";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { AuthContextData } from "../../models/AppUser";
 import PfpCanvas from "./PfpCanvas";
-import { NormalizePaths } from "../../utils/ScalePaths";
+import { NormalizePaths, UnnormalizePaths } from "../../utils/ScalePaths";
 
 function AccountContent() {
 
@@ -24,7 +24,8 @@ function AccountContent() {
 
     useEffect(() => {
         if (pfpRef && user?.profilePicture) {
-            pfpRef?.current?.loadPaths(user?.profilePicture);
+            pfpRef?.current?.clearCanvas();
+            pfpRef?.current?.loadPaths(UnnormalizePaths(user?.profilePicture, 200, 200));
         }
     }, [user, pfpRef])
 
