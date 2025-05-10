@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Button, Form } from "react-bootstrap";
-import Icon from "../../components/Icon";
 import { AnimatePresence, motion } from "framer-motion";
+
+import Icon from "../../components/Icon";
 
 interface Props {
     size: number,

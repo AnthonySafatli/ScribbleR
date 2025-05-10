@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Alert, Button, Col, Form, InputGroup, OverlayTrigger, Row, Spinner, Tooltip } from "react-bootstrap";
 import { ReactSketchCanvasRef, CanvasPath } from "react-sketch-canvas";
+import { SketchPicker, ColorResult } from "react-color";
 
 import Icon from "../../components/Icon";
 import { useAuthContext } from "../../hooks/useAuthContext";
@@ -17,6 +18,15 @@ function AccountContent() {
 
     const pfpRef = useRef<ReactSketchCanvasRef>(null);
 
+    const [isDrawMode, setIsDrawMode] = useState(true);
+    const [size, setSize] = useState(4);
+    const [colour, setColour] = useState("#000000");
+    const [showPicker, setShowPicker] = useState(false);
+
+    useEffect(() => {
+        pfpRef?.current?.eraseMode(!isDrawMode);
+    }, [isDrawMode])
+
     useEffect(() => {
         setDisplayName(user?.displayName ?? "")
         setAboutMe(user?.aboutMe ?? "")
@@ -27,6 +37,14 @@ function AccountContent() {
             pfpRef?.current?.loadPaths(user?.profilePicture);
         }
     }, [user, pfpRef])
+
+    const handleChangeColour = (colorResult: ColorResult) => {
+        setColour(colorResult.hex);
+    };
+
+    const clearPfp = () => {
+        pfpRef?.current?.clearCanvas();
+    }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -60,6 +78,8 @@ function AccountContent() {
         }
 
         setLoadingFormSubmit(true);
+        setSuccessFormSubmit(false);
+        setSubmitError(null)
         try {
             const res = await fetch('/api/account/edit', {
                 method: "POST",
@@ -172,7 +192,50 @@ function AccountContent() {
                     </Col>
                     <Col className="py-2">
                         <div className="d-flex justify-content-center">
-                            <DrawCanvas ref={pfpRef} width={200} height={200} onChange={() => handleChangePfp()} />
+                            <DrawCanvas
+                                ref={pfpRef}
+                                width={200}
+                                height={200}
+                                size={size}
+                                colour={colour}
+                                onChange={() => handleChangePfp()} />
+                        </div>
+                        <div className="d-flex justify-content-center gap-3 align-items-center mt-2">
+                            <Button variant={isDrawMode ? "primary" : "default"} onClick={() => setIsDrawMode(true)}>
+                                <Icon name="pen" />
+                            </Button>
+                            <Button variant={isDrawMode ? "default" : "primary"} onClick={() => setIsDrawMode(false)}>
+                                <Icon name="eraser" />
+                            </Button>
+                            <Button variant="primary" onClick={() => clearPfp()}>
+                                <Icon name="trash3" />
+                            </Button>
+                            <div style={{ position: "relative", display: "inline-block" }}>
+                                <div
+                                    onClick={() => setShowPicker(!showPicker)}
+                                    style={{
+                                        backgroundColor: colour,
+                                        width: "36px",
+                                        height: "36px",
+                                        border: "1px solid #ccc",
+                                        cursor: "pointer",
+                                    }}
+                                />
+                                {showPicker && (
+                                    <div style={{ position: "absolute", zIndex: 2 }}>
+                                        <SketchPicker color={colour} onChange={handleChangeColour} />
+                                    </div>
+                                )}
+                            </div>
+                            <div className="d-flex gap-1">
+                                <Icon name="brush" />
+                                <Form.Range
+                                    min={1}
+                                    max={40}
+                                    value={size}
+                                    onChange={(e) => setSize(parseInt(e.target.value))}
+                                />
+                            </div>
                         </div>
                     </Col>
                 </Row>
