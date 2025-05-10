@@ -162,10 +162,15 @@ function ChatRoomPage() {
                 <div className="vh-100 d-flex flex-column">
                     <div className="sticky-top mt-5 mb-2">
                         <div className="d-flex justify-content-around align-items-center">
-                            <div className="d-flex gap-3 align-items-center">
-                                <div className="mr-3"><Icon name="person-circle" /> {userCount}</div>
-                                <h1 className="text-center">Chatroom</h1>
-                                <h2 className="text-muted">{chatroomId}</h2>
+                            <div>
+                                <a href="/">
+                                    <Icon name="arrow-left" /> Back to Home
+                                </a>
+                                <div className="d-flex gap-3 align-items-center">
+                                    <div className="mr-3"><Icon name="person-circle" /> {userCount}</div>
+                                    <h1 className="text-center">Chatroom</h1>
+                                    <h2 className="text-muted">{chatroomId}</h2>
+                                </div>
                             </div>
                             <div>
                                 <Button variant="default" onClick={() => share()}><Icon name="box-arrow-up" /></Button>
