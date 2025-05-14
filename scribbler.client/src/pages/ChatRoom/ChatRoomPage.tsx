@@ -24,7 +24,7 @@ function ChatRoomPage() {
     const { chatroomId } = useParams();
     const { user } = useAuthContext() as AuthContextData;
 
-    const [isConnected, setIsConnected] = useState(false);
+    const isConnRef = useRef(false);
     const [conn, setConnection] = useState<HubConnection | null>(null);
     const [messages, setMessages] = useState<Message[]>([]);
     const [userCount, setUserCount] = useState(0);
@@ -39,21 +39,8 @@ function ChatRoomPage() {
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
-        switch (messageMode) {
-            case MessageMode.Draw:
-                canvasRef.current?.eraseMode(false);
-                break;
-            case MessageMode.Erase:
-                canvasRef.current?.eraseMode(true);
-                break;
-            case MessageMode.Text:
-                break;
-        }
-    }, [messageMode])
-
-    useEffect(() => {
-        if (user && !isConnected) {
-            setIsConnected(true);
+        if (user && isConnRef.current == false) {
+            isConnRef.current = true;
             const connect = async () => {
                 try {
                     const newConn = new HubConnectionBuilder()
@@ -106,7 +93,20 @@ function ChatRoomPage() {
 
             connect();
         }
-    }, [user, chatroomId, isConnected]);
+    }, [user, chatroomId]);
+
+    useEffect(() => {
+        switch (messageMode) {
+            case MessageMode.Draw:
+                canvasRef.current?.eraseMode(false);
+                break;
+            case MessageMode.Erase:
+                canvasRef.current?.eraseMode(true);
+                break;
+            case MessageMode.Text:
+                break;
+        }
+    }, [messageMode])
 
     const sendMessage = () => {
         if (messageMode === MessageMode.Text) {

@@ -52,17 +52,17 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost("Edit")]
-    public async Task<IActionResult> EditAccount([FromBody] UserAccountPostDto setupInfo)
+    public async Task<IActionResult> EditAccount([FromBody] UserAccountPostDto accountInfo)
     {
         AppUser? appUser = await _userManager.GetUserAsync(User);
         if (appUser == null) return Forbid();
 
-        if (string.IsNullOrWhiteSpace(setupInfo.DisplayName)) 
+        if (string.IsNullOrWhiteSpace(accountInfo.DisplayName)) 
             return BadRequest();
 
-        appUser.DisplayName = setupInfo.DisplayName;
-        appUser.AboutMe = string.IsNullOrWhiteSpace(setupInfo.AboutMe) ? null : setupInfo.AboutMe;
-        appUser.ProfilePicturePaths = setupInfo.ProfilePicture;
+        appUser.DisplayName = accountInfo.DisplayName;
+        appUser.AboutMe = string.IsNullOrWhiteSpace(accountInfo.AboutMe) ? null : accountInfo.AboutMe;
+        appUser.ProfilePicturePaths = accountInfo.ProfilePicture;
 
         await _context.SaveChangesAsync();
 

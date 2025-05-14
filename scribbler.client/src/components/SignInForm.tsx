@@ -88,6 +88,8 @@ function SignInForm({ closeToggle, onSignedIn }: Props) {
                 } else {
                     const data = await res.json();
 
+                    console.log(data)
+
                     setPasswordError(
                         <>
                             {data.errors.PasswordRequiresLower && (
@@ -101,6 +103,9 @@ function SignInForm({ closeToggle, onSignedIn }: Props) {
                             )}
                             {data.errors.PasswordTooShort && (
                                 <small className="text-danger d-block">Password must be at least 6 characters!</small>
+                            )}
+                            {data.errors.PasswordRequiresDigit && (
+                                <small className="text-danger d-block">Password must contain at least one number!</small>
                             )}
                         </>
                     )
