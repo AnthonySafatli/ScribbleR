@@ -56,6 +56,7 @@ public class AccountController : ControllerBase
     {
         AppUser? appUser = await _userManager.GetUserAsync(User);
         if (appUser == null) return Forbid();
+        if (appUser.IsSetup == false) return Forbid();
 
         if (string.IsNullOrWhiteSpace(accountInfo.DisplayName)) 
             return BadRequest();
@@ -74,6 +75,7 @@ public class AccountController : ControllerBase
     {
         AppUser? appUser = await _context.AppUsers.FirstOrDefaultAsync(x => x.Id == userId);
         if (appUser == null) return NotFound();
+        if (appUser.IsSetup == false) return NotFound();
 
         return Ok(new AppUserDto(appUser));
     }

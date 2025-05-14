@@ -63,16 +63,16 @@ public class FriendshipController : Controller
 
         AppUser? targetUser = null;
 
+        if (targetUser.Id == currUser.Id)
+            return BadRequest("Cannot send a friend request to yourself.");
+
         if (!string.IsNullOrEmpty(request.UserId))
             targetUser = await _userManager.FindByIdAsync(request.UserId);
         else if (!string.IsNullOrEmpty(request.Username))
             targetUser = await _userManager.FindByNameAsync(request.Username);
 
-        if (targetUser == null)
+        if (targetUser == null || targetUser.IsSetup == false)
             return NotFound("User not found.");
-
-        if (targetUser.Id == currUser.Id)
-            return BadRequest("Cannot send a friend request to yourself.");
 
         Friendship? existingRequest = await _context.Friendships.FirstOrDefaultAsync(x =>
             (x.RequestFromUserId == currUser.Id && x.RequestToUserId == targetUser.Id) ||
