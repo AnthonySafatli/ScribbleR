@@ -53,7 +53,7 @@ const ToolBarColourPicker = ({ colour, setColour }: Props ) => {
                                 }}
                             />
                             {showPicker && (
-                                <div style={{ position: "absolute", zIndex: 2 }}>
+                                <div style={{ position: "absolute", zIndex: 100 }}>
                                     <SketchPicker color={colour} onChange={handleChange} />
                                 </div>
                             )}

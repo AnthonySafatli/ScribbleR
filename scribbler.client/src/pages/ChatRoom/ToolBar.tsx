@@ -41,7 +41,7 @@ function ToolBar({ mode, setMode, colour, setColour, size, setSize, undo, redo }
     ]
 
     return (
-        <div className="d-flex gap-2 mb-2 justify-content-between overflow-auto">
+        <div className="d-flex gap-2 mb-2 justify-content-between">
             <div className="d-flex gap-2">
                 <ToolBarToggle selectedValue={mode} options={drawModeOptions} />
                 <ToolBarColourPicker colour={colour} setColour={setColour} />
