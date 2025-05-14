@@ -187,7 +187,7 @@ function ChatRoomPage() {
                     <div className="sticky-top mt-5 mb-2">
                         <div className="d-flex justify-content-around align-items-center">
                             <div>
-                                <a href="/">
+                                <a href="/" className="text-reset text-decoration-none">
                                     <Icon name="arrow-left" /> Back to Home
                                 </a>
                                 <div className="d-flex gap-3 align-items-center">

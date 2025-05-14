@@ -3,6 +3,8 @@ import { Container, Nav, Navbar, Spinner } from "react-bootstrap";
 import { AppUser } from "../../models/AppUser";
 import Icon from "../../components/Icon";
 
+import logo from "../../assets/logo.png";
+
 interface Props {
     onSignIn: () => void;
     accountInfo: AppUser | null | undefined;
@@ -12,7 +14,12 @@ function IndexNav({ onSignIn, accountInfo }: Props) {
     return (
         <Navbar bg="light" data-bs-theme="light">
             <Container>
-                <Navbar.Brand>ScribbleR</Navbar.Brand>
+                <Navbar.Brand>
+                    <img
+                        src={logo}
+                        alt="logo"
+                        style={{ height: '50px' }} />
+                </Navbar.Brand>
                 <Navbar.Toggle />
                 <Navbar.Collapse className="justify-content-end">
                     <Nav>

@@ -8,6 +8,9 @@ import SignInModal from "./SignInModal";
 import SetupAccountModal from "./SetupAccountModal";
 import { AuthContextData } from "../../models/AppUser";
 
+import logo from "../../assets/logo.png";
+import { motion } from "framer-motion";
+
 function IndexPage() {
     const { user } = useAuthContext() as AuthContextData;
     const [showSignInModal, setShowSignInModal] = useState(false);
@@ -30,6 +33,17 @@ function IndexPage() {
             
             <CenteredContainer>
                 <main>
+                    <div className="d-flex align-items-center gap-4">
+                        <p className="display-6 text-center text-uppercase">Welcome To</p>
+                        <motion.div
+                            initial={{ x: -100, opacity: 0 }}
+                            animate={{ x: 0, opacity: 1 }}
+                            transition={{ duration: 1, ease: 'easeIn' }}
+                        >
+                            <img className="mb-3" src={logo} alt="logo" style={{ height: '100px' }} />
+                        </motion.div>
+                    </div>
+                    <p className="text-center mb-1 mt-3 text-uppercase">{user === null && "Sign in and"} Join a Room</p>
                     <ChatRoomForm />
                 </main>
             </CenteredContainer>

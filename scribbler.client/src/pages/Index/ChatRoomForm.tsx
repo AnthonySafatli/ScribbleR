@@ -1,9 +1,13 @@
 import { useState } from "react";
-import { Button, Col, Form, Row } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 
-import RoomIdInput from "./RoomIdInput";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import { AuthContextData } from "../../models/AppUser";
 
 function ChatRoomForm() {
+
+    const { user } = useAuthContext() as AuthContextData;
+
     const [roomId, setRoomId] = useState("");
 
     const goToChatRoom = (e: React.FormEvent<HTMLFormElement>) => {
@@ -13,20 +17,23 @@ function ChatRoomForm() {
 
     return (
         <Form onSubmit={goToChatRoom}>
-            <Row>
-                <Col>
-                    <RoomIdInput onContentChange={setRoomId} />
-                </Col>
-                {roomId && (
-                    <Col>
-                        <div>
-                            <Button variant="primary" type="submit">
-                                Go To Room
-                            </Button>
-                        </div>
-                    </Col>
+            <div className="d-flex flex-column align-items-center gap-2">
+                <div className="d-flex gap-3">
+                    <Form.Control
+                        style={{ width: '200px'}}
+                        placeholder="Enter Room ID"
+                        onChange={(event) => setRoomId(event.target.value.trim())}
+                    />
+                    {roomId && (
+                        <Button variant="primary" type="submit" disabled={user === null ? true : false}>
+                            Go To Room
+                        </Button>
+                    )}
+                </div>
+                {(roomId && !user) && (
+                    <p className="small text-muted">You must sign in to enter a room!</p>
                 )}
-            </Row>
+            </div>
         </Form>
     );
 }
