@@ -80,7 +80,7 @@ const AddFriendModal = ({ show, onClose, onRequestSent }: Props) => {
                 <Form.Group controlId="username">
                     <Form.Label>Friend's Username</Form.Label>
                     <Form.Control
-                        type="email"
+                        type="text"
                         placeholder="Enter username"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}

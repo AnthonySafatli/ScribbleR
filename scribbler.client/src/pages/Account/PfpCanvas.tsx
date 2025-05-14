@@ -8,14 +8,9 @@ import Icon from "../../components/Icon";
 
 const PfpCanvas = forwardRef<ReactSketchCanvasRef>((_, ref) => {
 
-    const [isDrawMode, setIsDrawMode] = useState(true);
     const [size, setSize] = useState(4);
     const [colour, setColour] = useState("#000000");
     const [showPicker, setShowPicker] = useState(false);
-
-    useEffect(() => {
-        (ref as React.RefObject<ReactSketchCanvasRef>)?.current?.eraseMode(!isDrawMode);
-    }, [isDrawMode, ref])
 
     const handleChangeColour = (colorResult: ColorResult) => {
         setColour(colorResult.hex);
@@ -36,12 +31,6 @@ const PfpCanvas = forwardRef<ReactSketchCanvasRef>((_, ref) => {
                     colour={colour} />
             </div>
             <div className="d-flex justify-content-center gap-3 align-items-center mt-2">
-                <Button variant={isDrawMode ? "primary" : "default"} onClick={() => setIsDrawMode(true)}>
-                    <Icon name="pen" />
-                </Button>
-                <Button variant={isDrawMode ? "default" : "primary"} onClick={() => setIsDrawMode(false)}>
-                    <Icon name="eraser" />
-                </Button>
                 <Button variant="primary" onClick={() => clearPfp()}>
                     <Icon name="trash3" />
                 </Button>

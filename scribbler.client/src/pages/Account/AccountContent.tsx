@@ -178,7 +178,7 @@ function AccountContent() {
                 <Form.Group>
                     <div className="d-flex justify-content-between align-items-center">
                         
-                        <Button variant="outline-primary" type="submit" className="px-4">
+                        <Button variant="outline-primary" type="submit" className="px-4 mb-2">
                             Save Changes
                         </Button>
 
