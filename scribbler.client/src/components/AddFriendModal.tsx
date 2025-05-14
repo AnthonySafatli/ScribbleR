@@ -23,7 +23,7 @@ const AddFriendModal = ({ show, onClose, onRequestSent }: Props) => {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ username })
+                body: JSON.stringify(username)
             });
 
             if (!res.ok) {
@@ -48,7 +48,6 @@ const AddFriendModal = ({ show, onClose, onRequestSent }: Props) => {
             setUsername("");
             onRequestSent?.(data);
         } catch (err: any) {
-            console.log(err)
             toast.error(err.message, {
                 position: "bottom-right",
                 autoClose: 5000,
@@ -78,10 +77,10 @@ const AddFriendModal = ({ show, onClose, onRequestSent }: Props) => {
             </Modal.Header>
             <Modal.Body>
                 <Form.Group controlId="username">
-                    <Form.Label>Friend's Username</Form.Label>
+                    <Form.Label>Friend's User Handle</Form.Label>
                     <Form.Control
                         type="text"
-                        placeholder="Enter username"
+                        placeholder="Enter user handle"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         disabled={loading}
