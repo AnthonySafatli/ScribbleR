@@ -71,6 +71,7 @@ function SetupAccountForm() {
             if (res.ok) {
                 const data = await res.json();
                 setUser(data);
+                setLoadingSubmit(false)
                 return;
             } else {
                 const warning = await res.text();

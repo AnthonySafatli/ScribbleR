@@ -1,20 +1,13 @@
-import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 
-import useAuth from "../hooks/useAuth";
+import { useAuthContext } from "../hooks/useAuthContext";
+import { AuthContextData } from "../models/AppUser";
 import SignInForm from "./SignInForm";
 import CenteredContainer from "./CenteredContainer";
 import SetupAccountForm from "./SetupAccountForm";
 
 const ProtectedRoute: React.FC = () => {
-    const { user, loading } = useAuth();
-    const [isSetup, setIsSetup] = useState<boolean | null>(null);  
-
-    useEffect(() => {
-        if (user) {
-            setIsSetup(user?.isSetup ?? null); // TODO: Does not work
-        }
-    }, [user]);
+    const { user, loading } = useAuthContext() as AuthContextData;
 
     if (loading) {
         return (
@@ -26,7 +19,7 @@ const ProtectedRoute: React.FC = () => {
         );
     }
 
-    if (user === null || isSetup === null) {
+    if (user === null) {
         return (
             <div className="vh-100 d-flex flex-column">
                 <CenteredContainer>
@@ -39,7 +32,7 @@ const ProtectedRoute: React.FC = () => {
         );
     }
 
-    if (user && isSetup) {
+    if (user && user.isSetup) {
         return <Outlet />;
     }
 
