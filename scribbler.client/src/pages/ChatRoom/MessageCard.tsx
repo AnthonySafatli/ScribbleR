@@ -97,7 +97,7 @@ const MessageCard = ({ message, onCopy }: Props) => {
                     </div>
                     <div className="d-flex justify-content-center">
                         <div className="border border-dark p-3 overflow-auto" style={{ height: '200px', width: '400px' }}>
-                            <p className="m-0">{message.message}</p>
+                            <pre style={{ fontFamily: 'inherit', margin: '0', padding: '0' }}>{message.message}</pre> 
                         </div>
                     </div>
                 </Card.Body>

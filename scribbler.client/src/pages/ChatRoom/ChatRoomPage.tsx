@@ -87,7 +87,17 @@ function ChatRoomPage() {
                     setConnection(newConn);
                 } catch (e) {
                     console.error(e);
-                    // TODO: Handle error
+                    toast.error("Failed to connect to chatroom, try again later", {
+                        position: "bottom-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "light",
+                        transition: Bounce,
+                    });
                 }
             };
 
@@ -247,7 +257,7 @@ function ChatRoomPage() {
                     <div className="d-flex justify-content-center">
                         <Row className="my-2" style={{ maxWidth: "800px", width: "100%" }}>
                             <Col xs={8}>
-                                You are sending messages as 
+                                You are sending messages as &nbsp;
                                 <OverlayTrigger
                                     placement="top"
                                     overlay={<Popover id="popover-basic"><Popover.Body><UserInfo userId={user?.id ?? ""} /></Popover.Body></Popover>}

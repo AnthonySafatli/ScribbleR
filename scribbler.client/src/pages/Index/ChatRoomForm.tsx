@@ -8,7 +8,7 @@ function ChatRoomForm() {
 
     const goToChatRoom = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        window.location.replace("/Chatroom/" + roomId)
+        window.location.href = "/Chatroom/" + roomId
     }
 
     return (
