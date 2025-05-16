@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { SketchPicker, ColorResult } from "react-color";
 import { Button } from "react-bootstrap";

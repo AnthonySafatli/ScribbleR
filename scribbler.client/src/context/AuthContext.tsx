@@ -1,4 +1,4 @@
-import React, { createContext, JSX } from 'react';
+import { createContext, JSX } from 'react';
 
 import useAuth from '../hooks/useAuth';
 

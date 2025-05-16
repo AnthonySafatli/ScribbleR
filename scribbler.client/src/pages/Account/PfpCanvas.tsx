@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { ReactSketchCanvasRef } from "react-sketch-canvas";
 import { SketchPicker, ColorResult } from "react-color";
