@@ -34,7 +34,7 @@ public class Program
         {
             opt.AddPolicy("reactApp", builder =>
             {
-                builder.WithOrigins("http://localhost:52861", "http://localhost:3000")
+                builder.WithOrigins("http://172.105.22.39/", "http://172.105.22.39/", "http://scribbler.anthonysafatli.ca/", "https://scribbler.anthonysafatli.ca/")
                     .AllowCredentials()
                     .AllowAnyHeader()
                     .AllowAnyMethod();
@@ -76,6 +76,12 @@ public class Program
             var user = await userManager.FindByEmailAsync(email);
             return Results.Json(new { NeedsRegister = (user == null) } );
         });
+
+        using (var scope = app.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            db.Database.Migrate();
+        }
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())

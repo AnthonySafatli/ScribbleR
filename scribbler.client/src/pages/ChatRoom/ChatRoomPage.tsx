@@ -44,7 +44,7 @@ function ChatRoomPage() {
             const connect = async () => {
                 try {
                     const newConn = new HubConnectionBuilder()
-                        .withUrl("https://localhost:44389/api/chat")
+                        .withUrl("/api/chat")
                         .build();
 
                     newConn.on(SignalRConnections.RECEIVE_MESSAGE, (displayName: string, userId: string, msg: string, isJoinOrLeave: boolean | null, datetime: string) => {
@@ -257,7 +257,7 @@ function ChatRoomPage() {
                     <div className="d-flex justify-content-center">
                         <Row className="my-2" style={{ maxWidth: "800px", width: "100%" }}>
                             <Col xs={8}>
-                                You are sending messages as &nbsp;
+                                You are sending messages as&nbsp;
                                 <OverlayTrigger
                                     placement="top"
                                     overlay={<Popover id="popover-basic"><Popover.Body><UserInfo userId={user?.id ?? ""} /></Popover.Body></Popover>}
