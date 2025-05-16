@@ -37,22 +37,27 @@ function SetupAccountForm() {
 
         if (!userHandle) {
             handleFormError("User Handle can not be empty");
+            return;
         }
 
         if (userHandle.length > 50) {
             handleFormError("User Handle can not be greater than 50 characters");
+            return;
         }
 
         if (!displayName) {
             handleFormError("Display Name can not be empty");
+            return;
         }
 
         if (displayName.length > 50) {
             handleFormError("Display Name can not be greater than 50 characters");
+            return;
         }
 
         if (aboutMe.length > 200) {
             handleFormError("About Me can not be greater than 200 characters");
+            return;
         }
 
         try {
@@ -105,7 +110,7 @@ function SetupAccountForm() {
                     name="userHandle"
                     id="userHandle"
                     onChange={handleChange}
-                    placeholder="The unique name your account will be identified with" />
+                    placeholder="The unique username for your account" />
             </Form.Group>
 
             <Form.Group className="my-3">
