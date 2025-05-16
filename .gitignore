@@ -368,3 +368,4 @@ FodyWeavers.xsd
 # Secret Stuff
 appsettings.json
 appsettings.*.json
+/db.env
