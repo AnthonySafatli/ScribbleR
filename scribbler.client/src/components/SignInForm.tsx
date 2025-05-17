@@ -39,10 +39,15 @@ function SignInForm({ closeToggle, onSignedIn }: Props) {
     // handle change events for input fields
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        if (name === "username")
-            setUsername(value);
+
+        if (name === "username") {
+            const filtered = value.replace(/[^a-zA-Z0-9]/g, '');
+            setUsername(filtered);
+        }
+
         if (name === "password")
             setPassword(value);
+
         if (name === "rememberme")
             setRememberme(e.target.checked);
     };

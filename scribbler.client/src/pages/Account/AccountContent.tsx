@@ -8,6 +8,7 @@ import { AuthContextData } from "../../models/AppUser";
 import PfpCanvas from "./PfpCanvas";
 import PasswordChangeModal from "./PasswordChangeModal";
 import { NormalizePaths, UnnormalizePaths } from "../../utils/ScalePaths";
+import ExtractErrorMessages from "../../utils/ErrorUtils";
 
 function AccountContent() {
 
@@ -46,16 +47,16 @@ function AccountContent() {
 
     // Errors
     const [alertError, setAlertError] = useState<string | null>("");
-    const [submitError, setSubmitError] = useState<string | null>("");
+    const [submitErrors, setSubmitErrors] = useState<string[] | null>(null);
 
     const handleAccountSave = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        setSubmitError(null);
+        setSubmitErrors(null);
 
         setLoadingFormSubmit(true);
         setSuccessFormSubmit(false);
-        setSubmitError(null)
+        setSubmitErrors(null)
         try {
             const paths = await pfpRef?.current?.exportPaths();
             const normPaths = NormalizePaths(paths, 200, 200);
@@ -75,18 +76,15 @@ function AccountContent() {
             if (res.ok) {
                 const data = await res.json();
                 setUser(data)
-                setLoadingFormSubmit(false);
                 setSuccessFormSubmit(true);
             } else {
-                throw new Error("Error Saving Changes!");
+                const data = await res.json();
+                setSubmitErrors(ExtractErrorMessages(data))
+                throw new Error();
             }
         } catch (error: unknown) {
-            console.error(e);
-            if (error instanceof Error) {
-                setSubmitError(error.message);
-            } else {
-                setSubmitError("An unknown error occurred");
-            }
+            console.error(error);
+        } finally {
             setLoadingFormSubmit(false);
         }
     };
@@ -187,6 +185,7 @@ function AccountContent() {
                         </div>
                     </Col>
                 </Row>
+                {submitErrors && <div className="mb-3">{submitErrors.map(err => <small className="d-block text-danger">{err}</small>)}</div>}
                 <Form.Group>
                     <div className="d-flex justify-content-between align-items-center">
                         
@@ -202,19 +201,17 @@ function AccountContent() {
                         {successFormSubmit && (
                             <Icon name="check-circle-fill" colour="success" />
                         )}
-                        {submitError && (
+                        {submitErrors && (
                             <OverlayTrigger
                                 placement="top"
                                 delay={{ show: 250, hide: 400 }}
                                 overlay={
-                                    <Tooltip id="button-tooltip">
-                                        { submitError }
-                                    </Tooltip>
+                                    <Tooltip id="button-tooltip">Error Saving Changes!</Tooltip>
                                 }
                             >
                                 <div>
                                     <Icon name="x-circle-fill" colour="danger" />
-                                    <span className="visually-hidden">{submitError }</span>
+                                    <span className="visually-hidden">Error Saving Changes!</span>
                                 </div>
                             </OverlayTrigger>
                         )}
