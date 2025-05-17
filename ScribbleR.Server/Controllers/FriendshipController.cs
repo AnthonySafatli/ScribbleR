@@ -63,7 +63,8 @@ public class FriendshipController : Controller
 
         AppUser? targetUser = null;
 
-        targetUser = await _context.AppUsers.FirstOrDefaultAsync(x => x.UserHandle == username);
+        targetUser = await _context.AppUsers.FirstOrDefaultAsync(x => x.NormalizedEmail == username.ToUpper());
+        targetUser ??= await _context.AppUsers.FirstOrDefaultAsync(x => x.UserHandle == username);
         if (targetUser == null)
             return NotFound("User not found.");
 

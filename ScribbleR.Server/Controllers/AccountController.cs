@@ -28,7 +28,7 @@ public class AccountController : ControllerBase
         AppUser? appUser = await _userManager.GetUserAsync(User);
         if (appUser == null) return Forbid();
 
-        appUser.DisplayName = accountInfo.DisplayName;
+        appUser.DisplayName = string.IsNullOrWhiteSpace(accountInfo.DisplayName) ? null : accountInfo.DisplayName;
         appUser.AboutMe = string.IsNullOrWhiteSpace(accountInfo.AboutMe) ? null : accountInfo.AboutMe;
         appUser.ProfilePicturePaths = accountInfo.ProfilePicture;
 

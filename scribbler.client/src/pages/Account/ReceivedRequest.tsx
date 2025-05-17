@@ -67,7 +67,7 @@ function ReceivedRequest({ friendRequest, onAcceptRequest, onRejectRequest }: Pr
                         placement="bottom"
                         overlay={<Popover id="popover-basic"><Popover.Body><UserInfo userId={friendRequest.user.id} /></Popover.Body></Popover>}
                     >
-                        <div>{friendRequest.user.displayName}</div>
+                        <div>{friendRequest.user.displayName ?? friendRequest.user.userHandle}</div>
                     </OverlayTrigger>
                 </div>
                 <div className="d-flex gap-1">

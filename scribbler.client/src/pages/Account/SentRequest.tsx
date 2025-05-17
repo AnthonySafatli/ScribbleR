@@ -43,7 +43,7 @@ function SentRequest({ friendRequest, onCancelRequest }: Props) {
                         placement="bottom"
                         overlay={<Popover id="popover-basic"><Popover.Body><UserInfo userId={friendRequest.user.id} /></Popover.Body></Popover>}
                     >
-                        <div>{friendRequest.user.displayName}</div>
+                        <div>{friendRequest.user.displayName ?? friendRequest.user.userHandle}</div>
                     </OverlayTrigger>
                 </div>
                 <div>

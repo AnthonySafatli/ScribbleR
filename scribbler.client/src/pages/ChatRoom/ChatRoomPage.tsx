@@ -80,7 +80,7 @@ function ChatRoomPage() {
                     await newConn.start();
                     await newConn.invoke(SignalRConnections.JOIN_CHATROOM, {
                         chatroom: chatroomId,
-                        displayName: user?.displayName,
+                        displayName: user?.displayName ?? user?.userHandle,
                         userId: user?.id,
                     });
 
@@ -262,7 +262,7 @@ function ChatRoomPage() {
                                     placement="top"
                                     overlay={<Popover id="popover-basic"><Popover.Body><UserInfo userId={user?.id ?? ""} /></Popover.Body></Popover>}
                                 >
-                                    <strong><a href="/Account">{user?.displayName}</a></strong>
+                                    <strong><a href="/Account">{user?.displayName ?? user?.userHandle}</a></strong>
                                 </OverlayTrigger>
                             </Col>
                             <Col xs={4}>
