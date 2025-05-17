@@ -151,8 +151,8 @@ function SignInForm({ closeToggle, onSignedIn }: Props) {
             if (signedIn)
                 return;
 
-            if (data.status == 401)
-                handleFormError("Incorrect email or password!");
+            if (data.error)
+                handleFormError(data.error);
             else
                 throw new Error("Error logging in");
         }).catch((error) => {

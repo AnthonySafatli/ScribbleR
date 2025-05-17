@@ -129,7 +129,9 @@ public class FriendshipController : Controller
         AppUser? currUser = await _userManager.GetUserAsync(User);
         if (currUser == null) return Forbid();
 
-        Friendship? friendship = await _context.Friendships.FirstOrDefaultAsync(x => x.Id == requestId);
+        Friendship? friendship = await _context.Friendships
+            .Include(x => x.RequestFromUser)
+            .FirstOrDefaultAsync(x => x.Id == requestId);
         if (friendship == null) return NotFound();
 
         if (friendship.RequestToUserId != currUser.Id) 
@@ -147,7 +149,9 @@ public class FriendshipController : Controller
         AppUser? currUser = await _userManager.GetUserAsync(User);
         if (currUser == null) return Forbid();
 
-        Friendship? friendship = await _context.Friendships.FirstOrDefaultAsync(x => x.Id == requestId);
+        Friendship? friendship = await _context.Friendships
+            .Include(x => x.RequestFromUser)
+            .FirstOrDefaultAsync(x => x.Id == requestId);
         if (friendship == null) return NotFound();
 
         if (friendship.RequestToUserId != currUser.Id) 

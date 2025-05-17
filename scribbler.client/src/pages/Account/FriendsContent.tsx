@@ -115,15 +115,18 @@ function FriendsContent() {
                         <Card.Header>
                             Received Requests
                         </Card.Header>
-                        <ListGroup variant="flush">
-                            {receivedRequests.map((request) => (
-                                <ReceivedRequest
-                                    key={request.id}
-                                    friendRequest={request}
-                                    onAcceptRequest={onAcceptRequest}
-                                    onRejectRequest={onRejectRequest} />
+                        <Card.Body>
+                            {receivedRequests.map((request, i) => (
+                                <>
+                                    <ReceivedRequest
+                                        key={request.id}
+                                        friendRequest={request}
+                                        onAcceptRequest={onAcceptRequest}
+                                        onRejectRequest={onRejectRequest} />
+                                    {i !== (receivedRequests.length - 1) && <hr />}
+                                </>
                             ))}
-                        </ListGroup>
+                        </Card.Body>
                     </Card>
             }
 
@@ -133,22 +136,29 @@ function FriendsContent() {
                     <Card.Header>
                         Sent Requests
                     </Card.Header>
-                    <ListGroup variant="flush">
-                        {sentRequests.map((request) => (
-                            <SentRequest key={request.id} friendRequest={request} onCancelRequest={onCancelRequest} />
+                    <Card.Body>
+                        {sentRequests.map((request, i) => (
+                            <>
+                                <SentRequest key={request.id} friendRequest={request} onCancelRequest={onCancelRequest} />
+                                {i !== (sentRequests.length - 1) && <hr /> }
+                            </>
                         ))}
-                    </ListGroup>
+                    </Card.Body>
                 </Card>
             }
 
             <div>
-                {friends?.map((friend) => (
-                    <FriendItem key={friend.id} friend={friend} onRemoveFriend={onRemoveFriend} />
+                {friends?.map((friend, i) => (
+                    <>
+                        <FriendItem key={friend.id} friend={friend} onRemoveFriend={onRemoveFriend} />
+                        {i !== (friends.length - 1) && <hr />}
+                    </>
                 ))}
 
                 {friends?.length === 0 && (
-                    <div className="mt-5 text-center">
-                        <p>You have no friends yet. <Icon name="emoji-frown" /></p>
+                    <div className="mt-5 text-center d-flex flex-column">
+                        <p>You have no friends yet</p>
+                        <p className="display-6"><Icon name="emoji-frown" /></p>
                     </div>
                 ) }
             </div>
