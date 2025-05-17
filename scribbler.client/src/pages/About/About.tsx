@@ -5,8 +5,8 @@ const About = () => {
         <Container className="my-5">
             <Row className="mb-5">
                 <Col md={8} className="mx-auto text-center">
-                    <h2 className="display-4">ScribbleR</h2>
-                    <p className="lead">
+                    <h1>ScribbleR</h1>
+                    <p className="fs-5">
                         ScribbleR is a fun, web-based chatroom where you can draw and message friends in real time. Inspired by the classic PictoChat, it brings the nostalgia back with modern features like private rooms and a friends list.
                     </p>
                     <Button
@@ -35,8 +35,8 @@ const About = () => {
             </Row>
             <Row>
                 <Col md={8} className="mx-auto text-center">
-                    <h3 className="display-6">Hello! I'm Anthony!</h3>
-                    <p className="lead">
+                    <h2>Hello! I'm Anthony!</h2>
+                    <p className="fs-5">
                         I'm a software developer and student at Dalhousie University.
                         I love building cool stuff, learning new tech, and exploring the outdoors.
                     </p>

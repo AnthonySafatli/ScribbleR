@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Modal, Button } from "react-bootstrap";
+import { Modal, Button, Container } from "react-bootstrap";
 
 function DevelopmentWarning() {
 
@@ -39,15 +39,17 @@ function DevelopmentWarning() {
                 </Modal.Body>
             </Modal>
 
-            <p className="text-center m-1 mt-2 text-muted">
-                This site is still under development,
-                and is planned to be done by the end of May.
-                Click&nbsp;
-                <Button variant="link" className="p-0 align-baseline" onClick={() => setShowFeaturesModal(true)}>
-                    here
-                </Button>
-                &nbsp;to see a list of planned features
-            </p>
+            <Container>
+                <p className="text-center m-1 mt-2 text-muted">
+                    This site is still under development,
+                    and is planned to be done by the end of May.
+                    Click&nbsp;
+                    <Button variant="link" className="p-0 align-baseline" onClick={() => setShowFeaturesModal(true)}>
+                        here
+                    </Button>
+                    &nbsp;to see a list of planned features
+                </p>
+            </Container>
         </>
     )
 };
