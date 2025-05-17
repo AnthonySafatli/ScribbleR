@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Card, ListGroup } from "react-bootstrap";
+import { Button, Card } from "react-bootstrap";
 
 import { AppUser } from "../../models/AppUser";
 import { FriendRequest } from "../../models/FriendRequest";
