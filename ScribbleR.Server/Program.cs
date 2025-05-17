@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Globalization;
 using ScribbleR.Server.Hubs;
 using ScribbleR.Server.Models.Dtos;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ScribbleR.Server;
 
@@ -76,6 +77,37 @@ public class Program
             var user = await userManager.FindByEmailAsync(email);
             return Results.Json(new { NeedsRegister = (user == null) } );
         });
+
+        app.MapPost("/api/auth/changepassword", async (
+            [FromBody] ChangePasswordDto model,
+            UserManager<AppUser> userManager,
+            HttpContext httpContext) =>
+        {
+            var context = new ValidationContext(model, null, null);
+            var validationResults = new List<ValidationResult>();
+            bool isValid = Validator.TryValidateObject(model, context, validationResults, true);
+
+            if (!isValid)
+            {
+                var errorDict = validationResults
+                    .GroupBy(e => e.MemberNames.FirstOrDefault() ?? "")
+                    .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray());
+                return Results.ValidationProblem(errorDict);
+            }
+
+            var user = await userManager.GetUserAsync(httpContext.User);
+            if (user == null)
+                return Results.Unauthorized();
+
+            var result = await userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+
+            if (!result.Succeeded)
+                return Results.BadRequest(result.Errors);
+
+            return Results.Ok(new { message = "Password changed successfully." });
+        })
+        .RequireAuthorization();
+
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())

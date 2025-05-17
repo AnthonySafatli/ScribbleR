@@ -3,6 +3,7 @@ import { Alert, Button, Form, Spinner } from "react-bootstrap";
 
 import EmailInput from "./EmailInput";
 import PasswordInput from "./PasswordInput";
+import ExtractErrorMessages from "../utils/ErrorUtils";
 
 interface Props {
     closeToggle: boolean,
@@ -19,7 +20,7 @@ function SignInForm({ closeToggle, onSignedIn }: Props) {
     // state variable for error message
     const [alertError, setAlertError] = useState<string | null>(null);
     const [emailError, setEmailError] = useState<string | null>("");
-    const [passwordError, setPasswordError] = useState<JSX.Element | null>(null)
+    const [passwordErrors, setPasswordErrors] = useState<string[] | null>(null)
 
     // state variables for submit button
     const [isRegister, setIsRegister] = useState<boolean | null>(null);
@@ -28,7 +29,7 @@ function SignInForm({ closeToggle, onSignedIn }: Props) {
     useEffect(() => {
         setAlertError(null);
         setEmailError(null);
-        setPasswordError(null);
+        setPasswordErrors(null);
         setIsRegister(null);
     }, [closeToggle])
 
@@ -53,7 +54,7 @@ function SignInForm({ closeToggle, onSignedIn }: Props) {
         // setup
         setAlertError(null);
         setEmailError(null);
-        setPasswordError(null);
+        setPasswordErrors(null);
         setLoadingSubmit(true);
 
         // make sure email is validated
@@ -90,29 +91,15 @@ function SignInForm({ closeToggle, onSignedIn }: Props) {
 
                     console.log(data)
 
-                    setPasswordError(
-                        <>
-                            {data.errors.PasswordRequiresLower && (
-                                <small className="text-danger d-block">Password must contain at least one lowercase!</small>
-                            )}
-                            {data.errors.PasswordRequiresNonAlphanumeric && (
-                                <small className="text-danger d-block">Passwords must have at least one special character!</small>
-                            )}
-                            {data.errors.PasswordRequiresUpper && (
-                                <small className="text-danger d-block">Password must contain at least one uppercase!</small>
-                            )}
-                            {data.errors.PasswordTooShort && (
-                                <small className="text-danger d-block">Password must be at least 6 characters!</small>
-                            )}
-                            {data.errors.PasswordRequiresDigit && (
-                                <small className="text-danger d-block">Password must contain at least one number!</small>
-                            )}
-                        </>
-                    )
-                    if (data.errors.InvalidEmail)
+                    if (data.errors.InvalidEmail) {
                         setEmailError("Invalid Email!")
-                    if (data.errors.DuplicateUserName)
+                        data.errors.InvalidEmail = null;
+                    }
+                    if (data.errors.DuplicateUserName) {
                         setEmailError("Username Taken. Try again!")
+                        data.errors.DuplicateUserName = null;
+                    }
+                    setPasswordErrors(ExtractErrorMessages(data))
 
                     throw new Error(data.title)
                 }
@@ -194,9 +181,7 @@ function SignInForm({ closeToggle, onSignedIn }: Props) {
             <Form.Group className="my-3">
                 <Form.Label>Password</Form.Label>
                 <PasswordInput handleChange={handleChange} />
-                {passwordError && (
-                    passwordError
-                )}
+                {passwordErrors && passwordErrors.map((err) => <p className="mb-1 text-danger">{err}</p>)}
             </Form.Group>
             <Form.Group className="my-3">
                 <Form.Check

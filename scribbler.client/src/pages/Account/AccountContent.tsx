@@ -6,6 +6,7 @@ import Icon from "../../components/Icon";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { AuthContextData } from "../../models/AppUser";
 import PfpCanvas from "./PfpCanvas";
+import PasswordChangeModal from "./PasswordChangeModal";
 import { NormalizePaths, UnnormalizePaths } from "../../utils/ScalePaths";
 
 function AccountContent() {
@@ -16,6 +17,8 @@ function AccountContent() {
     const [aboutMe, setAboutMe] = useState<string>(user?.aboutMe ?? "");
 
     const pfpRef = useRef<ReactSketchCanvasRef>(null);
+
+    const [showPasswordChangeModal, setShowPasswordChangeModal] = useState(false);
 
     useEffect(() => {
         setDisplayName(user?.displayName ?? "")
@@ -95,6 +98,8 @@ function AccountContent() {
 
     return (
         <>
+            <PasswordChangeModal show={showPasswordChangeModal} onClose={() => setShowPasswordChangeModal(false)} />
+
             <h1 className="mb-5 mt-3">My Account</h1>
 
             {alertError && (
@@ -173,6 +178,18 @@ function AccountContent() {
                     </Col>
                     <Col className="py-2">
                         <PfpCanvas ref={pfpRef} />
+                    </Col>
+                </Row>
+                <Row className="my-3">
+                    <Col xs={2}>
+                        <div className="d-flex align-items-center h-100">
+                            <Form.Label className="mb-0">Password</Form.Label>
+                        </div>
+                    </Col>
+                    <Col className="py-2">
+                        <div className="d-flex justify-content-center">
+                            <Button onClick={() => setShowPasswordChangeModal(true)}>Change Password</Button>
+                        </div>
                     </Col>
                 </Row>
                 <Form.Group>
