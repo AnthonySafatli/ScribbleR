@@ -1,16 +1,16 @@
 import { Container, Nav, Navbar, Spinner } from "react-bootstrap";
 
-import { AppUser } from "../../models/AppUser";
-import Icon from "../../components/Icon";
+import { AppUser } from "../models/AppUser";
+import Icon from "./Icon";
 
-import logo from "../../assets/logo.png";
+import logo from "../assets/logo.png";
 
 interface Props {
     onSignIn: () => void;
     accountInfo: AppUser | null | undefined;
 }
 
-function IndexNav({ onSignIn, accountInfo }: Props) {
+function NavBar({ onSignIn, accountInfo }: Props) {
     return (
         <Navbar bg="light" data-bs-theme="light">
             <Container>
@@ -22,7 +22,8 @@ function IndexNav({ onSignIn, accountInfo }: Props) {
                 </Navbar.Brand>
                 <Navbar.Toggle />
                 <Navbar.Collapse className="justify-content-end">
-                    <Nav>
+                    <Nav className="gap-3">
+                        <Nav.Link href="/About">About</Nav.Link>
                         {
                             accountInfo === undefined ?
                                 <Spinner size='sm'></Spinner>
@@ -42,4 +43,4 @@ function IndexNav({ onSignIn, accountInfo }: Props) {
     );
 }
 
-export default IndexNav;
+export default NavBar;

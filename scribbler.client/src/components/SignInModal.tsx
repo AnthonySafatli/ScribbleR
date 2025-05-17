@@ -1,14 +1,15 @@
 import { useState } from "react";
 import {  Modal } from "react-bootstrap";
 
-import SignInForm from "../../components/SignInForm";
+import SignInForm from "./SignInForm";
 
 interface Props {
     show: boolean,
-    onClose: () => void
+    onClose: () => void,
+    redirectLink?: string
 }
 
-function SignInModal({ show, onClose }: Props) {
+function SignInModal({ show, onClose, redirectLink = '/'}: Props) {
     const [closeToggle, setCloseToggle] = useState(false);
 
     const closeModal = () => {
@@ -17,7 +18,7 @@ function SignInModal({ show, onClose }: Props) {
     }
 
     const onSignedIn = () => {
-        window.location.href = '/';
+        window.location.href = redirectLink;
     }
 
     return (

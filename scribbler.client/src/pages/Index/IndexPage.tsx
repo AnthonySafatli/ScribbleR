@@ -3,8 +3,8 @@ import { useState } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import CenteredContainer from "../../components/CenteredContainer";
 import ChatRoomForm from "./ChatRoomForm";
-import IndexNav from "./IndexNav";
-import SignInModal from "./SignInModal";
+import NavBar from "../../components/NavBar";
+import SignInModal from "../../components/SignInModal";
 import { AuthContextData } from "../../models/AppUser";
 
 import logo from "../../assets/logo.png";
@@ -12,10 +12,11 @@ import { motion } from "framer-motion";
 import { Button, Modal } from "react-bootstrap";
 
 function IndexPage() {
+
     const { user } = useAuthContext() as AuthContextData;
+
     const [showSignInModal, setShowSignInModal] = useState(false);
     const [showFeaturesModal, setShowFeaturesModal] = useState(false);
-
 
     const features = [
         {
@@ -37,7 +38,7 @@ function IndexPage() {
 
     return (
         <div className="vh-100 d-flex flex-column">
-            <IndexNav onSignIn={() => setShowSignInModal(true)} accountInfo={user} /> 
+            <NavBar onSignIn={() => setShowSignInModal(true)} accountInfo={user} /> 
 
             <SignInModal show={showSignInModal} onClose={() => setShowSignInModal(false)} />
 

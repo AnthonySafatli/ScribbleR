@@ -5,6 +5,7 @@ import IndexPage from './pages/Index/IndexPage';
 import AccountPage from './pages/Account/AccountPage';
 import ChatRoomPage from './pages/ChatRoom/ChatRoomPage';
 import NotFound from './pages/NotFound';
+import AboutPage from './pages/About/AboutPage';
 
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
@@ -19,6 +20,9 @@ function App() {
                     <Routes>
                         {/* Index */}
                         <Route path="/" element={<IndexPage />} />
+
+                        {/* Accounts */}
+                        <Route path="/About" element={<AboutPage />} />
 
                         {/* Accounts */}
                         <Route element={<ProtectedRoute />}>
