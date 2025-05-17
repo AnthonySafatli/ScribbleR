@@ -53,7 +53,7 @@ function UserInfo({ userId }: Props) {
                 <div className="my-1">
                     {user ? (
                         <>
-                            <p className="lead m-0 p-0">{user.displayName}</p>
+                            {user.displayName && <p className="lead m-0 p-0">{user.displayName}</p>}
                             <p className="font-monospace m-0 p-0">@{user.userHandle}</p>
                             <p className="m-0 p-0">{user.email}</p>
                         </>

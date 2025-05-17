@@ -7,7 +7,6 @@ export interface AppUser {
     userHandle: string,
     displayName: string | null,
     aboutMe: string | null,
-    isSetup: boolean,
     profilePicture: CanvasPath[] | null,
 }
 

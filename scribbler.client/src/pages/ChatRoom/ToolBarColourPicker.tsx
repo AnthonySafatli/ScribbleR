@@ -1,28 +1,35 @@
 import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import { SketchPicker, ColorResult } from "react-color";
-import { Button } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 
 import Icon from "../../components/Icon";
-
 
 interface Props {
     colour: string;
     setColour: (colour: string) => void;
 }
 
-const ToolBarColourPicker = ({ colour, setColour }: Props ) => {
-
+const ToolBarColourPicker = ({ colour, setColour }: Props) => {
     const [expanded, setExpanded] = useState(false);
-
-    const [showPicker, setShowPicker] = useState(false);
+    const [showModal, setShowModal] = useState(false);
 
     const handleChange = (colorResult: ColorResult) => {
         setColour(colorResult.hex);
     };
 
+    const primaryDrawingColours = [
+        { color: "#000000", title: "black" },
+        { color: "#FFFFFF", title: "white" },
+        { color: "#FF0000", title: "red" },
+        { color: "#0000FF", title: "blue" },
+        { color: "#00FF00", title: "green" },
+        { color: "#FFFF00", title: "yellow" },
+        { color: "#FFA500", title: "orange" },
+        { color: "#800080", title: "purple" },
+    ];
+
     return (
-        <div className="d-flex align-items-center" style={{ height: "50px" }}>
+        <>
             <Button
                 variant="primary"
                 style={{ width: "50px", height: "50px" }}
@@ -31,38 +38,45 @@ const ToolBarColourPicker = ({ colour, setColour }: Props ) => {
                 <Icon name="paint-bucket" />
             </Button>
 
-            <AnimatePresence>
-                {expanded && (
-                    <motion.div
-                        className="ms-2"
-                        initial={{ opacity: 0, width: 0 }}
-                        animate={{ opacity: 1, width: "auto" }}
-                        exit={{ opacity: 0, width: 0 }}
-                        transition={{ duration: 0.3 }}
-                    >
+            {expanded && (
+                <div className="ms-2" style={{ display: "inline-block", height: "50px", lineHeight: "50px" }}>
+                    <div
+                        onClick={() => setShowModal(true)}
+                        style={{
+                            backgroundColor: colour,
+                            width: "36px",
+                            height: "36px",
+                            border: "1px solid #ccc",
+                            cursor: "pointer",
+                            display: "inline-block",
+                            verticalAlign: "middle",
+                        }}
+                        title="Open color picker"
+                    />
+                </div>
+            )}
 
-                        <div style={{ position: "relative", display: "inline-block" }}>
-                            <div
-                                onClick={() => setShowPicker(!showPicker)}
-                                style={{
-                                    backgroundColor: colour,
-                                    width: "36px",
-                                    height: "36px",
-                                    border: "1px solid #ccc",
-                                    cursor: "pointer",
-                                }}
-                            />
-                            {showPicker && (
-                                <div style={{ position: "absolute", zIndex: 100 }}>
-                                    <SketchPicker color={colour} onChange={handleChange} />
-                                </div>
-                            )}
-                        </div>
-
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </div>
+            <Modal
+                show={showModal}
+                onHide={() => setShowModal(false)}
+                centered
+                size="sm"
+                backdrop="static"
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Pick a Color</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <div className="d-flex justify-content-center align-items-center">
+                        <SketchPicker
+                            color={colour}
+                            onChange={handleChange}
+                            presetColors={primaryDrawingColours}
+                            disableAlpha />
+                    </div>
+                </Modal.Body>
+            </Modal>
+        </>
     );
 };
 

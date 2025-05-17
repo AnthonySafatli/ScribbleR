@@ -42,6 +42,4 @@ public class AppUser : IdentityUser
 
     [StringLength(2083)]
     public string? SocialMedia { get; set; }
-    
-    public bool IsSetup { get; set; }
 }

@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { useAuthContext } from "../../hooks/useAuthContext";
 import CenteredContainer from "../../components/CenteredContainer";
 import ChatRoomForm from "./ChatRoomForm";
 import IndexNav from "./IndexNav";
 import SignInModal from "./SignInModal";
-import SetupAccountModal from "./SetupAccountModal";
 import { AuthContextData } from "../../models/AppUser";
 
 import logo from "../../assets/logo.png";
@@ -15,16 +14,8 @@ import { Button, Modal } from "react-bootstrap";
 function IndexPage() {
     const { user } = useAuthContext() as AuthContextData;
     const [showSignInModal, setShowSignInModal] = useState(false);
-    const [showSetupAccountModal, setShowSetupAccountModal] = useState(false);
     const [showFeaturesModal, setShowFeaturesModal] = useState(false);
 
-    useEffect(() => {
-        if (user === null || user === undefined) {
-            setShowSetupAccountModal(false)
-            return;
-        }
-        setShowSetupAccountModal(!user.isSetup)
-    }, [user])
 
     const features = [
         {
@@ -49,7 +40,6 @@ function IndexPage() {
             <IndexNav onSignIn={() => setShowSignInModal(true)} accountInfo={user} /> 
 
             <SignInModal show={showSignInModal} onClose={() => setShowSignInModal(false)} />
-            <SetupAccountModal show={showSetupAccountModal} />
 
             <Modal show={showFeaturesModal} onHide={() => setShowFeaturesModal(false)} centered>
                 <Modal.Header closeButton>
@@ -65,7 +55,7 @@ function IndexPage() {
                 </Modal.Body>
             </Modal>
 
-            <p className="text-center m-0 mt-2 text-muted">
+            <p className="text-center m-1 mt-2 text-muted">
                 This site is still under development,
                 and is planned to be done by the end of May.
                 Click&nbsp;
@@ -82,7 +72,7 @@ function IndexPage() {
                         <motion.div
                             initial={{ x: -100, opacity: 0 }}
                             animate={{ x: 0, opacity: 1 }}
-                            transition={{ duration: 1, ease: 'easeIn' }}
+                            transition={{ duration: 1, ease: [0, 0.71, 0.2, 1.01] }}
                         >
                             <img className="mb-3" src={logo} alt="logo" style={{ height: '100px' }} />
                         </motion.div>

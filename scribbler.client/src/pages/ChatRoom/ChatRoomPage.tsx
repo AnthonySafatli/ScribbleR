@@ -80,7 +80,7 @@ function ChatRoomPage() {
                     await newConn.start();
                     await newConn.invoke(SignalRConnections.JOIN_CHATROOM, {
                         chatroom: chatroomId,
-                        displayName: user?.displayName,
+                        displayName: user?.displayName ?? user?.userHandle,
                         userId: user?.id,
                     });
 
@@ -160,20 +160,18 @@ function ChatRoomPage() {
 
     const share = () => {
         navigator.clipboard.writeText(location.pathname)
-            .then(() => console.log("Copied!"))
+            .then(() => toast.info('Chatroom URL has been copied to clipboard', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+            }))
             .catch(err => console.error("Failed to copy: ", err));
-
-        toast.info('Chatroom URL has been copied to clipboard', {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-            transition: Bounce,
-        });
     }
 
     if (chatroomId === undefined) {
@@ -262,7 +260,7 @@ function ChatRoomPage() {
                                     placement="top"
                                     overlay={<Popover id="popover-basic"><Popover.Body><UserInfo userId={user?.id ?? ""} /></Popover.Body></Popover>}
                                 >
-                                    <strong><a href="/Account">{user?.displayName}</a></strong>
+                                    <strong><a href="/Account">{user?.displayName ?? user?.userHandle}</a></strong>
                                 </OverlayTrigger>
                             </Col>
                             <Col xs={4}>

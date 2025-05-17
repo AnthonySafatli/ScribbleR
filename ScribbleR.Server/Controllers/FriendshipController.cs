@@ -59,12 +59,13 @@ public class FriendshipController : Controller
     public async Task<IActionResult> SendFriendRequest([FromBody] string username)
     {
         AppUser? currUser = await _userManager.GetUserAsync(User);
-        if (currUser == null || currUser.IsSetup == false) return Forbid();
+        if (currUser == null) return Forbid();
 
         AppUser? targetUser = null;
 
-        targetUser = await _context.AppUsers.FirstOrDefaultAsync(x => x.UserHandle == username);
-        if (targetUser == null || targetUser.IsSetup == false)
+        targetUser = await _context.AppUsers.FirstOrDefaultAsync(x => x.NormalizedEmail == username.ToUpper());
+        targetUser ??= await _context.AppUsers.FirstOrDefaultAsync(x => x.UserHandle == username);
+        if (targetUser == null)
             return NotFound("User not found.");
 
         if (targetUser.Id == currUser.Id)
@@ -126,9 +127,11 @@ public class FriendshipController : Controller
     public async Task<IActionResult> AcceptFriendRequest(int requestId)
     {
         AppUser? currUser = await _userManager.GetUserAsync(User);
-        if (currUser == null || currUser.IsSetup == false) return Forbid();
+        if (currUser == null) return Forbid();
 
-        Friendship? friendship = await _context.Friendships.FirstOrDefaultAsync(x => x.Id == requestId);
+        Friendship? friendship = await _context.Friendships
+            .Include(x => x.RequestFromUser)
+            .FirstOrDefaultAsync(x => x.Id == requestId);
         if (friendship == null) return NotFound();
 
         if (friendship.RequestToUserId != currUser.Id) 
@@ -144,9 +147,11 @@ public class FriendshipController : Controller
     public async Task<IActionResult> RejectFriendRequest(int requestId)
     {
         AppUser? currUser = await _userManager.GetUserAsync(User);
-        if (currUser == null || currUser.IsSetup == false) return Forbid();
+        if (currUser == null) return Forbid();
 
-        Friendship? friendship = await _context.Friendships.FirstOrDefaultAsync(x => x.Id == requestId);
+        Friendship? friendship = await _context.Friendships
+            .Include(x => x.RequestFromUser)
+            .FirstOrDefaultAsync(x => x.Id == requestId);
         if (friendship == null) return NotFound();
 
         if (friendship.RequestToUserId != currUser.Id) 

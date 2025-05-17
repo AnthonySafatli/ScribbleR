@@ -33,6 +33,10 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
         builder.Entity<AppUser>()
             .Property(d => d.ProfilePicture)
             .HasColumnType("jsonb");
+
+        builder.Entity<AppUser>()
+            .HasIndex(u => u.UserHandle)
+            .IsUnique();
     }
 
     public override int SaveChanges(bool acceptAllChangesOnSuccess)

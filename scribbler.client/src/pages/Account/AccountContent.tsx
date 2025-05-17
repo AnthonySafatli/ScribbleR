@@ -6,7 +6,9 @@ import Icon from "../../components/Icon";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { AuthContextData } from "../../models/AppUser";
 import PfpCanvas from "./PfpCanvas";
+import PasswordChangeModal from "./PasswordChangeModal";
 import { NormalizePaths, UnnormalizePaths } from "../../utils/ScalePaths";
+import ExtractErrorMessages from "../../utils/ErrorUtils";
 
 function AccountContent() {
 
@@ -16,6 +18,8 @@ function AccountContent() {
     const [aboutMe, setAboutMe] = useState<string>(user?.aboutMe ?? "");
 
     const pfpRef = useRef<ReactSketchCanvasRef>(null);
+
+    const [showPasswordChangeModal, setShowPasswordChangeModal] = useState(false);
 
     useEffect(() => {
         setDisplayName(user?.displayName ?? "")
@@ -43,21 +47,16 @@ function AccountContent() {
 
     // Errors
     const [alertError, setAlertError] = useState<string | null>("");
-    const [submitError, setSubmitError] = useState<string | null>("");
+    const [submitErrors, setSubmitErrors] = useState<string[] | null>(null);
 
     const handleAccountSave = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        setSubmitError(null);
-
-        if (!displayName) {
-            setAlertError("Display Name cannot be empty!");
-            return;
-        }
+        setSubmitErrors(null);
 
         setLoadingFormSubmit(true);
         setSuccessFormSubmit(false);
-        setSubmitError(null)
+        setSubmitErrors(null)
         try {
             const paths = await pfpRef?.current?.exportPaths();
             const normPaths = NormalizePaths(paths, 200, 200);
@@ -77,24 +76,23 @@ function AccountContent() {
             if (res.ok) {
                 const data = await res.json();
                 setUser(data)
-                setLoadingFormSubmit(false);
                 setSuccessFormSubmit(true);
             } else {
-                throw new Error("Error Saving Changes!");
+                const data = await res.json();
+                setSubmitErrors(ExtractErrorMessages(data))
+                throw new Error();
             }
         } catch (error: unknown) {
-            console.error(e);
-            if (error instanceof Error) {
-                setSubmitError(error.message);
-            } else {
-                setSubmitError("An unknown error occurred");
-            }
+            console.error(error);
+        } finally {
             setLoadingFormSubmit(false);
         }
     };
 
     return (
         <>
+            <PasswordChangeModal show={showPasswordChangeModal} onClose={() => setShowPasswordChangeModal(false)} />
+
             <h1 className="mb-5 mt-3">My Account</h1>
 
             {alertError && (
@@ -175,6 +173,19 @@ function AccountContent() {
                         <PfpCanvas ref={pfpRef} />
                     </Col>
                 </Row>
+                <Row className="my-3">
+                    <Col xs={2}>
+                        <div className="d-flex align-items-center h-100">
+                            <Form.Label className="mb-0">Password</Form.Label>
+                        </div>
+                    </Col>
+                    <Col className="py-2">
+                        <div className="d-flex justify-content-center">
+                            <Button onClick={() => setShowPasswordChangeModal(true)}>Change Password</Button>
+                        </div>
+                    </Col>
+                </Row>
+                {submitErrors && <div className="mb-3">{submitErrors.map(err => <small className="d-block text-danger">{err}</small>)}</div>}
                 <Form.Group>
                     <div className="d-flex justify-content-between align-items-center">
                         
@@ -190,19 +201,17 @@ function AccountContent() {
                         {successFormSubmit && (
                             <Icon name="check-circle-fill" colour="success" />
                         )}
-                        {submitError && (
+                        {submitErrors && (
                             <OverlayTrigger
                                 placement="top"
                                 delay={{ show: 250, hide: 400 }}
                                 overlay={
-                                    <Tooltip id="button-tooltip">
-                                        { submitError }
-                                    </Tooltip>
+                                    <Tooltip id="button-tooltip">Error Saving Changes!</Tooltip>
                                 }
                             >
                                 <div>
                                     <Icon name="x-circle-fill" colour="danger" />
-                                    <span className="visually-hidden">{submitError }</span>
+                                    <span className="visually-hidden">Error Saving Changes!</span>
                                 </div>
                             </OverlayTrigger>
                         )}

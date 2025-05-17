@@ -43,7 +43,7 @@ function FriendItem({ friend, onRemoveFriend }: Props) {
                     placement="bottom"
                     overlay={<Popover id="popover-basic"><Popover.Body><UserInfo userId={friend.id} /></Popover.Body></Popover>}
                 >
-                    <div>{friend.displayName}</div>
+                    <div>{friend.displayName ?? friend.userHandle}</div>
                 </OverlayTrigger>
             </div>
             <div>

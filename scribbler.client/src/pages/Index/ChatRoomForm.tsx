@@ -10,6 +10,11 @@ function ChatRoomForm() {
 
     const [roomId, setRoomId] = useState("");
 
+    const onChangeRoomId = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const filtered = e.target.value.replace(/[^a-zA-Z0-9]/g, '');
+        setRoomId(filtered);
+    }
+
     const goToChatRoom = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         window.location.href = "/Chatroom/" + roomId
@@ -22,7 +27,8 @@ function ChatRoomForm() {
                     <Form.Control
                         style={{ width: '200px'}}
                         placeholder="Enter Room ID"
-                        onChange={(event) => setRoomId(event.target.value.trim())}
+                        value={roomId}
+                        onChange={onChangeRoomId}
                     />
                     {roomId && (
                         <Button variant="primary" type="submit" disabled={user === null ? true : false}>
