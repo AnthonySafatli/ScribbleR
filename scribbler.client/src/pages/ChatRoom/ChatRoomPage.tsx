@@ -160,20 +160,18 @@ function ChatRoomPage() {
 
     const share = () => {
         navigator.clipboard.writeText(location.pathname)
-            .then(() => console.log("Copied!"))
+            .then(() => toast.info('Chatroom URL has been copied to clipboard', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+            }))
             .catch(err => console.error("Failed to copy: ", err));
-
-        toast.info('Chatroom URL has been copied to clipboard', {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-            transition: Bounce,
-        });
     }
 
     if (chatroomId === undefined) {

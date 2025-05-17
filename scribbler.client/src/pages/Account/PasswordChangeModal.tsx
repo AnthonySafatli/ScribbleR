@@ -45,7 +45,6 @@ function PasswordChangeModal({ show, onClose }: Props) {
 
             if (!response.ok) {
                 const errorData = await response.json();
-                console.log(errorData)
                 setErrors(ExtractErrorMessages(errorData) as string[]);
                 const msg = "Failed to change password.";
                 throw new Error(msg);
