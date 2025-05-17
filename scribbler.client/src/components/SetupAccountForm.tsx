@@ -18,10 +18,15 @@ function SetupAccountForm() {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        if (name === "userHandle")
-            setUserHandle(value);
+
+        if (name === "userHandle") {
+            const filtered = value.replace(/[^a-zA-Z0-9]/g, '');
+            setUserHandle(filtered);
+        }
+
         if (name === "displayName")
             setDisplayName(value);
+
         if (name === "aboutMe")
             setAboutMe(value);
     };
@@ -104,6 +109,7 @@ function SetupAccountForm() {
                     type="text"
                     name="userHandle"
                     id="userHandle"
+                    value={userHandle}
                     onChange={handleChange}
                     placeholder="The unique name your account will be identified with" />
             </Form.Group>
