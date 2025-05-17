@@ -27,7 +27,7 @@ function IndexPage() {
                         <motion.div
                             initial={{ x: -100, opacity: 0 }}
                             animate={{ x: 0, opacity: 1 }}
-                            transition={{ duration: 1, ease: 'easeIn' }}
+                            transition={{ duration: 1, ease: [0, 0.71, 0.2, 1.01] }}
                         >
                             <img className="mb-3" src={logo} alt="logo" style={{ height: '100px' }} />
                         </motion.div>
