@@ -369,3 +369,6 @@ FodyWeavers.xsd
 appsettings.json
 appsettings.*.json
 /db.env
+/.vscode
+/vhost.d
+/certs
