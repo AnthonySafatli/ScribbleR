@@ -7,7 +7,6 @@ public class AppUserDto
     public string UserHandle { get; set; }
     public string? DisplayName { get; set; }
     public string? AboutMe { get; set; }
-    public bool IsSetup { get; set; }
     public CanvasPath[]? ProfilePicture { get; set; }
 
     public AppUserDto(AppUser appUser)
@@ -17,7 +16,6 @@ public class AppUserDto
         UserHandle = appUser.UserHandle ?? "";
         DisplayName = appUser.DisplayName;
         AboutMe = appUser.AboutMe;
-        IsSetup = appUser.IsSetup;
         ProfilePicture = appUser.ProfilePicturePaths;
     }
 }

@@ -4,7 +4,6 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import { AuthContextData } from "../models/AppUser";
 import SignInForm from "./SignInForm";
 import CenteredContainer from "./CenteredContainer";
-import SetupAccountForm from "./SetupAccountForm";
 
 const ProtectedRoute: React.FC = () => {
     const { user, loading } = useAuthContext() as AuthContextData;
@@ -32,20 +31,7 @@ const ProtectedRoute: React.FC = () => {
         );
     }
 
-    if (user && user.isSetup) {
-        return <Outlet />;
-    }
-
-    return (
-        <div className="vh-100 d-flex flex-column">
-            <CenteredContainer>
-                <div>
-                    <h1>Setup Account!</h1>
-                    <SetupAccountForm />
-                </div>
-            </CenteredContainer>
-        </div>
-    );
+    return <Outlet />;
 };
 
 export default ProtectedRoute;

@@ -53,11 +53,6 @@ function AccountContent() {
 
         setSubmitError(null);
 
-        if (!displayName) {
-            setAlertError("Display Name cannot be empty!");
-            return;
-        }
-
         setLoadingFormSubmit(true);
         setSuccessFormSubmit(false);
         setSubmitError(null)

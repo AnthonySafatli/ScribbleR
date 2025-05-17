@@ -1,4 +1,4 @@
-import { JSX, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Alert, Button, Form, Spinner } from "react-bootstrap";
 
 import EmailInput from "./EmailInput";
@@ -14,11 +14,13 @@ function SignInForm({ closeToggle, onSignedIn }: Props) {
 
     // state variables for input fields
     const [email, setEmail] = useState<string>("");
+    const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [rememberme, setRememberme] = useState<boolean>(false);
 
     // state variable for error message
     const [alertError, setAlertError] = useState<string | null>(null);
+    const [usernameError, setUsernameError] = useState<string | null>("");
     const [emailError, setEmailError] = useState<string | null>("");
     const [passwordErrors, setPasswordErrors] = useState<string[] | null>(null)
 
@@ -29,6 +31,7 @@ function SignInForm({ closeToggle, onSignedIn }: Props) {
     useEffect(() => {
         setAlertError(null);
         setEmailError(null);
+        setUsernameError(null);
         setPasswordErrors(null);
         setIsRegister(null);
     }, [closeToggle])
@@ -36,6 +39,8 @@ function SignInForm({ closeToggle, onSignedIn }: Props) {
     // handle change events for input fields
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
+        if (name === "username")
+            setUsername(value);
         if (name === "password")
             setPassword(value);
         if (name === "rememberme")
@@ -54,6 +59,7 @@ function SignInForm({ closeToggle, onSignedIn }: Props) {
         // setup
         setAlertError(null);
         setEmailError(null);
+        setUsernameError(null);
         setPasswordErrors(null);
         setLoadingSubmit(true);
 
@@ -64,12 +70,12 @@ function SignInForm({ closeToggle, onSignedIn }: Props) {
         }
 
         // input validation
-        if (!email || !password) {
+        if (!email || !password || (isRegister && !username)) {
             handleFormError("Please fill in all fields.");
             return;
         }
 
-        // register of needed
+        // register if needed
         let registerSuccess = false;
         if (isRegister == true) {
             try {
@@ -80,6 +86,7 @@ function SignInForm({ closeToggle, onSignedIn }: Props) {
                     },
                     body: JSON.stringify({
                         email: email,
+                        handle: username,
                         password: password,
                     }),
                 })
@@ -89,16 +96,9 @@ function SignInForm({ closeToggle, onSignedIn }: Props) {
                 } else {
                     const data = await res.json();
 
-                    console.log(data)
+                    if (data.error)
+                        setUsernameError(data.error)
 
-                    if (data.errors.InvalidEmail) {
-                        setEmailError("Invalid Email!")
-                        data.errors.InvalidEmail = null;
-                    }
-                    if (data.errors.DuplicateUserName) {
-                        setEmailError("Username Taken. Try again!")
-                        data.errors.DuplicateUserName = null;
-                    }
                     setPasswordErrors(ExtractErrorMessages(data))
 
                     throw new Error(data.title)
@@ -178,10 +178,24 @@ function SignInForm({ closeToggle, onSignedIn }: Props) {
                     <small className="text-danger d-block">{emailError}</small>
                 )}
             </Form.Group>
+            {isRegister && (
+                <Form.Group className="my-3">
+                    <Form.Label>Username</Form.Label>
+                    <Form.Control
+                        onChange={handleChange}
+                        value={username}
+                        name="username"
+                        type="text"
+                        placeholder="Enter username" />
+                    {usernameError && (
+                        <small className="text-danger d-block">{usernameError}</small>
+                    )}
+                </Form.Group>
+            )}
             <Form.Group className="my-3">
                 <Form.Label>Password</Form.Label>
                 <PasswordInput handleChange={handleChange} />
-                {passwordErrors && passwordErrors.map((err) => <p className="mb-1 text-danger">{err}</p>)}
+                {passwordErrors && passwordErrors.map((err) => <small className="text-danger d-block">{err}</small>)}
             </Form.Group>
             <Form.Group className="my-3">
                 <Form.Check
