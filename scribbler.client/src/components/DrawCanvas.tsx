@@ -39,7 +39,7 @@ const DrawCanvas = forwardRef<ReactSketchCanvasRef, Props>(({ colour = "black", 
                 allowOnlyPointerType={isDrawable ? "all" : "none"}
                 onChange={onChange}
                 style={{ touchAction: isDrawable ? "none" : "auto" }}
-                className="border border-dark"
+                className="border border-primary"
             />
             {!isDrawable && (
                 <div

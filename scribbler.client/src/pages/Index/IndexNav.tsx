@@ -3,6 +3,7 @@ import { Container, Nav, Navbar, Spinner } from "react-bootstrap";
 import { AppUser } from "../../models/AppUser";
 import Icon from "../../components/Icon";
 import DarkModeToggle from "../../components/DarkModeToggle";
+import { useColourMode, ColourMode } from "../../context/ColourModeContext";
 
 import logo from "../../assets/logo.png";
 import logoLight from "../../assets/logo-light.png";
@@ -10,11 +11,12 @@ import logoLight from "../../assets/logo-light.png";
 interface Props {
     onSignIn: () => void;
     accountInfo: AppUser | null | undefined;
-    isDark: boolean;
-    setIsDark: (isDark: boolean) => void;
 }
 
-function IndexNav({ onSignIn, accountInfo, isDark, setIsDark }: Props) {
+function IndexNav({ onSignIn, accountInfo }: Props) {
+
+    const { isDark } = useColourMode() as ColourMode;
+
     return (
         <Navbar>
             <Container>
@@ -39,7 +41,7 @@ function IndexNav({ onSignIn, accountInfo, isDark, setIsDark }: Props) {
                                         &nbsp; View Account
                                     </Nav.Link>
                         }
-                        <DarkModeToggle isDark={isDark} setIsDark={setIsDark} />
+                        <DarkModeToggle />
                     </Nav>
                 </Navbar.Collapse>
             </Container>

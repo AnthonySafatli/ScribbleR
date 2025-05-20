@@ -57,7 +57,7 @@ const MessageCard = ({ message, onCopy }: Props) => {
     if (message.isSystem) {
         return (
             <div className="d-flex justify-content-center">
-                <Alert variant="info" className="mt-2 mb-0" style={{ maxWidth: "700px", width: "100%" }}>
+                <Alert variant="primary" className="mt-2 mb-0" style={{ maxWidth: "700px", width: "100%" }}>
                     <div>
                         { PrettyDate(message.datetime) }
                     </div>

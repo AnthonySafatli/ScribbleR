@@ -7,24 +7,21 @@ import ChatRoomForm from "./ChatRoomForm";
 import IndexNav from "./IndexNav";
 import SignInModal from "./SignInModal";
 import { AuthContextData } from "../../models/AppUser";
-import GetInitialTheme from "../../utils/ThemeUtils";
 
 import logoLight from "../../assets/logo-light.png";
 import logo from "../../assets/logo.png";
+import { useColourMode, ColourMode } from "../../context/ColourModeContext";
 
 function IndexPage() {
     const { user } = useAuthContext() as AuthContextData;
 
     const [showSignInModal, setShowSignInModal] = useState(false);
-    const [isDark, setIsDark] = useState(GetInitialTheme());
+
+    const { isDark } = useColourMode() as ColourMode;
 
     return (
         <div className="vh-100 d-flex flex-column">
-            <IndexNav
-                onSignIn={() => setShowSignInModal(true)}
-                accountInfo={user}
-                isDark={isDark}
-                setIsDark={setIsDark} /> 
+            <IndexNav onSignIn={() => setShowSignInModal(true)} accountInfo={user} /> 
 
             <SignInModal show={showSignInModal} onClose={() => setShowSignInModal(false)} />
             
