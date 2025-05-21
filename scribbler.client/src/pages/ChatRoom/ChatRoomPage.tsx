@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button, Col, Container, Form, OverlayTrigger, Popover, Row, Tooltip } from "react-bootstrap";
 import { ReactSketchCanvasRef, CanvasPath } from "react-sketch-canvas";
 
+import MyHelmet from "../../components/MyHelmet";
 import NotFound from "../NotFound";
 import SignalRConnections from "../../models/SignalRConnections";
 import { useAuthContext } from "../../hooks/useAuthContext";
@@ -180,103 +181,108 @@ function ChatRoomPage() {
     }
 
     return (
-        <main>
-            <Container>
-                <div className="vh-100 d-flex flex-column">
-                    <div className="sticky-top mt-4 mb-2">
-                        <a href="/" className="text-reset text-decoration-none">
-                            <Icon name="arrow-left" /> Back to Home
-                        </a>
-                        <div className="d-flex justify-content-around align-items-center">
-                            <div>
-                                <div className="d-flex gap-3 align-items-center mt-3">
-                                    <OverlayTrigger
-                                        placement="bottom"
-                                        overlay={
-                                            <Tooltip>
-                                                {userCount === 1
-                                                    ? "You are the only one in the chatroom"
-                                                    : `${userCount} people are currently in the chatroom`}
-                                            </Tooltip>
-                                        }
-                                    >
-                                        <div className="mr-3">
-                                            <Icon name="person-circle" /> {userCount}
-                                        </div>
+        <>
+            <MyHelmet
+                title={`Chatroom ${chatroomId} - ScribbleR`}
+                description={`Join the real-time chatroom ${chatroomId} on ScribbleR.`}
+            />
+            <main>
+                <Container>
+                    <div className="vh-100 d-flex flex-column">
+                        <div className="sticky-top mt-4 mb-2">
+                            <a href="/" className="text-reset text-decoration-none">
+                                <Icon name="arrow-left" /> Back to Home
+                            </a>
+                            <div className="d-flex justify-content-around align-items-center">
+                                <div>
+                                    <div className="d-flex gap-3 align-items-center mt-3">
+                                        <OverlayTrigger
+                                            placement="bottom"
+                                            overlay={
+                                                <Tooltip>
+                                                    {userCount === 1
+                                                        ? "You are the only one in the chatroom"
+                                                        : `${userCount} people are currently in the chatroom`}
+                                                </Tooltip>
+                                            }
+                                        >
+                                            <div className="mr-3">
+                                                <Icon name="person-circle" /> {userCount}
+                                            </div>
+                                        </OverlayTrigger>
+
+                                        <h1 className="text-center">Chatroom</h1>
+                                        <h2 className="text-muted">{chatroomId}</h2>
+                                    </div>
+                                </div>
+                                <div>
+                                    <OverlayTrigger placement="bottom" overlay={<Tooltip>Copy the url for the chatroom</Tooltip>}>
+                                        <Button variant="default" onClick={() => share()}><Icon name="box-arrow-up" /></Button>
                                     </OverlayTrigger>
-
-                                    <h1 className="text-center">Chatroom</h1>
-                                    <h2 className="text-muted">{chatroomId}</h2>
+                                    <DarkModeToggle />
                                 </div>
                             </div>
+                        </div>
+                        <div className="d-flex flex-column overflow-auto flex-grow-1 p-1">
+                            {messages.map((msg, i) => (
+                                <div key={i}><MessageCard message={msg} onCopy={copyCanvas} /></div>
+                            ))}
+                            <div ref={messagesEndRef} />
+                        </div>
+                        <div className="d-flex justify-content-center mt-3">
+                            <div style={{ maxWidth: "600px", width: "100%" }}>
+                                <ToolBar
+                                    mode={messageMode}
+                                    setMode={setMessageMode}
+                                    colour={colour}
+                                    setColour={setColour}
+                                    size={size}
+                                    setSize={setSize}
+                                    undo={() => canvasRef?.current?.undo()}
+                                    redo={() => canvasRef?.current?.redo()} />
+                            </div>
+                        </div>
+                        <div className="d-flex justify-content-center">
                             <div>
-                                <OverlayTrigger placement="bottom" overlay={<Tooltip>Copy the url for the chatroom</Tooltip>}>
-                                    <Button variant="default" onClick={() => share()}><Icon name="box-arrow-up" /></Button>
-                                </OverlayTrigger>
-                                <DarkModeToggle />
+                                {
+                                    messageMode === MessageMode.Text ?
+                                        <Form.Control
+                                            as="textarea"
+                                            style={{ resize: "none", width: "400px", height: "200px" }}
+                                            value={typedMessage}
+                                            onChange={(e) => setTypedMessage(e.target.value)}
+                                        />
+                                        :
+                                        <DrawCanvas
+                                            ref={canvasRef}
+                                            colour={colour}
+                                            size={size} />
+                                }
                             </div>
                         </div>
-                    </div>
-                    <div className="d-flex flex-column overflow-auto flex-grow-1 p-1">
-                        {messages.map((msg, i) => (
-                            <div key={i}><MessageCard message={msg} onCopy={copyCanvas} /></div>
-                        ))}
-                        <div ref={messagesEndRef} />
-                    </div>
-                    <div className="d-flex justify-content-center mt-3">
-                        <div style={{ maxWidth: "600px", width: "100%" }}>
-                            <ToolBar
-                                mode={messageMode}
-                                setMode={setMessageMode}
-                                colour={colour}
-                                setColour={setColour}
-                                size={size}
-                                setSize={setSize}
-                                undo={() => canvasRef?.current?.undo()}
-                                redo={() => canvasRef?.current?.redo()} />
+                        <div className="d-flex justify-content-center">
+                            <Row className="my-2" style={{ maxWidth: "800px", width: "100%" }}>
+                                <Col xs={8}>
+                                    You are sending messages as&nbsp;
+                                    <OverlayTrigger
+                                        placement="top"
+                                        overlay={<Popover id="popover-basic"><Popover.Body><UserInfo userId={user?.id ?? ""} /></Popover.Body></Popover>}
+                                    >
+                                        <a href="/Account">{user?.displayName ?? user?.userHandle}</a>
+                                    </OverlayTrigger>
+                                </Col>
+                                <Col xs={4}>
+                                    <div className="d-flex gap-2">
+                                        <Button style={{ width: '100%' }} variant="primary" onClick={clearCanvas}><Icon name="trash3" /></Button>
+                                        <Button style={{ width: '100%' }} variant="primary" onClick={sendMessage}><Icon name="upload" /></Button>
+                                    </div>
+                                </Col>
+                            </Row>
                         </div>
                     </div>
-                    <div className="d-flex justify-content-center">
-                        <div>
-                            {
-                                messageMode === MessageMode.Text ?
-                                    <Form.Control
-                                        as="textarea"
-                                        style={{ resize: "none", width: "400px", height: "200px" }}
-                                        value={typedMessage}
-                                        onChange={(e) => setTypedMessage(e.target.value)}
-                                    />
-                                    :
-                                    <DrawCanvas
-                                        ref={canvasRef}
-                                        colour={colour}
-                                        size={size} />
-                            }
-                        </div>
-                    </div>
-                    <div className="d-flex justify-content-center">
-                        <Row className="my-2" style={{ maxWidth: "800px", width: "100%" }}>
-                            <Col xs={8}>
-                                You are sending messages as&nbsp;
-                                <OverlayTrigger
-                                    placement="top"
-                                    overlay={<Popover id="popover-basic"><Popover.Body><UserInfo userId={user?.id ?? ""} /></Popover.Body></Popover>}
-                                >
-                                    <a href="/Account">{user?.displayName ?? user?.userHandle}</a>
-                                </OverlayTrigger>
-                            </Col>
-                            <Col xs={4}>
-                                <div className="d-flex gap-2">
-                                    <Button style={{ width: '100%' }} variant="primary" onClick={clearCanvas}><Icon name="trash3" /></Button>
-                                    <Button style={{ width: '100%' }} variant="primary" onClick={sendMessage}><Icon name="upload" /></Button>
-                                </div>
-                            </Col>
-                        </Row>
-                    </div>
-                </div>
-            </Container>
-        </main>
-
+                </Container>
+            </main>
+        </>
     );
 }
 

@@ -10,8 +10,9 @@ import AboutPage from './pages/About/AboutPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
 
-import './App.css'
 import { ColourModeProvider } from './context/ColourModeContext';
+
+import './App.css'
 
 function App() {
 
@@ -24,13 +25,13 @@ function App() {
                             {/* Index */}
                             <Route path="/" element={<IndexPage />} />
 
-                        {/* Accounts */}
-                        <Route path="/About" element={<AboutPage />} />
+                            {/* Accounts */}
+                            <Route path="/About" element={<AboutPage />} />
 
-                        {/* Accounts */}
-                        <Route element={<ProtectedRoute />}>
-                            <Route path="/Account" element={<AccountPage />} />
-                        </Route>
+                            {/* Accounts */}
+                            <Route element={<ProtectedRoute />}>
+                                <Route path="/Account" element={<AccountPage />} />
+                            </Route>
 
                             {/* Chatroom */}
                             <Route element={<ProtectedRoute />}>

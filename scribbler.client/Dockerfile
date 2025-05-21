@@ -3,7 +3,7 @@ FROM node:18 AS builder
 
 WORKDIR /app
 COPY . .
-RUN npm install
+RUN npm install --legacy-peer-deps
 RUN npm run build
 
 # Stage 2: Serve

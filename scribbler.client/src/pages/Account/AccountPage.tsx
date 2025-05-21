@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 
+import MyHelmet from "../../components/MyHelmet";
 import AccountNav from './AccountNav';
 import AccountContent from './AccountContent';
 import FriendsContent from './FriendsContent';
@@ -27,17 +28,27 @@ function AccountPage() {
     };
 
     return (
-        <Container>
-            <Row className="vh-100 py-5">
-                <AccountNav currentPage={currentPage} navigate={setCurrentPage} />
+        <>
+            <MyHelmet
+                title={`${currentPage === 1
+                        ? "My Account"
+                        : currentPage === 2
+                            ? "Friends"
+                            : "History"
+                    } - ScribbleR`}
+            />
+            <Container>
+                <Row className="vh-100 py-5">
+                    <AccountNav currentPage={currentPage} navigate={setCurrentPage} />
 
-                <Col>
-                    <div className="px-5">
-                        { renderContent() }
-                    </div>
-                </Col>
-            </Row>
-        </Container>
+                    <Col>
+                        <div className="px-5">
+                            { renderContent() }
+                        </div>
+                    </Col>
+                </Row>
+            </Container>
+        </>
     );
 }
 
