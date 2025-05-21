@@ -181,7 +181,7 @@ function AccountContent() {
                     </Col>
                     <Col className="py-2">
                         <div className="d-flex justify-content-center">
-                            <Button onClick={() => setShowPasswordChangeModal(true)}>Change Password</Button>
+                            <Button variant="secondary" onClick={() => setShowPasswordChangeModal(true)}>Change Password</Button>
                         </div>
                     </Col>
                 </Row>
@@ -189,7 +189,7 @@ function AccountContent() {
                 <Form.Group>
                     <div className="d-flex justify-content-between align-items-center">
                         
-                        <Button variant="outline-primary" type="submit" className="px-4 mb-2">
+                        <Button variant="primary" type="submit" className="px-4 mb-2">
                             Save Changes
                         </Button>
 

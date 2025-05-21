@@ -31,7 +31,7 @@ const PfpCanvas = forwardRef<ReactSketchCanvasRef>((_, ref) => {
                     colour={colour} />
             </div>
             <div className="d-flex justify-content-center gap-3 align-items-center mt-2">
-                <Button variant="primary" onClick={() => clearPfp()}>
+                <Button variant="secondary" onClick={() => clearPfp()}>
                     <Icon name="trash3" />
                 </Button>
                 <div style={{ position: "relative", display: "inline-block" }}>
@@ -47,13 +47,18 @@ const PfpCanvas = forwardRef<ReactSketchCanvasRef>((_, ref) => {
                     />
                     {showPicker && (
                         <div style={{ position: "absolute", zIndex: 2 }}>
-                            <SketchPicker color={colour} onChange={handleChangeColour} />
+                            <SketchPicker
+                                color={colour}
+                                onChange={handleChangeColour}
+                                presetColors={[]}
+                                disableAlpha />
                         </div>
                     )}
                 </div>
                 <div className="d-flex gap-1">
                     <Icon name="brush" />
                     <Form.Range
+                        className="range-secondary"
                         min={1}
                         max={40}
                         value={size}

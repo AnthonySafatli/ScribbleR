@@ -104,7 +104,7 @@ function FriendsContent() {
 
             <div className="mb-5 mt-3 d-flex justify-content-between align-items-center">
                 <h1 className="m-0">My Friends</h1>
-                <Button variant="outline-primary" onClick={() => setShowAddFriendModal(true)}>
+                <Button variant="secondary" onClick={() => setShowAddFriendModal(true)}>
                     <Icon name="plus-circle" />
                 </Button>
             </div>

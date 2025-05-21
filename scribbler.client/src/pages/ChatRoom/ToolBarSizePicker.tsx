@@ -34,6 +34,7 @@ function ToolBarSizePicker({ size, setSize }: Props) {
                     >
                         <div style={{ minWidth: '100px' }}>
                             <Form.Range
+                                className="range-secondary"
                                 min={1}
                                 max={40}
                                 value={size}

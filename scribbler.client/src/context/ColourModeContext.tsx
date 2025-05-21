@@ -20,7 +20,7 @@ export const ColourModeProvider = ({ children }) => {
     );
 };
 
-export const useColourMode = () => useContext(ColorModeContext);
+export const useColourMode = () => useContext(ColourModeContext);
 
 export interface ColourMode {
     isDark: boolean;
