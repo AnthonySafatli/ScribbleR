@@ -7,7 +7,7 @@ function DarkModeToggle() {
     const { isDark, setIsDark } = useColourMode() as ColourMode;
 
     return (
-        <Button variant="default" onClick={() => setIsDark(prev => !prev)}>
+        <Button variant="default" onClick={() => setIsDark(!isDark)}>
             <Icon name={isDark ? "sun" : "moon"} />
         </Button>
     );
