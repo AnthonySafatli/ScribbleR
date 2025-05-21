@@ -5,7 +5,7 @@ import Icon from "../../components/Icon";
 import DarkModeToggle from "../../components/DarkModeToggle";
 import { useColourMode, ColourMode } from "../../context/ColourModeContext";
 
-import logo from "../../assets/logo.png";
+import logoDark from "../../assets/logo-dark.png";
 import logoLight from "../../assets/logo-light.png";
 
 interface Props {
@@ -22,7 +22,7 @@ function IndexNav({ onSignIn, accountInfo }: Props) {
             <Container>
                 <Navbar.Brand>
                     <img
-                        src={isDark ? logoLight : logo}
+                        src={isDark ? logoLight : logoDark}
                         alt="logo"
                         style={{ height: '50px' }} />
                 </Navbar.Brand>
