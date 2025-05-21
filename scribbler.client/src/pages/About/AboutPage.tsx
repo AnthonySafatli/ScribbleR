@@ -23,7 +23,7 @@ const AboutPage = () => {
                 <About />
             </CenteredContainer>
 
-            <p className="text-center m-1 mt-5 text-muted">Version 1.2</p>
+            <p className="text-center m-1 mt-5 text-muted">Version 1.3</p>
         </div>
     )
 }
