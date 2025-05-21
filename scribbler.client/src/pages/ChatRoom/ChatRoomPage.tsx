@@ -10,6 +10,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { AuthContextData } from "../../models/AppUser";
 import { Message } from "../../models/Message";
 import Icon from "../../components/Icon";
+import DarkModeToggle from "../../components/DarkModeToggle";
 import DrawCanvas from "../../components/DrawCanvas";
 import MessageCard from "./MessageCard";
 import ToolBar from "./ToolBar";
@@ -182,13 +183,13 @@ function ChatRoomPage() {
         <main>
             <Container>
                 <div className="vh-100 d-flex flex-column">
-                    <div className="sticky-top mt-5 mb-2">
+                    <div className="sticky-top mt-4 mb-2">
+                        <a href="/" className="text-reset text-decoration-none">
+                            <Icon name="arrow-left" /> Back to Home
+                        </a>
                         <div className="d-flex justify-content-around align-items-center">
                             <div>
-                                <a href="/" className="text-reset text-decoration-none">
-                                    <Icon name="arrow-left" /> Back to Home
-                                </a>
-                                <div className="d-flex gap-3 align-items-center">
+                                <div className="d-flex gap-3 align-items-center mt-3">
                                     <OverlayTrigger
                                         placement="bottom"
                                         overlay={
@@ -212,6 +213,7 @@ function ChatRoomPage() {
                                 <OverlayTrigger placement="bottom" overlay={<Tooltip>Copy the url for the chatroom</Tooltip>}>
                                     <Button variant="default" onClick={() => share()}><Icon name="box-arrow-up" /></Button>
                                 </OverlayTrigger>
+                                <DarkModeToggle />
                             </div>
                         </div>
                     </div>
@@ -260,7 +262,7 @@ function ChatRoomPage() {
                                     placement="top"
                                     overlay={<Popover id="popover-basic"><Popover.Body><UserInfo userId={user?.id ?? ""} /></Popover.Body></Popover>}
                                 >
-                                    <strong><a href="/Account">{user?.displayName ?? user?.userHandle}</a></strong>
+                                    <a href="/Account">{user?.displayName ?? user?.userHandle}</a>
                                 </OverlayTrigger>
                             </Col>
                             <Col xs={4}>

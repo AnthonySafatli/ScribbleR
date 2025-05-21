@@ -2,8 +2,11 @@ import { Container, Nav, Navbar, Spinner } from "react-bootstrap";
 
 import { AppUser } from "../models/AppUser";
 import Icon from "./Icon";
+import DarkModeToggle from "./DarkModeToggle";
+import { useColourMode, ColourMode } from "../context/ColourModeContext";
 
-import logo from "../assets/logo.png";
+import logoDark from "../assets/logo-dark.png";
+import logoLight from "../assets/logo-light.png";
 
 interface Props {
     onSignIn: () => void;
@@ -11,12 +14,15 @@ interface Props {
 }
 
 function NavBar({ onSignIn, accountInfo }: Props) {
+
+    const { isDark } = useColourMode() as ColourMode;
+
     return (
-        <Navbar bg="light" data-bs-theme="light">
+        <Navbar>
             <Container>
                 <Navbar.Brand href="/">
                     <img
-                        src={logo}
+                        src={isDark ? logoLight : logoDark}
                         alt="logo"
                         style={{ height: '50px' }} />
                 </Navbar.Brand>
@@ -37,6 +43,7 @@ function NavBar({ onSignIn, accountInfo }: Props) {
                                 </Nav.Link>
                             )
                         }
+                        <DarkModeToggle />
                     </Nav>
                 </Navbar.Collapse>
             </Container>

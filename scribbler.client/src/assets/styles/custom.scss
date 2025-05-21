@@ -1,0 +1,21 @@
+
+$font-family-base: "Domine", 'Times New Roman', Times, serif;
+
+$card-bg: rgba(0, 0, 0, 0.3);
+
+$primary: #be00be;
+$secondary: #46E2FF;
+
+@import "bootstrap/scss/bootstrap";
+
+.range-secondary::-webkit-slider-thumb {
+    background-color: var(--bs-secondary);
+}
+
+.range-secondary::-moz-range-thumb {
+    background-color: var(--bs-secondary);
+}
+
+.range-secondary::-ms-thumb {
+    background-color: var(--bs-secondary);
+}

@@ -48,7 +48,7 @@ const ToolBarToggle = ({ options, selectedValue }: Props) => {
                             {options.map((option, index) => (
                                 <Button
                                     key={index}
-                                    variant={option.value == selectedValue ? "primary" : "default"}
+                                    variant={option.value == selectedValue ? "secondary" : "default"}
                                     onClick={() => clickOption(option)}
                                 >
                                     <span className="text-nowrap">
