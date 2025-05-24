@@ -2,7 +2,7 @@
 
 ScribbleR is a modern, web-based reimagining of the classic Nintendo DS game **PictoChat**. Featuring real-time chatrooms, a friends system, and responsive drawing capabilities, ScribbleR brings collaborative sketching into the browser.
 
-## 🚀 Live Demo
+## 🚀 Live Site
 
 👉 [Visit ScribbleR](https://scribbler.anthonysafatli.ca)
 
@@ -21,11 +21,11 @@ ScribbleR is a modern, web-based reimagining of the classic Nintendo DS game **P
 - **Backend**: ASP.NET Core Web API
 - **Realtime Communication**: SignalR
 - **Database**: PostgreSQL
-- **Containerization/Deployment**: Docker
+- **Containerization / Deployment**: Docker
 
 ## 📝 Getting Started
 
-1. Go to [https://scribbler.anthonysafatli.ca](https://scribbler.anthonysafatli.ca)
+1. Go to [scribbler.anthonysafatli.ca](https://scribbler.anthonysafatli.ca)
 2. Click **Sign In** and create an account using your email, username, and password
 3. Enter any alphanumeric Room ID to join or create a room
 4. Start drawing and chatting in real time!
@@ -35,22 +35,6 @@ ScribbleR is a modern, web-based reimagining of the classic Nintendo DS game **P
 - **First Icon**: Select Mode — `Draw`, `Eraser`, or `Text`
 - **Second Icon**: Choose Pen Color
 - **Third Icon**: Adjust Pen Size
-
-## 📚 What I Learned
-
-This was my **first full-stack project**, and I learned a lot about:
-
-- Using React for UI development
-- Managing real-time communication with SignalR
-- Working with PostgreSQL databases
-- Dockerizing applications for deployment
-- Full-stack architecture from the ground up
-
-## 🔮 Future Plans
-
-- ✨ Complete UI redesign with custom styling
-- 💬 Chat History: Save and browse past messages
-- 🧹 General polish and UX improvements
 
 ### Possible Enhancements
 
