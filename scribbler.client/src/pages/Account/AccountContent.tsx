@@ -35,11 +35,20 @@ function AccountContent() {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        if (name === "displayName")
-            setDisplayName(value);
-        if (name === "aboutMe")
-            setAboutMe(value);
+
+        if (name === "displayName") {
+            if (value.length <= 50) {
+                setDisplayName(value);
+            }
+        }
+
+        if (name === "aboutMe") {
+            if (value.length <= 200) {
+                setAboutMe(value);
+            }
+        }
     };
+
 
     // Submit Status
     const [loadingFormSubmit, setLoadingFormSubmit] = useState(false);
@@ -145,6 +154,7 @@ function AccountContent() {
                             onChange={handleChange}
                             value={displayName} 
                             placeholder="Enter your preferred display name" />
+                        <p className="text-muted m-0 align-right">{displayName?.length ?? 50} / 50</p>
                     </Col>
                 </Row>
                 <Row className="my-3">
@@ -161,6 +171,7 @@ function AccountContent() {
                             onChange={handleChange}
                             value={aboutMe} 
                             placeholder="Share something interesting about yourself!" />
+                        <p className="text-muted m-0 align-right">{aboutMe?.length ?? 0} / 200</p>
                     </Col>
                 </Row>
                 <Row className="my-3">
