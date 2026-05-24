@@ -1,44 +1,72 @@
-# ScribbleR ✏️
+# ScribbleR — Real-Time Collaborative Drawing & Chat in the Browser
 
-ScribbleR is a modern, web-based reimagining of the classic Nintendo DS game **PictoChat**. Featuring real-time chatrooms, a friends system, and responsive drawing capabilities, ScribbleR brings collaborative sketching into the browser.
+<!-- ![ScribbleR Screenshot](https://via.placeholder.com/900x450?text=Screenshot+or+Demo+GIF) -->
 
-## 🚀 Live Site
+> A modern, web-based reimagining of the classic Nintendo DS **PictoChat**, with real-time drawing, chatrooms, and a friends system, all running in the browser. Built from scratch as my first full-stack application.
 
-👉 [Visit ScribbleR](https://scribbler.anthonysafatli.ca)
+🔗 **[Live Demo](https://scribbler.anthonysafatli.ca)**
 
-## 🧠 Features
+## Features
 
-- Real-time drawing and messaging with **SignalR**
-- Unlimited chatrooms (room = any alphanumeric ID)
-- Persistent user accounts with PostgreSQL
-- Friends system for easy reconnection
-- Fully containerized with **Docker**
-- Built from scratch as a first full-stack app
+- **Real-time drawing & chat** — powered by SignalR; changes appear instantly for everyone in the room
+- **Unlimited chatrooms** — join or create any room with an alphanumeric ID, no setup required
+- **Persistent accounts** — sign up with email & username; your profile and friends carry across sessions
+- **Friends system** — add friends for easy reconnection without sharing room codes
+- **Fully containerized** — Docker-based deployment for consistent environments across dev and prod
 
-## 🛠️ Tech Stack
+---
 
-- **Frontend**: React
-- **Backend**: ASP.NET Core Web API
-- **Realtime Communication**: SignalR
-- **Database**: PostgreSQL
-- **Containerization / Deployment**: Docker
+## Tech Stack
 
-## 📝 Getting Started
+| Layer | Technology |
+|-------|-----------|
+| Frontend | React |
+| Backend | ASP.NET Core Web API |
+| Real-time | SignalR |
+| Database | PostgreSQL |
+| Deployment | Docker, VPS |
 
-1. Go to [scribbler.anthonysafatli.ca](https://scribbler.anthonysafatli.ca)
-2. Click **Sign In** and create an account using your email, username, and password
-3. Enter any alphanumeric Room ID to join or create a room
-4. Start drawing and chatting in real time!
+*Note: the site was originally hosted using docker but this is no longer the case*
 
-### 🧰 Toolbar Guide
+## Running Locally
 
-- **First Icon**: Select Mode — `Draw`, `Eraser`, or `Text`
-- **Second Icon**: Choose Pen Color
-- **Third Icon**: Adjust Pen Size
+```bash
+# 1. Clone the repo
+git clone https://github.com/AnthonySafatli/ScribbleR.git
+cd scribbler
 
-### Possible Enhancements
+# 2. Start all services with Docker
+docker compose up --build
+```
 
-- 🔐 **Admin Mode**: Monitor users, sessions, and rooms
-- 🏠 **Chatroom Controls**: Public/private rooms, invites, moderation tools
-- 👥 **Better Friends System**: Enhanced friend interaction
-- 🔑 **JWT Authentication**: Improve scalability/security (currently cookie-based)
+The app will be available at `http://localhost:3000`.
+
+**Environment variables required:**
+
+| Variable | Description |
+|----------|-------------|
+| `DATABASE_URL` | PostgreSQL connection string |
+| `ASPNETCORE_ENVIRONMENT` | `Development` or `Production` |
+
+> Or just visit **[scribbler.anthonysafatli.ca](https://scribbler.anthonysafatli.ca)**, create an account, and enter any alphanumeric Room ID to start drawing.
+
+## What I Learned
+
+This was my first full-stack app — the goal was to touch every layer of the stack and ship something real.
+
+- **SignalR connection lifecycle** — managing reconnections and dropped clients gracefully so the canvas stays in sync was trickier than expected; solved with connection event handlers and a server-side room state model
+- **Drawing synchronization** — broadcasting raw mouse events was too noisy; throttling updates and only syncing deltas significantly reduced WebSocket traffic
+- **Docker Compose for multi-service apps** — learned how networking between containers works (service names as hostnames) and how to sequence startup with `depends_on`
+- **Cookie-based auth trade-offs** — chose cookies for simplicity on a first project, but learned why stateless JWT becomes important at scale (horizontal scaling, microservices)
+
+## Roadmap
+
+- [ ] **JWT Authentication** — replace cookie sessions for better scalability and security
+- [ ] **Private rooms** — password-protected or invite-only rooms
+- [ ] **Admin dashboard** — monitor active users, sessions, and rooms
+- [ ] **Enhanced friends system** — friend requests, online status, direct room invites
+- [ ] **Chatroom moderation** — owner controls, kick/ban, room settings
+
+## License
+
+[GNU GPL v3](LICENSE)
