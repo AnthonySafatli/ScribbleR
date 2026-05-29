@@ -5,6 +5,7 @@
 > A modern, web-based reimagining of the classic Nintendo DS **PictoChat**, with real-time drawing, chatrooms, and a friends system, all running in the browser. Built from scratch as my first full-stack application.
 
 🔗 **[Live Demo](https://scribbler.anthonysafatli.ca)**
+
 🌐 **[More Information](https://anthonysafatli.ca/Project/scribbler)**
 
 ## Features
