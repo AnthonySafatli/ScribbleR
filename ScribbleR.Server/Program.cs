@@ -11,27 +11,39 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        // Database
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-        builder.Services.AddEntityFrameworkNpgsql().AddDbContext<ApplicationDbContext>(options =>
+
+        builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(connectionString));
 
+        // Identity
         builder.Services.AddAuthorization();
+
         builder.Services.AddIdentityApiEndpoints<AppUser>()
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
+        // Services
         builder.Services.AddSignalR();
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
-        builder.Services.AddCors(opt =>
+        // CORS
+        builder.Services.AddCors(options =>
         {
-            opt.AddPolicy("reactApp", builder =>
+            options.AddPolicy("reactApp", policy =>
             {
-                builder.WithOrigins("http://172.105.22.39/", "http://172.105.22.39/", "http://scribbler.anthonysafatli.ca/", "https://scribbler.anthonysafatli.ca/")
-                    .AllowCredentials()
+                policy
+                    .WithOrigins(
+                        "http://172.105.22.39",
+                        "https://172.105.22.39",
+                        "http://scribbler.anthonysafatli.ca",
+                        "https://scribbler.anthonysafatli.ca"
+                    )
                     .AllowAnyHeader()
-                    .AllowAnyMethod();
+                    .AllowAnyMethod()
+                    .AllowCredentials();
             });
         });
 
@@ -39,7 +51,24 @@ public class Program
 
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
+        // Apply Migrations
+        using (var scope = app.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+            try
+            {
+                db.Database.Migrate();
+                Console.WriteLine("Database migrations applied successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Database migration failed:");
+                Console.WriteLine(ex);
+            }
+        }
+
+        // Configure pipeline
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
@@ -52,7 +81,7 @@ public class Program
 
         app.UseAuthentication();
         app.UseAuthorization();
-        
+
         app.MapControllers();
         app.MapHub<ChatHub>("/api/Chat");
 
